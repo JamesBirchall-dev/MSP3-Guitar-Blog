@@ -28,6 +28,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'role')
     list_filter = ('role',)
+    search_fields = ('user__username',)
 
 
 # REPLY INLINE (Shows replies inside Post admin)
