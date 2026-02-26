@@ -12,24 +12,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load env.py from project root if present
-if os.path.isfile(os.path.join(BASE_DIR, 'env.py')):
-    import env  # noqa: F401
+# --- Robust env.py loading regardless of working directory ---
+import importlib.util
+env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'env.py'))
+if os.path.isfile(env_path):
+    spec = importlib.util.spec_from_file_location('env', env_path)
+    env = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(env)
+# ------------------------------------------------------------
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    'django-insecure-6v(4-f)ea7lgb$5a4gz(da3sbw2wnfeyoxoqxis_@xub0l@261'
-)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Read sensitive settings from environment in production
@@ -63,6 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'msp3guitarblog',
+    'blog',
 ]
 
 MIDDLEWARE = [
