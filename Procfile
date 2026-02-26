@@ -1,0 +1,1 @@
+web: gunicorn msp3guitarblog.wsgi
