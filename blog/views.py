@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post
+from .models import Post, Comment, Vote
+from django.db.models import Count
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm, PostForm, CommentForm
@@ -21,27 +22,28 @@ def home(request):
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(
-        parent__isnull=True
-    ).order_by("-created_on")
+
+    # order comments by vote count and then by creation date
+
+    comments = post.comments.annotate(
+        vote_count=Count('votes')
+    ).order_by('-vote_count', '-created_on')
+
+    comment_form = CommentForm(request.POST)
 
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect("login")
+
         comment_form = CommentForm(request.POST)
-        if comment_form.is_valid() and request.user.is_authenticated:
+
+        if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.author = request.user
-
-            parent_id = request.POST.get('parent_id')
-            if parent_id:
-                from .models import Comment
-                try:
-                    new_comment.parent = Comment.objects.get(id=parent_id)
-                except Comment.DoesNotExist:
-                    new_comment.parent = None
-
             new_comment.save()
-            return redirect("post_detail", slug=post.slug)
+
+            return redirect("post_detail", slug=slug)
     else:
         comment_form = CommentForm()
 
@@ -102,3 +104,20 @@ def create_post(request):
         form = PostForm()
 
     return render(request, "blog/create_post.html", {"form": form})
+
+
+# comment voting view
+
+@login_required
+def vote_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    vote, created = Vote.objects.get_or_create(
+        user=request.user,
+        comment=comment
+    )
+
+    if not created:
+        # User has already voted, so remove the vote
+        vote.delete()
+
+    return redirect("post_detail", slug=comment.post.slug)

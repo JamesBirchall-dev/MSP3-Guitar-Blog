@@ -16,33 +16,22 @@
 
 {% for comment in comments %}
     <div class="card mb-3 p-3">
-        <strong>{{ comment.author }}</strong>
-        <small class="text-muted">{{ comment.created_on }}</small>
-        <p class="mt-2">{{ comment.content }}</p>
-
-        <!--Reply Button-->
-        {% if user.is_authenticated %}
-        <form method="POST" class="mt-2">
-            {% csrf_token %}
-            <input type="hidden" name="parent_id" value="{{ comment.id }}">
-            <textarea name="content" class="form-control" rows="2" placeholder="Write a reply..."></textarea>
-            <button class="btn btn-sm btn-outline-primary mt-1">Reply</button>
-        </form>
-        {% endif %}
-
-
-        <!-- Display Replies -->
-        {% for reply in comment.replies.all %}
-            <div class="card mt-3 ms-4 p-2 bg-light">
-                <strong>{{ reply.author }}</strong>
-                <small class="text-muted">{{ reply.created_on }}</small>
-                <p class="mt-2">{{ reply.content }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ comment.author }}</strong>
+                <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
-        {% endfor %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'vote_comment' comment.id %}" class="btn btn-sm btn-success ms-2">
+                    {{ comment.vote_count }}
+                </a>
+            {% endif %}
+        </div>
+        <p class="mt-2 mb-0">{{ comment.content }}</p>
     </div>
 {% empty %}
-    <p>No comments yet.</p>
-{% endfor %}
+    <p>No comments yet. Be the first to comment!</p>
+{% endfor %}    
 
 <!-- Comment Form for new top-level comment -->
 {% if user.is_authenticated %}

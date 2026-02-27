@@ -150,12 +150,8 @@ class Resource(models.Model):
     )
 
     title = models.CharField(max_length=200)
-
-    # External URL
     url = models.URLField()
-
     description = models.TextField(blank=True)
-
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -178,16 +174,6 @@ class Comment(models.Model):
     )
 
     content = models.TextField()
-
-    # Comment Threading: A comment can be a reply to another comment
-
-    parent = models.ForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        related_name='replies',
-        on_delete=models.CASCADE
-    )
 
     created_on = models.DateTimeField(auto_now_add=True)
 

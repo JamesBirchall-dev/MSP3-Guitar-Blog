@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Robust env.py loading regardless of working directory -
 env_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'env.py')
+    os.path.join(os.path.dirname(__file__), '..', 'env.py')
 )
 if os.path.isfile(env_path):
     spec = importlib.util.spec_from_file_location('env', env_path)
