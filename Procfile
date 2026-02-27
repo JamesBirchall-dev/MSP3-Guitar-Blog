@@ -1,1 +1,1 @@
-web: gunicorn msp3guitarblog.wsgi
+web: gunicorn msp3guitarblog.msp3guitarblog.wsgi
