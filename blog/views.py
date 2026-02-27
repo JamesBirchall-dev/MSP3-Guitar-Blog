@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment, Vote
+from .models import Post, Comment, Vote, Resource
 from django.db.models import Count
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import RegisterForm, PostForm, CommentForm
+from .forms import RegisterForm, PostForm, CommentForm, ResourceForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -29,28 +29,54 @@ def post_detail(request, slug):
         vote_count=Count('votes')
     ).order_by('-vote_count', '-created_on')
 
-    comment_form = CommentForm(request.POST)
+    # Order resources by vote count then creation date
+    resources = post.resources.annotate(
+        vote_count=Count('votes')
+    ).order_by('-vote_count', '-created_on')
 
-    if request.method == "POST":
+    comment_form = CommentForm()
+    resource_form = ResourceForm()
+    if request.method == 'POST':
         if not request.user.is_authenticated:
             return redirect("login")
+        # comment section
+        if "content" in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.author = request.user
+                comment.post = post
+                comment.save()
 
-        comment_form = CommentForm(request.POST)
-
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.post = post
-            new_comment.author = request.user
-            new_comment.save()
-
+                # Check if resource fields are filled
+                resource_title = (
+                    comment_form.cleaned_data.get('resource_title')
+                )
+                resource_url = (
+                    comment_form.cleaned_data.get('resource_url')
+                )
+                resource_description = (
+                    comment_form.cleaned_data.get(
+                        'resource_description'
+                    )
+                )
+                if resource_title or resource_url or resource_description:
+                    if resource_title and resource_url:
+                        Resource.objects.create(
+                            comment=comment,
+                            added_by=request.user,
+                            title=resource_title,
+                            url=resource_url,
+                            description=resource_description or '',
+                        )
             return redirect("post_detail", slug=slug)
-    else:
-        comment_form = CommentForm()
 
     context = {
         "post": post,
         "comments": comments,
-        "comment_form": comment_form
+        "resources": resources,
+        "comment_form": comment_form,
+        "resource_form": resource_form
     }
     return render(request, "blog/post_detail.html", context)
 
@@ -97,6 +123,7 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user  # Assign current user
+            post.status = 1  # Set post as published
             post.save()
             return redirect("home")
 
@@ -121,3 +148,18 @@ def vote_comment(request, comment_id):
         vote.delete()
 
     return redirect("post_detail", slug=comment.post.slug)
+
+
+@login_required
+def vote_resource(request, resource_id):
+    resource = get_object_or_404(Resource, id=resource_id)
+    vote, created = Vote.objects.get_or_create(
+        user=request.user,
+        resource=resource
+    )
+
+    if not created:
+        # User has already voted, so remove the vote
+        vote.delete()
+
+    return redirect("post_detail", slug=resource.post.slug)

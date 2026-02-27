@@ -12,6 +12,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 
 # STATUS CHOICES (For Draft / Published posts)
 
@@ -98,10 +99,7 @@ class Post(models.Model):
         null=True,
         blank=True
     )
-
     content = models.TextField()
-
-    # Minimum skill level required
     min_level = models.CharField(
         max_length=20,
         choices=LEVEL_CHOICES,
@@ -141,6 +139,16 @@ class Resource(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
+        related_name='resources',
+        null=True,
+        blank=True
+    )
+
+    comment = models.ForeignKey(
+        'Comment',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name='resources'
     )
 
@@ -213,11 +221,29 @@ class Vote(models.Model):
         related_name='votes'
     )
 
+    resource = models.ForeignKey(
+        Resource,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='votes'
+    )
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         # Prevents a user from voting twice
-        unique_together = ('user', 'post', 'comment')
+        unique_together = ('user', 'post', 'comment', 'resource')
+
+    def clean(self):
+        # Ensure that only one of post, comment, or resource is set
+
+        targets = [self.post, self.comment, self.resource]
+        if sum(target is not None for target in targets) != 1:
+            raise ValidationError(
+                "A vote must be associated with exactly one of "
+                "post, comment, or resource."
+            )
 
     def __str__(self):
         return f"Vote by {self.user}"

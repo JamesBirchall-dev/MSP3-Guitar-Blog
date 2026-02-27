@@ -12,7 +12,11 @@
  <hr>
 <p>{{ post.content }}</p>
 <hr>
-<h4>Comments</h4>
+
+<hr>
+
+
+<h4>Comments & Learning Resources</h4>
 
 {% for comment in comments %}
     <div class="card mb-3 p-3">
@@ -28,18 +32,40 @@
             {% endif %}
         </div>
         <p class="mt-2 mb-0">{{ comment.content }}</p>
+        {% if comment.resources.all %}
+            <div class="comment-resources mt-2">
+                <strong>Resource(s) shared with this comment:</strong>
+                <ul>
+                    {% for resource in comment.resources.all %}
+                        <li>
+                            <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
+                            {% if resource.description %}<br>{{ resource.description }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
 {% empty %}
     <p>No comments yet. Be the first to comment!</p>
-{% endfor %}    
+{% endfor %}
 
 <!-- Comment Form for new top-level comment -->
+
 {% if user.is_authenticated %}
     <h4 class="mt-4">Add a Comment</h4>
     <form method="POST">
         {% csrf_token %}
-        <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..."></textarea>
-        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
+        {{ comment_form.content.label_tag }}<br>
+        {{ comment_form.content }}<br><br>
+        <strong>Optionally add a resource:</strong><br>
+        {{ comment_form.resource_title.label_tag }}<br>
+        {{ comment_form.resource_title }}<br>
+        {{ comment_form.resource_url.label_tag }}<br>
+        {{ comment_form.resource_url }}<br>
+        {{ comment_form.resource_description.label_tag }}<br>
+        {{ comment_form.resource_description }}<br><br>
+        <button type="submit" name="comment_submit" class="btn btn-primary mt-2">Add Comment</button>
     </form>
 {% else %}
     <p class="mt-4">

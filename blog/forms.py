@@ -4,7 +4,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Post, Comment
+from .models import Post, Comment, Resource
 
 
 class RegisterForm(UserCreationForm):
@@ -30,7 +30,31 @@ class PostForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     # Form for creating/editing comments (replies)
+    resource_title = forms.CharField(
+        max_length=200, required=False,
+        label='Resource Title'
+    )
+    resource_url = forms.URLField(
+        required=False, label='Resource URL'
+    )
+    resource_description = forms.CharField(
+        widget=forms.Textarea, required=False,
+        label='Resource Description'
+    )
 
     class Meta:
         model = Comment
-        fields = ['content']
+        fields = [
+            'content',
+            'resource_title',
+            'resource_url',
+            'resource_description'
+        ]
+
+
+class ResourceForm(forms.ModelForm):
+    # Form for creating/editing resources
+
+    class Meta:
+        model = Resource
+        fields = ['title', 'url', 'description']
