@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+<!-- Heading-->
+<h2 class="mb-4">Register</h2>
+
+<!-- Registration Form -->
+ <form method="POST">
+
+<!-- CSRF Token for security -->
+    {% csrf_token %}
+
+<!--Loop through form fields automatically-->
+    {% for field in form %}
+        <div class="mb-3">
+            {{ field.label_tag }}  <!-- Display the label for the field -->
+            {{ field }}          <!-- Display the form field itself -->
+            {% if field.errors %}  <!-- Check if there are errors for this field -->
+                <div class="text-danger small">
+                    {{ field.errors }}  <!-- Display the error messages -->
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Register</button>
+
+ </form>
+
+<!-- Link to login page for existing users -->
+<p class="mt-3">
+    Already have an account? <a href="{% url 'login' %}">Login here</a>.
+</p>
+
+{% endblock %}

@@ -11,7 +11,7 @@ class RegisterForm(UserCreationForm):
     # Extends Django's built-in UserCreationForm to
     # include email and role fields
 
-    email = forms.EmailFeld(required=True)
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = User
