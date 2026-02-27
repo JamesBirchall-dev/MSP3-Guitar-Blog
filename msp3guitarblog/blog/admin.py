@@ -5,7 +5,7 @@ from .models import (
     Subject,
     Profile,
     Post,
-    Reply,
+    Comment,
     Resource,
     Vote
 )
@@ -33,13 +33,16 @@ class ProfileAdmin(admin.ModelAdmin):
 
 # REPLY INLINE (Shows replies inside Post admin)
 
-class ReplyInline(admin.TabularInline):
-    model = Reply
-    extra = 0
-
 
 class ResourceInline(admin.TabularInline):
     model = Resource
+    extra = 0
+
+
+# comment inline (Shows comments inside Post admin)
+
+class CommentInline(admin.TabularInline):
+    model = Comment
     extra = 0
 
 
@@ -70,16 +73,16 @@ class PostAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'created_on'
 
-    inlines = [ReplyInline, ResourceInline]
+    inlines = [CommentInline, ResourceInline]
 
 
-# REPLY ADMIN
+# COMMENT ADMIN
 
-@admin.register(Reply)
-class ReplyAdmin(admin.ModelAdmin):
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
 
-    list_display = ('author', 'post', 'is_verified', 'created_on')
-    list_filter = ('is_verified', 'created_on')
+    list_display = ('author', 'post', 'approved', 'created_on')
+    list_filter = ('approved', 'created_on')
     search_fields = ('content',)
 
 
@@ -97,5 +100,5 @@ class ResourceAdmin(admin.ModelAdmin):
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'post', 'reply', 'created_on')
+    list_display = ('user', 'post', 'comment', 'created_on')
     list_filter = ('created_on',)

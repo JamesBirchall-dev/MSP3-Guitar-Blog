@@ -129,32 +129,6 @@ class Post(models.Model):
         return self.title
 
 
-# REPLY MODEL
-# Represents responses to posts (discussion system).
-
-
-class Reply(models.Model):
-    post = models.ForeignKey(
-        Post,
-        on_delete=models.CASCADE,
-        related_name='replies'
-    )
-
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    content = models.TextField()
-
-    # Allows teachers to verify helpful replies
-    is_verified = models.BooleanField(default=False)
-
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Reply by {self.author}"
-
 # RESOURCE MODEL
 # External learning materials attached to a post.
 # Example:
@@ -187,6 +161,30 @@ class Resource(models.Model):
     def __str__(self):
         return self.title
 
+# Comments Model
+# stores comments on posts and replies.
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    content = models.TextField()
+
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    approved = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.post}"
 
 # VOTE MODEL
 # Scalable voting system.
@@ -195,6 +193,7 @@ class Resource(models.Model):
 # - A Reply
 #
 # Only one of post or reply should be filled.
+
 
 class Vote(models.Model):
     user = models.ForeignKey(
@@ -210,8 +209,8 @@ class Vote(models.Model):
         related_name='votes'
     )
 
-    reply = models.ForeignKey(
-        Reply,
+    comment = models.ForeignKey(
+        Comment,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -222,7 +221,7 @@ class Vote(models.Model):
 
     class Meta:
         # Prevents a user from voting twice
-        unique_together = ('user', 'post', 'reply')
+        unique_together = ('user', 'post', 'comment')
 
     def __str__(self):
         return f"Vote by {self.user}"
