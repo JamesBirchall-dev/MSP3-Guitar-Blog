@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from msp3guitarblog.blog.models import Profile
+from blog.models import Profile
 
 # Run this in manage.py shell to create missing profiles for all users.
 
