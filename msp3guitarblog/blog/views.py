@@ -3,7 +3,8 @@ from .models import Post
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, PostForm
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -58,3 +59,23 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+
+# restrict post creation to logged-in users
+
+@login_required
+def create_post(request):
+    # Allows logged-in users to create a post.
+    if request.method == "POST":
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  # Assign current user
+            post.save()
+            return redirect("home")
+
+    else:
+        form = PostForm()
+
+    return render(request, "blog/create_post.html", {"form": form})
