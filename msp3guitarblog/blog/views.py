@@ -20,38 +20,35 @@ def home(request):
 
 
 def post_detail(request, slug):
-    # get specific post by slug or return 404 if not found
     post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.filter(
+        parent__isnull=True
+    ).order_by("-created_on")
 
-# get all approved comments for this post
-    comments = post.comments.filter(approved=True).order_by("-created_on")
-
-    # if user submits a comment form
     if request.method == "POST":
-
-        # create a comment form instance with submitted data
         comment_form = CommentForm(request.POST)
-
         if comment_form.is_valid() and request.user.is_authenticated:
-
-            # dont save to db yet, we need to assign post and author first
             new_comment = comment_form.save(commit=False)
-
-            # attach post and author to comment
             new_comment.post = post
-
             new_comment.author = request.user
 
-            # save comment to db
-            new_comment.save()
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                from .models import Comment
+                try:
+                    new_comment.parent = Comment.objects.get(id=parent_id)
+                except Comment.DoesNotExist:
+                    new_comment.parent = None
 
-            # redirect to same post detail page to show new comment
+            new_comment.save()
             return redirect("post_detail", slug=post.slug)
+    else:
+        comment_form = CommentForm()
 
     context = {
         "post": post,
         "comments": comments,
-        "comment_form": CommentForm()
+        "comment_form": comment_form
     }
     return render(request, "blog/post_detail.html", context)
 

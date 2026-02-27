@@ -15,22 +15,42 @@
 <h4>Comments</h4>
 
 {% for comment in comments %}
-    <div class="card mb-2 p-3 shadow-sm">
+    <div class="card mb-3 p-3">
         <strong>{{ comment.author }}</strong>
         <small class="text-muted">{{ comment.created_on }}</small>
         <p class="mt-2">{{ comment.content }}</p>
+
+        <!--Reply Button-->
+        {% if user.is_authenticated %}
+        <form method="POST" class="mt-2">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <textarea name="content" class="form-control" rows="2" placeholder="Write a reply..."></textarea>
+            <button class="btn btn-sm btn-outline-primary mt-1">Reply</button>
+        </form>
+        {% endif %}
+
+
+        <!-- Display Replies -->
+        {% for reply in comment.replies.all %}
+            <div class="card mt-3 ms-4 p-2 bg-light">
+                <strong>{{ reply.author }}</strong>
+                <small class="text-muted">{{ reply.created_on }}</small>
+                <p class="mt-2">{{ reply.content }}</p>
+            </div>
+        {% endfor %}
     </div>
 {% empty %}
     <p>No comments yet.</p>
 {% endfor %}
 
-<!-- Comment Form -->
+<!-- Comment Form for new top-level comment -->
 {% if user.is_authenticated %}
     <h4 class="mt-4">Add a Comment</h4>
     <form method="POST">
         {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Comment</button>
+        <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..."></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Submit Comment</button>
     </form>
 {% else %}
     <p class="mt-4">

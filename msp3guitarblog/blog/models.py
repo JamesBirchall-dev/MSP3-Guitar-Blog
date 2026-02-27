@@ -179,6 +179,16 @@ class Comment(models.Model):
 
     content = models.TextField()
 
+    # Comment Threading: A comment can be a reply to another comment
+
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     approved = models.BooleanField(default=True)
