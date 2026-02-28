@@ -131,6 +131,11 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Set the role in the Profile
+            role = form.cleaned_data.get('role', 'beginner')
+            if hasattr(user, 'profile'):
+                user.profile.role = role
+                user.profile.save()
             login(request, user)
             return redirect('home')
     else:
@@ -159,6 +164,14 @@ def logout_view(request):
 
 @login_required
 def create_post(request):
+
+    # ensures user has a profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    # only allow users with a role of 'teacher'
+    if profile.role != 'teacher':
+        return redirect('home')
+
     # Allows logged-in users to create a post.
     if request.method == "POST":
         form = PostForm(request.POST)

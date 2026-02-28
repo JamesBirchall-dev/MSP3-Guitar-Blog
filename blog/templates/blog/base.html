@@ -16,11 +16,19 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
+                        ...
+                        {% if user.profile.role == 'teacher' %}
+                            ...
+                        {% endif %}
+                        ...
+                    {% endif %}
                         <li class="nav-item">
-                            <a class=""nav-link" href="{% url 'profile' user.username %}">
+                            <a class="nav-link" href="{% url 'profile' user.username %}">
                                 {{ user.username }}
                             </a>
                         </li>
+
+                        {% if user.profile.role == 'teacher' %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'create_post' %}">
                                 Create Post

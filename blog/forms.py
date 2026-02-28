@@ -13,11 +13,20 @@ class RegisterForm(UserCreationForm):
     # include email and role fields
 
     email = forms.EmailField(required=True)
+    role = forms.ChoiceField(
+        choices=[
+            ('beginner', 'Beginner'),
+            ('intermediate', 'Intermediate'),
+            ('advanced', 'Advanced'),
+        ],
+        required=True,
+        label='Role/Skill Level'
+    )
 
     class Meta:
         model = User
         # Fields to include in the registration form
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'role']
 
 
 class PostForm(forms.ModelForm):
