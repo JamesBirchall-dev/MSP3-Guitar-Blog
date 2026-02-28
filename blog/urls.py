@@ -9,6 +9,7 @@ urlpatterns = [
         views.vote_comment,
         name='vote_comment'
     ),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/<str:username>/', views.profile_view, name='profile'),
     path('base/', views.base_view, name='base'),
     path('subjects/', views.subject_list_view, name='subject_list'),

@@ -5,7 +5,7 @@
 <!-- Heading -->
 <h2>{{ post.title }}</h2>
 <p class="text-muted">
-    Subject: {{ post.subject }} | By {{ post.author }} | {{ post.created_on }}
+    Subject: {{ post.subject }} | <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> | {{ post.created_on }}
 </p>
 
 <!-- Post Content -->
@@ -22,12 +22,12 @@
     <div class="card mb-3 p-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <strong>{{ comment.author }}</strong>
+                <strong><a href="{% url 'profile' comment.author.username %}">{{ comment.author.username }}</a></strong>
                 <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
             {% if user.is_authenticated %}
                 <a href="{% url 'vote_comment' comment.id %}" class="btn btn-sm btn-success ms-2">
-                    {{ comment.vote_count }}
+                    {{ comment.vote_total }}
                 </a>
             {% endif %}
         </div>

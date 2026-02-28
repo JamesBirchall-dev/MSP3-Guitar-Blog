@@ -4,7 +4,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Post, Comment, Resource
+from .models import Post, Comment, Resource, Profile
 
 
 class RegisterForm(UserCreationForm):
@@ -58,3 +58,11 @@ class ResourceForm(forms.ModelForm):
     class Meta:
         model = Resource
         fields = ['title', 'url', 'description']
+
+
+class ProfileForm(forms.ModelForm):
+    # Form for editing the Profile model's role and bio fields
+
+    class Meta:
+        model = Profile
+        fields = ['role', 'bio']

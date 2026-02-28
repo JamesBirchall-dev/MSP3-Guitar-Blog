@@ -76,6 +76,11 @@ class Profile(models.Model):
         default='beginner'
     )
 
+    bio = models.TextField(
+        blank=True,
+        null=True
+    )
+
     # reputation stats
 
     @property

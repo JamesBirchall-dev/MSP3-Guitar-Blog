@@ -3,7 +3,9 @@ from .models import Post, Comment, Vote, Resource, Profile
 from django.db.models import Count
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import RegisterForm, PostForm, CommentForm, ResourceForm
+from .forms import (
+    RegisterForm, PostForm, CommentForm, ResourceForm, ProfileForm
+)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -26,13 +28,13 @@ def post_detail(request, slug):
 
     # order comments by vote count and then by creation date
     comments = post.comments.annotate(
-        vote_count=Count('votes')
-    ).order_by('-vote_count', '-created_on')
+        vote_total=Count('votes')
+    ).order_by('-vote_total', '-created_on')
 
     # Order resources by vote count then creation date
     resources = post.resources.annotate(
-        vote_count=Count('votes')
-    ).order_by('-vote_count', '-created_on')
+        vote_total=Count('votes')
+    ).order_by('-vote_total', '-created_on')
 
     comment_form = CommentForm()
     resource_form = ResourceForm()
@@ -45,6 +47,7 @@ def post_detail(request, slug):
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.author = request.user
+
                 comment.post = post
                 comment.save()
 
@@ -100,6 +103,22 @@ def profile_view(request, username):
     }
 
     return render(request, 'blog/profile.html', context)
+
+
+# profile update view
+
+@login_required
+def edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', username=request.user.username)
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'blog/edit_profile.html', {'form': form})
+
 
 # login/out and registration views
 
@@ -158,7 +177,12 @@ def create_post(request):
 
 @login_required
 def vote_comment(request, comment_id):
+    if request.method != "POST":
+        return redirect("home")
     comment = get_object_or_404(Comment, id=comment_id)
+    if comment.author == request.user:
+        # Prevent users from voting on their own comments
+        return redirect("post_detail", slug=comment.post.slug)
     vote, created = Vote.objects.get_or_create(
         user=request.user,
         comment=comment
@@ -173,7 +197,12 @@ def vote_comment(request, comment_id):
 
 @login_required
 def vote_resource(request, resource_id):
+    if request.method != "POST":
+        return redirect("home")
     resource = get_object_or_404(Resource, id=resource_id)
+    if resource.author == request.user:
+        # Prevent users from voting on their own resources
+        return redirect("post_detail", slug=resource.post.slug)
     vote, created = Vote.objects.get_or_create(
         user=request.user,
         resource=resource

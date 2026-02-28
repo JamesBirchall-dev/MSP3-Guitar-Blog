@@ -7,6 +7,12 @@
 <hr>
 
 <p><strong>Role:</strong> {{ profile.get_role_display }}</p>
+
+<p>{{ profile.bio|default:"No bio added yet." }}</p>
+{% if request.user.is_authenticated and request.user == profile_user %}
+    <a href="{% url 'edit_profile' %}" class="btn btn-secondary mb-3">Edit Profile</a>
+{% endif %}
+
 <p><strong>Total Votes Received:</strong> {{ profile.total_votes_received }}</p>
 <p><strong>Total Votes Cast:</strong> {{ profile.total_votes_cast }}</p>
 
