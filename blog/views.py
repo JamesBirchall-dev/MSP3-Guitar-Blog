@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment, Vote, Resource
+from .models import Post, Comment, Vote, Resource, Profile
 from django.db.models import Count
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm, PostForm, CommentForm, ResourceForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def base_view(request):
@@ -24,7 +25,6 @@ def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
     # order comments by vote count and then by creation date
-
     comments = post.comments.annotate(
         vote_count=Count('votes')
     ).order_by('-vote_count', '-created_on')
@@ -79,6 +79,27 @@ def post_detail(request, slug):
         "resource_form": resource_form
     }
     return render(request, "blog/post_detail.html", context)
+
+
+def profile_view(request, username):
+    user_obj = get_object_or_404(User, username=username)
+
+    # makes sure a profile exists for the user, creates one if not
+    profile, created = Profile.objects.get_or_create(user=user_obj)
+
+    posts = user_obj.blog_posts.all().order_by("-created_on")
+    comments = user_obj.comment_set.all().order_by("-created_on")
+    resources = user_obj.resources.all().order_by("-created_on")
+
+    context = {
+        'profile_user': user_obj,
+        'profile': profile,
+        'posts': posts,
+        'comments': comments,
+        'resources': resources,
+    }
+
+    return render(request, 'blog/profile.html', context)
 
 # login/out and registration views
 

@@ -5,7 +5,7 @@
 # - Subject (categories)
 # - Profile (user role extension)
 # - Post (main learning posts)
-# - Reply (discussion responses)
+# - Comment (discussion responses)
 # - Resource (external learning links)
 # - Vote (upvoting system)
 
@@ -64,15 +64,44 @@ class Subject(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="profile"
+    )
+
     role = models.CharField(
         max_length=20,
         choices=LEVEL_CHOICES,
         default='beginner'
     )
 
+    # reputation stats
+
+    @property
+    def total_votes_received(self):
+        # Total votes on user's posts
+        post_votes = sum(
+            post.votes.count() for post in self.user.blog_posts.all()
+        )
+        comment_votes = sum(
+            comment.votes.count()
+            for comment in self.user.comment_set.all()
+        )
+        resource_votes = sum(
+            resource.votes.count()
+            for resource in self.user.resources.all()
+        )
+
+        return post_votes + comment_votes + resource_votes
+
+    @property
+    def total_votes_cast(self):
+        # Total votes user cast (upvoting others)
+        return self.user.vote_set.count()
+
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username} - {self.role}"
 
 # POST MODEL
 # Main learning content in the forum.
@@ -123,6 +152,10 @@ class Post(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    @property
+    def vote_count(self):
+        return self.votes.count()
+
     def __str__(self):
         return self.title
 
@@ -154,13 +187,18 @@ class Resource(models.Model):
 
     added_by = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="resources"
     )
 
     title = models.CharField(max_length=200)
     url = models.URLField()
     description = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def vote_count(self):
+        return self.votes.count()
 
     def __str__(self):
         return self.title
@@ -186,6 +224,10 @@ class Comment(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     approved = models.BooleanField(default=True)
+
+    @property
+    def vote_count(self):
+        return self.votes.count()
 
     def __str__(self):
         return f"Comment by {self.author} on {self.post}"

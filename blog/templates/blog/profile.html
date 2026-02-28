@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+<h2>{{ profile_user.username }}'s Profile</h2>
+
+<hr>
+
+<p><strong>Role:</strong> {{ profile.get_role_display }}</p>
+<p><strong>Total Votes Received:</strong> {{ profile.total_votes_received }}</p>
+<p><strong>Total Votes Cast:</strong> {{ profile.total_votes_cast }}</p>
+
+<hr>
+
+<h3>Posts</h3>
+    {% for post in posts %}
+        <div>
+            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+        </div>
+    {% empty %}
+        <p>No posts yet.</p>
+    {% endfor %}
+
+<hr>
+
+<h3>Resources</h3>
+    {% for resource in resources %}
+        <div>
+            <a href="{{ resource.url }}" target="_blank">{{ resource.title }}
+            </a>
+            Votes: {{ resource.vote_count }}
+        </div>
+    {% empty %}
+        <p>No resources shared yet.</p>
+    {% endfor %}
+
+{% endblock %}
