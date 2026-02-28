@@ -41,6 +41,7 @@ LEVEL_CHOICES = [
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
         """

@@ -16,7 +16,7 @@ def base_view(request):
 
 def subject_list_view(request):
     subjects = Subject.objects.annotate(
-        post_count=Count('post')
+        post_count=Count('posts')
     ).order_by('name')
     return render(request, 'blog/subject_list.html', {'subjects': subjects})
 
