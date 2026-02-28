@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<h2>{{ subject.name }}</h2>
+<hr>
+
+<div class="container mt-4">
+    {% for post in posts %}
+        <div class="card p-3 mb-3 shadow-sm">
+            <h5>
+                <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+            </h5>
+            <p>
+                By <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a>
+            </p>
+            <p>Votes: {{ post.vote_total }}</p>
+            <small>{{ post.created_on }}</small>
+        </div>
+    {% empty %}
+        <p>No posts found for this subject.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -13,6 +13,11 @@ urlpatterns = [
     path('profile/<str:username>/', views.profile_view, name='profile'),
     path('base/', views.base_view, name='base'),
     path('subjects/', views.subject_list_view, name='subject_list'),
+    path(
+        'subjects/<slug:slug>/',
+        views.subject_detail_view,
+        name='subject_detail'
+    ),
 
     # Create Post URL
     path('create/', views.create_post, name='create_post'),

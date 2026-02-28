@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment, Vote, Resource, Profile
+from .models import Post, Comment, Vote, Resource, Profile, Subject
 from django.db.models import Count
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -15,7 +15,10 @@ def base_view(request):
 
 
 def subject_list_view(request):
-    return render(request, 'blog/subject_list.html')
+    subjects = Subject.objects.annotate(
+        post_count=Count('post')
+    ).order_by('name')
+    return render(request, 'blog/subject_list.html', {'subjects': subjects})
 
 
 def home(request):
@@ -213,3 +216,20 @@ def vote_resource(request, resource_id):
         vote.delete()
 
     return redirect("post_detail", slug=resource.post.slug)
+
+
+# Subject detail view
+
+def subject_detail_view(request, slug):
+    subject = get_object_or_404(Subject, slug=slug)
+
+    posts = subject.posts.filter(
+        status=1
+    ).annotate(
+        vote_total_count=Count('votes')
+    ).order_by('-vote_total_count', '-created_on')
+
+    return render(request, 'blog/subject_detail.html', {
+        'subject': subject,
+        'posts': posts,
+    })
