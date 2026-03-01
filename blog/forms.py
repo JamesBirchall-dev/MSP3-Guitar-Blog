@@ -35,6 +35,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'slug', 'content', 'min_level', 'subject', 'tags']
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple(),
+        }
 
 
 class CommentForm(forms.ModelForm):

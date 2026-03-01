@@ -181,6 +181,7 @@ def create_post(request):
             post.author = request.user  # Assign current user
             post.status = 1  # Set post as published
             post.save()
+            form.save_m2m()  # Save tags
             return redirect("home")
 
     else:
