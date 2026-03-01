@@ -1,0 +1,141 @@
+/* Global Theme Styles */
+
+body {
+    background-color: #f5e0c4;
+    font-family: "opensans", sans-serif;
+    color: #2f2a26
+}
+
+.container-main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 3rem 1rem;
+}
+
+
+/* typography */
+
+/*headings*/
+
+h1, h2, h3, h4, h5 {
+    font-family: "montserrat", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand {
+    font-family: "varela Round", sans-serif;
+    font-size: 1.4rem;
+}
+
+small {
+    color: #7a6f66
+}
+
+/*Navbar*/
+
+.navbar {
+    background-color: #fff8ee !important;
+    border-bottom: 1px solid #e6dccf;
+}
+
+.navbar .nav-link {
+    color: #5a4a42 !important;
+    font-weight: 500;    
+}
+
+.nav-link:hover {
+    color: #8c6a6a !important;
+}
+
+/* Subject Header */
+
+.subject-header {
+    background-color: #fffaf3;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e6dccf;
+    margin-bottom: 2rem;
+}
+
+/* Post Card */
+
+.card-custom {
+    background: white;
+    border: 1px solid #e6dccf;
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.card-custom:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+/* tags */
+
+
+.tag-badge {
+    display: inline-block;
+    background-color: #efe6db;
+    color: #6b4f4f;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    margin: 3px 3px 3px 0;
+    transition: all 0.2s ease;
+}
+
+.tag-badge:hover {
+    background-color: #6b4f4f;
+    color: white;
+    border-radius: 30px;
+    padding: 6px 18px;
+    border: none;
+    font-size: 0.9rem;
+
+}
+
+/* Buttons */
+
+
+.btn-custom {
+    background-color: #6b4f4f;
+    color: white;
+    border-radius: 30px;
+    padding: 6px 18px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-custom:hover {
+    background-color: #8c6a6a;
+    color: white;
+}
+
+/* Linkss */
+
+a {
+    color: #6b4f4f;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #8c6a6a;
+    text-decoration: underline;
+}
+
+/* Forms */ 
+
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #e6dccf;
+
+}
+
+.form-control:focus {
+    border-color: #6b4f4f;
+    box-shadow: 0 0 0 0.2rem rgba(107,79,79,0.25);
+}

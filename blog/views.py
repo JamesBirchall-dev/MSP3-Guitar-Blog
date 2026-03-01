@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment, Vote, Resource, Profile, Subject, Tag
+from .models import Post, Comment, Vote, Resource, Profile, Subject
 from django.db.models import Count
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
