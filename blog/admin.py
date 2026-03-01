@@ -7,7 +7,8 @@ from .models import (
     Post,
     Comment,
     Resource,
-    Vote
+    Vote,
+    Tag
 )
 
 
@@ -18,6 +19,12 @@ class SubjectAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'slug')
     search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ('tags',)
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -74,6 +81,8 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
 
     inlines = [CommentInline, ResourceInline]
+
+    filter_horizontal = ('tags',)
 
 
 # COMMENT ADMIN

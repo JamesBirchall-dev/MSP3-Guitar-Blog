@@ -45,6 +45,12 @@ class Subject(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
 
+    tags = models.ManyToManyField(
+        'Tag',
+        related_name='subjects',
+        blank=True
+    )
+
     def save(self, *args, **kwargs):
         """
         Automatically generate slug from name
@@ -58,6 +64,21 @@ class Subject(models.Model):
         """
         String representation shown in admin.
         """
+        return self.name
+
+
+# tags model
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
         return self.name
 
 # PROFILE MODEL
@@ -136,6 +157,14 @@ class Post(models.Model):
         null=True,
         blank=True
     )
+
+    # tags for filtering
+    tags = models.ManyToManyField(
+        Tag,
+        related_name='posts',
+        blank=True
+    )
+
     content = models.TextField()
     min_level = models.CharField(
         max_length=20,

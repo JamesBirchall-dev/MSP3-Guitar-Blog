@@ -5,6 +5,11 @@
 <h2>{{ subject.name }}</h2>
 <hr>
 
+<a href="{% url 'subject_detail' subject.slug %}"
+   class="btn btn-sm {% if not active_tag %}btn-dark{% else %}btn-outline-dark{% endif %}>
+    All
+</a>
+
 <div class="container mt-4">
     {% for post in posts %}
         <div class="card p-3 mb-3 shadow-sm">
