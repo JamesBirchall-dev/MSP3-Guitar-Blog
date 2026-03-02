@@ -205,7 +205,7 @@ class Post(models.Model):
 # - PDF
 
 class Resource(models.Model):
-
+    # assigns subject to resource for better organization and filtering
     subject = models.ForeignKey(
         Subject,
         on_delete=models.CASCADE,
@@ -213,7 +213,7 @@ class Resource(models.Model):
         null=True,
         blank=True
     )
-
+# A resource can be attached to either a post or a comment (reply).
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -221,7 +221,8 @@ class Resource(models.Model):
         null=True,
         blank=True
     )
-
+# A resource can also be attached to a comment (reply)
+# for more specific guidance.
     comment = models.ForeignKey(
         'Comment',
         on_delete=models.CASCADE,
@@ -229,7 +230,7 @@ class Resource(models.Model):
         blank=True,
         related_name='resources'
     )
-
+# The user who added the resource (for attribution and voting)
     added_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -240,6 +241,20 @@ class Resource(models.Model):
     url = models.URLField()
     description = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Automatically assign subject from post or comment if not set.
+        This ensures resources are categorized even if the user
+        doesn't select a subject.
+        """
+        if self.post:
+            self.subject = self.post.subject
+
+        elif self.comment:
+            self.subject = self.comment.post.subject
+
+        super().save(*args, **kwargs)
 
     @property
     def vote_count(self):
