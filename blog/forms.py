@@ -75,6 +75,14 @@ class ResourceForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     # Form for editing the Profile model's role and bio fields
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # exclude teacher from edit profile form
+        self.fields['role'].choices = [
+            (value, label) for value, label in self.fields['role'].choices
+            if value != 'teacher'
+        ]
+
     class Meta:
         model = Profile
         fields = ['role', 'bio']

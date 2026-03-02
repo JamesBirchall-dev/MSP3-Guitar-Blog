@@ -2,12 +2,52 @@
 
 {% block content %}
 
-<h2>Edit Profile</h2>
+<!-- PAGE HEADER -->
+ <div class="page-header mb-4">
+    <h1>Edit Profile</h1>
+    <p class="text-muted">Update your profile information and preferences.      
+    </p>
+ </div>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+<!-- Edit Profile Form -->
 
-{% endblock %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+      <div class="card shadow-sm p-4">
+        <form method="POST">
+            {% csrf_token %}
+
+            <!--form fields loop through for better control and styling -->
+            {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">
+                            {{ field.help_text }}
+                        </div>
+                    {% endif %}
+                    <!--display field errors -->
+                    {% if field.errors %}
+                        <div class="text-danger small">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="d-flex justify-content-between mt-4">
+                <!--backbutton -->
+                <a href="{% url 'profile' user.username %}" class="btn btn-outline-secondary">
+                    Back to Profile
+                </a>
+                <!--Submit button -->
+                <button type="submit" class="btn btn-primary">
+                    Update Profile
+                </button>
+            </div>
+        </form>
+    </div>
+ </div>
+
+ {% endblock %}
