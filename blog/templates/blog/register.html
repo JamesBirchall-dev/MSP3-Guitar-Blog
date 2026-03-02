@@ -2,8 +2,13 @@
 
 {% block content %}
 
-<!-- Heading-->
-<h2 class="mb-4">Register</h2>
+<!-- Registration header -->
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card shadow-sm p-4">
+            <h3 class="mb-4 text-center">Register</h3>
+
 
 <!-- Registration Form -->
  <form method="POST">
@@ -16,6 +21,13 @@
         <div class="mb-3">
             {{ field.label_tag }}  <!-- Display the label for the field -->
             {{ field }}          <!-- Display the form field itself -->
+
+            {% if field.help_text %}  <!-- Check if there is help text for this field -->
+                <div class="form-text">
+                    {{ field.help_text }}  <!-- Display the help text -->
+                </div>
+            {% endif %}
+
             {% if field.errors %}  <!-- Check if there are errors for this field -->
                 <div class="text-danger small">
                     {{ field.errors }}  <!-- Display the error messages -->
@@ -23,7 +35,7 @@
             {% endif %}
         </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary w-100">Register</button>
 
  </form>
 
