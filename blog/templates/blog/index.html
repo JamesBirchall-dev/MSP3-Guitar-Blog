@@ -10,91 +10,96 @@
 </div>
 
 <!-- Filter bar-->
-<form method="GET" class="card p-3 mb-4 shadow-sm">
-    <div class="col-md-3">
-        <label class="form-label">Filter by Subject:</label>
-        <select name="subject" id="subject" class="form-select">
-            <option value="">All Subjects</option>
-            {% for subject in subjects %}
-                <option value="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
-                    {{ subject.name }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
 
-<!--Content type filter-->
-    <div class="col-md-3">
-        <label class="form-label">Filter by Content Type:</label>
-        <select name="type" id="type" class="form-select">
-            <option value="">All Types</option>
-            <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
-            <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>   
-        </select>
-    </div>
 
-<!--Search bar-->
-
-    <div class="col-md-4">
-        <label class="form-label">Search:</label>
-        <input type="text"
+<div class="container">
+    <form method="GET" class="card p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+            <label class="form-label">Filter by Subject:</label>
+            <select name="subject" id="subject" class="form-select">
+                <option value="">All Subjects</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
+                        {{ subject.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+            <div class="col-md-3">
+            <label class="form-label">Filter by Content Type:</label>
+            <select name="type" id="type" class="form-select">
+                <option value="">All Types</option>
+                <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
+                <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>
+            </select>
+        </div>
+            <div class="col-md-4">
+            <label class="form-label">Search:</label>
+            <input type="text"
                 name="q"
                 value="{{ query }}"
                 class="form-control"
                 placeholder="Search posts and resources...">
+        </div>
     </div>
 
-<!--Search submit button -->
-    <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100">Apply</button>
-    </div>
+        <div class="row mt-2">
+            <div class="col-md-12 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5">Apply</button>
+            </div>
+        </div>
+    </form>
 </div>
-</form>
 
 <!-- Feed Grid -->
 
-<div class="row">
+
+
     {% for post in posts %}
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-
-                    <!-- Post Title -->
-                    <h5 class="card-title">
-                        <a href="{% url 'post_detail' post.slug %}">
-                            {{ post.title }}
-                        </a>
-                    </h5>
-
-                    <!-- Post Meta -->
-                    <p class="text-muted small">
-                        <strong>Subject:</strong> {{ post.subject.name }}<br>
-                        <strong>Level:</strong> {{ post.min.level|title }}<br>
-                    </p>
-                    <!-- Post Preview -->
-                    <p class="card-text">
-                        {{ post.content|truncatechars:150 }}
-                    </p>
-
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <!-- Post Badge -->
+                        <span class="badge bg-primary mb-2">Post</span>
+                        <!-- Post Title -->
+                        <h5 class="card-title">
+                            <a href="{% url 'post_detail' post.slug %}">
+                                {{ post.title }}
+                            </a>
+                        </h5>
+                        <!-- Post Meta -->
+                        <p class="text-muted small">
+                            <strong>Subject:</strong> {{ post.subject.name }}<br>
+                            <strong>Level:</strong> {{ post.min.level|title }}<br>
+                        </p>
+                        <!-- Post Preview -->
+                        <p class="card-text">
+                            {{ post.content|truncatechars:150 }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <small class="text-muted">
+                            By {{ post.author }}
+                            {{ post.created_on|date:"M d, Y" }}
+                            {{ post.vote_count }}
+                        </small>
+                    </div>
                 </div>
-
-                <div class="card-footer bg-white border-0">
-                    <small class="text-muted">
-                        By {{ post.author }}
-                        {{ post.created_on|date:"M d, Y" }}
-                        {{ post.vote_count }}
-                    </small>
-                </div>
-                </div>
+            </div>
         </div>
+    </div>
     {% endfor %}
 
     <!--Resources Loop/ Cards -->
 
     {% for resource in resources %}
-        <div class="col-md-6 mb-4">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
             <div class="card h-100 shadow-sm border-start border-4 border-warning">
-
                 <div class="card-body">
 
                     <!-- Resource Badge -->
@@ -134,7 +139,10 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
+</div>
+
+{% endfor %}
 
     <!--If empty -->
     {% if not posts and not resources %}

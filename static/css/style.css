@@ -61,6 +61,7 @@ small {
 .page-header h1,
 .page-header h2 {
     margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .page-header p {
@@ -80,6 +81,10 @@ small {
 }
 
 /* Post Card */
+
+.card {
+    border-radius: 12px;;
+}
 
 .card-custom {
     background: white;
@@ -193,10 +198,14 @@ a:hover {
 
 /* Forms */ 
 
+/* Form inputs */
+input, select, textarea {
+    border-radius: 8px !important;
+}
+
 .form-control {
     border-radius: 12px;
     border: 1px solid #e6dccf;
-
 }
 
 .form-control:focus {
@@ -207,7 +216,7 @@ a:hover {
 /* Form Card */
 
 form.card {
-    background-color: #fffdf8;
+    background-color: #f8f9fa;
     border-radius: 12px;
 }
 
