@@ -43,7 +43,10 @@ LEVEL_CHOICES = [
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
+    # detailed description shown on subject page
     description = models.TextField(blank=True)
+    # short description for listing pages
+    short_description = models.CharField(max_length=255, blank=True, null=True)
 
     tags = models.ManyToManyField(
         'Tag',

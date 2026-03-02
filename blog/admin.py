@@ -8,7 +8,7 @@ from .models import (
     Comment,
     Resource,
     Vote,
-    Tag
+    Tag,
 )
 
 
@@ -17,10 +17,11 @@ from .models import (
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
 
-    list_display = ('name', 'slug')
+    list_display = ('name', 'slug', 'short_description')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('tags',)
+    fields = ('name', 'slug', 'description', 'short_description', 'tags')
 
 
 @admin.register(Tag)
