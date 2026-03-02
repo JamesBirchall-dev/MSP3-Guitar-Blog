@@ -23,7 +23,7 @@
                     </h4>
 
                     <p class="card-text text-muted">
-                        {{ subject.short_description|default:"No short description available." }}
+                        {{ subject.short_description|default:"No short description available."|safe }}
                     </p>
 
                     <div class="mt-auto">

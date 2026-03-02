@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Post, Comment, Resource, Profile
+from ckeditor.widgets import CKEditorWidget
 
 
 class RegisterForm(UserCreationForm):
@@ -31,6 +32,7 @@ class RegisterForm(UserCreationForm):
 
 class PostForm(forms.ModelForm):
     # Form for creating/editing posts
+    content = forms.CharField(widget=CKEditorWidget())
 
     class Meta:
         model = Post
@@ -41,6 +43,7 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
     # Form for creating/editing comments (replies)
     resource_title = forms.CharField(
         max_length=200, required=False,
@@ -50,7 +53,7 @@ class CommentForm(forms.ModelForm):
         required=False, label='Resource URL'
     )
     resource_description = forms.CharField(
-        widget=forms.Textarea, required=False,
+        widget=CKEditorWidget(), required=False,
         label='Resource Description'
     )
 

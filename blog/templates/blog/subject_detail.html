@@ -4,6 +4,9 @@
 
 <h2>{{ subject.name }}</h2>
 <hr>
+<div class="subject-description">
+    {{ subject.description|safe }}
+</div>
 
 <a href="{% url 'subject_detail' subject.slug %}"
    class="btn btn-sm {% if not active_tag %}btn-dark{% else %}btn-outline-dark{% endif %}>
