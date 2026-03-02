@@ -48,6 +48,27 @@ small {
     color: #8c6a6a !important;
 }
 
+/* Page Header */
+
+.page-header {
+    background-color: #fffaf3;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #e6dccf;
+    margin-bottom: 2rem;
+}
+
+.page-header h1,
+.page-header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #7a6f66;
+    margin-bottom: 0;
+}
+
+
 /* Subject Header */
 
 .subject-header {
