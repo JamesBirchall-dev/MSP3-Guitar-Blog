@@ -10,6 +10,54 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 
+def index(request):
+    # This view renders the main feed page (same as home)
+    posts = Post.objects.filter(status=1).select_related(
+        "subject", "author"
+    ).order_by("-created_on")
+
+    resources = Resource.objects.select_related(
+        "subject", "added_by", "post"
+    )
+
+    subject_slug = request.GET.get('subject')
+    if subject_slug:
+        posts = posts.filter(subject__slug=subject_slug)
+        resources = resources.filter(subject__slug=subject_slug)
+
+    query = request.GET.get('q')
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
+        resources = resources.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+    content_type = request.GET.get('type')
+    if content_type == 'post':
+        resources = resources.none()
+    elif content_type == 'resource':
+        posts = posts.none()
+
+    posts = posts.order_by("-created_on")
+    resources = resources.order_by("-created_on")
+
+    subjects = Subject.objects.all().order_by("name")
+
+    context = {
+        "posts": posts,
+        "resources": resources,
+        "subjects": subjects,
+        "active_subject": subject_slug,
+        "active_type": content_type,
+        "query": query,
+    }
+    return render(request, "blog/index.html", context)
+
+
 def base_view(request):
     return render(request, 'blog/base.html')
 
@@ -32,6 +80,7 @@ def home(request):
     resources = Resource.objects.select_related(
         "subject", "added_by", "post"
     )
+
 
 #  Subject Filter
     subject_slug = request.GET.get('subject')

@@ -19,6 +19,9 @@ urlpatterns = [
         name='subject_detail'
     ),
 
+    # Home feed URL
+    path('', views.index, name='index'),
+
     # Create Post URL
     path('create/', views.create_post, name='create_post'),
 
