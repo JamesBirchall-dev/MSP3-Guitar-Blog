@@ -2,42 +2,93 @@
 
 {% block content %}
 
-<h2>{{ profile_user.username }}'s Profile</h2>
 
-<hr>
+<!-- Heading -->
 
-<p><strong>Role:</strong> {{ profile.get_role_display }}</p>
+<div class="page-header mb-4">
+    <h1>{{ profile_user.username }}'s Profile</h1>
+    <p class="text-muted">
+        Member role: {{ profile.get_role_display }} | Joined on {{ profile_user.date_joined|date:"F j, Y" }}
+    </p>
+</div>
 
-<p>{{ profile.bio|default:"No bio added yet." }}</p>
-{% if request.user.is_authenticated and request.user == profile_user %}
-    <a href="{% url 'edit_profile' %}" class="btn btn-secondary mb-3">Edit Profile</a>
-{% endif %}
+<!-- Profile Summary Card -->
+ <div class="row mb-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadown-sm p-4">
+            
+            <!--Bio Section -->
+             <h2>About</h2>
+             <p class="text-muted">
+                {{ profile.bio|default:"No bio added yet." }}
+                </p>
+                <hr>
 
-<p><strong>Total Votes Received:</strong> {{ profile.total_votes_received }}</p>
-<p><strong>Total Votes Cast:</strong> {{ profile.total_votes_cast }}</p>
+            <!-- Voting stats -->
+             <div class="col-6">
+                <h6 class="mb-0">Total Votes Received</h6>
+                <p class="fw-bold">{{ profile.total_votes_received }}</p>
+             </div>
 
-<hr>
+            <div class="col-6">
+                <h6 class="mb-0">Total Votes Cast</h6>
+                <p class="fw-bold">{{ profile.total_votes_cast }}</p>
+             </div>
 
-<h3>Posts</h3>
+        </div>
+
+        <!-- Edit Profile Button only logged in user sees for themselves -->
+        {% if request.user.is_authenticated and request.user == profile_user %}
+        <div class="mt-3 text-end">
+            <a href="{% url 'edit_profile' %}" class="btn btn-outline-secondary">Edit Profile</a>
+        </div>
+        {% endif %}
+        </div>
+    </div>
+ </div>
+
+<!--Posts section -->
+
+<h4 class="mb-3">Posts</h4>
+
+<div class="row mb-4">
     {% for post in posts %}
-        <div>
-            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm p-3 h-100">
+               <a href="{% url 'post_detail' post.slug %}">
+                    <h5>{{ post.title }}</h5>
+                </a>
+                <small class="text-muted">{{ post.created_on|date:"F j, Y" }}
+                </small>
+            </div>
         </div>
     {% empty %}
-        <p>No posts yet.</p>
+        <p class="text-muted">No posts yet.</p>
     {% endfor %}
+</div>
 
-<hr>
+<!-- Resources section -->
 
-<h3>Resources</h3>
+<h4 class="mb-3">Resources</h4>
+
+<div class="row mb-4">
     {% for resource in resources %}
-        <div>
-            <a href="{{ resource.url }}" target="_blank">{{ resource.title }}
-            </a>
-            Votes: {{ resource.vote_count }}
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm p-3 h-100 border-start border-4 border-warning">
+                
+               <a href="{{ resource.url }}" target="_blank"
+                class="fw-semibold text-decoration-none">
+                 {{ resource.title }}
+                </a>
+
+                <small class="text-muted">
+                    Votes: {{ resource.vote_count }} 
+                <small>
+            </div>
         </div>
     {% empty %}
-        <p>No resources shared yet.</p>
-    {% endfor %}
+        <p class="text-muted">No resources yet.</p>
+    {% endfor %}    
+</div>
 
 {% endblock %}
