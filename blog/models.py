@@ -204,8 +204,16 @@ class Post(models.Model):
 # - Article
 # - PDF
 
-
 class Resource(models.Model):
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="resources",
+        null=True,
+        blank=True
+    )
+
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
