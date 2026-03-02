@@ -23,12 +23,12 @@
                     </h4>
 
                     <p class="card-text text-muted">
-                        {{ subject.description|default:"No description available." }}
+                        {{ subject.short_description|default:"No short description available." }}
                     </p>
 
                     <div class="mt-auto">
                         <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary w-100 mt-3">Read More</a>
-                       <a href="{% url 'subject_detail' subject.slug %}" class="badge bg-primary text-decoration-none">
+                       <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary btn-lg my-3">
                         {{ subject.post_count }} posts
                         </a>
                     </div>
