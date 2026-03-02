@@ -7,7 +7,7 @@
         <h2 class="create-title">Create New Post</h2>
 
 
-<form method="POST">
+<form method="POST" class="card">
     {% csrf_token %}
 
 <!--Top section -->
@@ -20,8 +20,8 @@
             {{ form.subject }}          
             </div>
         </div>
-
-        <div class="col-md-6>
+    </div>  
+        <div class="col-md-6"
             <div class="form-group-clean">
                 <label>Tags</label>
                 <div class="tag-container"></div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div> 
-
+    </div> 
 <!--Main content section -->
     <div class="post-content-section">
         <div class="form-group-clean">

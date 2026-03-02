@@ -2,39 +2,145 @@
 
 {% block content %}
 
+<!--PAGE HEADER-->
+
 <div class="page-header">
     <h1>Guitar Learning Blog</h1>
     <p class="lead">Your go-to resource for all things guitar. Explore posts, subjects, and resources to enhance your guitar skills.</p>    
 </div>
 
+<!-- Filter bar-->
+<form method="GET" class="card p-3 mb-4 shadow-sm">
+    <div class="col-md-3">
+        <label class="form-label">Filter by Subject:</label>
+        <select name="subject" id="subject" class="form-select">
+            <option value="">All Subjects</option>
+            {% for subject in subjects %}
+                <option value="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
+                    {{ subject.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+<!--Content type filter-->
+    <div class="col-md-3">
+        <label class="form-label">Filter by Content Type:</label>
+        <select name="type" id="type" class="form-select">
+            <option value="">All Types</option>
+            <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
+            <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>   
+        </select>
+    </div>
+
+<!--Search bar-->
+
+    <div class="col-md-4">
+        <label class="form-label">Search:</label>
+        <input type="text"
+                name="q"
+                value="{{ query }}"
+                class="form-control"
+                placeholder="Search posts and resources...">
+    </div>
+
+<!--Search submit button -->
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Apply</button>
+    </div>
+</div>
+</form>
+
+<!-- Feed Grid -->
+
 <div class="row">
     {% for post in posts %}
         <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
+
+                    <!-- Post Title -->
                     <h5 class="card-title">
                         <a href="{% url 'post_detail' post.slug %}">
                             {{ post.title }}
                         </a>
                     </h5>
 
-                    <p class="card-text text-muted">
-                        Subject: {{ post.subject }}
+                    <!-- Post Meta -->
+                    <p class="text-muted small">
+                        <strong>Subject:</strong> {{ post.subject.name }}<br>
+                        <strong>Level:</strong> {{ post.min.level|title }}<br>
                     </p>
-
+                    <!-- Post Preview -->
                     <p class="card-text">
-                        {{ post.content|truncatewords:20 }}
+                        {{ post.content|truncatechars:150 }}
                     </p>
 
+                </div>
+
+                <div class="card-footer bg-white border-0">
                     <small class="text-muted">
-                        By {{ post.author }} | {{ post.created_on }}
+                        By {{ post.author }}
+                        {{ post.created_on|date:"M d, Y" }}
+                        {{ post.vote_count }}
+                    </small>
+                </div>
+                </div>
+        </div>
+    {% endfor %}
+
+    <!--Resources Loop/ Cards -->
+
+    {% for resource in resources %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-start border-4 border-warning">
+
+                <div class="card-body">
+
+                    <!-- Resource Badge -->
+                     <span class="badge bg-warning text-dark mb-2">Resource</span>
+                    <!-- Resource Title --> 
+                    <h5>
+                        <a href="{{ resource.url }}" target="_blank">
+                            {{ resource.title }}   
+                        </a>
+                    </h5>
+                    <!-- Resource description -->
+                     <p>
+                        {{ resource.description|truncatewords:20 }}
+                    </p>
+
+                    <!-- Resource Meta -->
+
+                    <p class="text-muted small">
+                        <strong>Subject:</strong> {{ resource.subject.name }}<br>
+                        
+                        {% if resource.post %}
+                            <strong>From</strong>
+                            <a href="{% url 'post_detail' resource.post.slug %}">
+                                {{ resource.post.title }}
+                            </a>
+                        {% endif %}
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-white border-0">
+                    <small class="text-muted">
+                        Added by {{ resource.added_by }}
+                        {{ resource.created_on|date:"M d, Y" }}
+                        {{ resource.vote_count }} votes
                     </small>
                 </div>
             </div>
         </div>
-    {% empty %}
-        <p>No posts yet.</p>
     {% endfor %}
-</div>
 
+    <!--If empty -->
+    {% if not posts and not resources %}
+        <div class="col-12">
+            <p class="text-center">No posts or resources found. Try adjusting your filters or search terms.</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

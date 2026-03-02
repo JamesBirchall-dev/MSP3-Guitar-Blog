@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment, Vote, Resource, Profile, Subject
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import (
@@ -21,9 +21,59 @@ def subject_list_view(request):
     return render(request, 'blog/subject_list.html', {'subjects': subjects})
 
 
+# HOME PAGE VIEW
+# Displays all published posts and resources
+
 def home(request):
-    posts = Post.objects.filter(status=1).order_by("-created_on")
-    return render(request, "blog/index.html", {"posts": posts})
+    posts = Post.objects.filter(status=1).select_related(
+        "subject", "author"
+    ).order_by("-created_on")
+
+    resources = Resource.objects.select_related(
+        "subject", "added_by", "post"
+    )
+
+#  Subject Filter
+    subject_slug = request.GET.get('subject')
+    if subject_slug:
+        posts = posts.filter(subject__slug=subject_slug)
+        resources = resources.filter(subject__slug=subject_slug)
+
+# search filter
+    query = request.GET.get('q')
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
+
+        resources = resources.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+# content ttype filter (post vs resource)
+    content_type = request.GET.get('type')
+    if content_type == 'post':
+        resources = resources.none()  # Exclude resources
+    elif content_type == 'resource':
+        posts = posts.none()  # Exclude posts
+
+    posts = posts.order_by("-created_on")
+    resources = resources.order_by("-created_on")
+
+    subjects = Subject.objects.all().order_by("name")
+
+    context = {
+        "posts": posts,
+        "resources": resources,
+        "subjects": subjects,
+        "active_subject": subject_slug,
+        "active_type": content_type,
+        "query": query,
+
+    }
+    return render(request, "blog/index.html", context)
 
 
 def post_detail(request, slug):
@@ -217,7 +267,7 @@ def vote_resource(request, resource_id):
     if request.method != "POST":
         return redirect("home")
     resource = get_object_or_404(Resource, id=resource_id)
-    if resource.author == request.user:
+    if resource.added_by == request.user:
         # Prevent users from voting on their own resources
         return redirect("post_detail", slug=resource.post.slug)
     vote, created = Vote.objects.get_or_create(
@@ -239,7 +289,7 @@ def subject_detail_view(request, slug):
 
     tag_slug = request.GET.get('tag')
     if tag_slug:
-        posts = subject.posts.filter(tags_slug=tag_slug)
+        posts = subject.posts.filter(tags__slug=tag_slug)
     else:
         posts = subject.posts.all()
 
