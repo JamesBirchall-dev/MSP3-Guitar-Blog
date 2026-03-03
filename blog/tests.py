@@ -1,1 +1,3 @@
-# Create your tests here.
+# Create your tests himport sysere.import sys
+import sys
+print(sys.executable)

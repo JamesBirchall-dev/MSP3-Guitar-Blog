@@ -4,7 +4,11 @@
 
 ### Scope
 
-Concept: The site is a reddit-style guitar learning forum for all levels users to see, share and rate learning content. The website will be split into clear subjects and feeds and with relevant tags for filtering and with a teacher-level moderator user for verifying content posted providing a clear teacher vs learner dynamic.
+Concept:
+
+As someone who has tuaght and have experience with both classical and own learning, sites like Youtube are a great resource however, these can be a little overwhelming and saturated with different teachers and philosophies. When learning an instrument this can definately expose you to 'going down rabbit holes' and not getting an even, rounded learning experience; which then leads to skill gaps down the road. So my idea is to create a blog community where teachers and content creators can publish core training articles in specified subjects, then they and the rest of the users can comment with resource ideas pertaining to said subject.
+
+The site is a reddit-style guitar learning forum for all levels users to see, share and rate learning content. The website will be split into clear subjects and feeds and with relevant tags for filtering and with a teacher-level moderator user for verifying content posted providing a clear teacher vs learner dynamic.
 The posts themselves will be rateable with a verification badge that can be applied by the teachers/ moderators. The posts will be able to share external resources such as youtube videos, guitar tabs and articles.
 
 ### Content & Wireframes
@@ -171,7 +175,82 @@ Acceptance Criteria
 
 ## User Profile
 
+The 2 main distinct user profiles/roles for this site is Teacher vs Student, student being split into: Beginner, intermediate and advanced. Which will be part of the users' profile.
+
+Teacher will only be asigned by admin through application to ensure learning content is moderated and to protect brand integrity.
+
+The teacher profile would be experienced teachers and/or content creators who want to provide continued content, this will allow them to cross promote their existing social media channels.
+
+The students will be self learning people interested in learning the instrument in a structured and thorough way, traffic mainly coming through the existing teachers existing channels and recommendations.
+
 ## User Journey
+
+### Overview
+
+The platform is designed as a structured, subject based guitar learning community where different levels of users interact through posts, comments and shared learning resources. The User Journey ensures intuitive navigation, clear content organisation and meaniningful engagement via the contribution system.
+
+### First Time Visitor
+
+Journey
+
+1. Lands on the homepage.
+2. Browses subjects from the subject list.
+3. Selects a subject.
+4. Views posts by subject.
+5. Opens a post.
+6. Reads comments and shared resources.
+7. Registers to participate in community.
+
+Value:
+
+1. Clear subject organisation and orientation.
+2. Ranked comments with upvote system and teacher verification.
+3. Quick onboarding via register form.
+
+### Registered Student (Role: Beginner - Advanced)
+
+Journey:
+
+1. Logs into account
+2. Reads recent posts via homefeed
+3. Navigates or filters to subject for posts and resources.
+4. leaves comment and optionally shares resources for posts.
+5. votes on helpful resources.
+6. See's own profile for their contribution.
+
+Value:
+
+1. Ability to contribute knowledge
+2. Ability to provide feedback through comments and voting.
+3. Can build profile reputation through displayed activity.
+
+### Teacher User
+
+(Can publish learning posts)
+
+1. log into account
+2. Create a new post
+3. Assign a subject to post with any relevant tags
+4. Publish post
+5. Engages with students comments and resources.
+6. Moderates and monitors resources shared under their posts.
+
+### Returning User
+
+For continued learning.
+
+Journey:
+
+1. Logs in
+2. Returns to subject or feed
+3. Filters chosen subject and tags
+4. Views resources.
+
+Value:
+
+1. Structured navigation.
+2. Dynamic filtering
+3. Ranked content
 
 ## Interaction Design
 
