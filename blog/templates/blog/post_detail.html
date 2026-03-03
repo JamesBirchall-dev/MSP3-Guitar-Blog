@@ -10,7 +10,7 @@
 
 <!-- Post Content -->
  <hr>
-<p>{{ post.content }}</p>
+<p>{{ post.content|safe }}</p>
 <hr>
 
 <hr>
@@ -31,7 +31,7 @@
                 </a>
             {% endif %}
         </div>
-        <p class="mt-2 mb-0">{{ comment.content }}</p>
+        <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
         {% if comment.resources.all %}
             <div class="comment-resources mt-2">
                 <strong>Resource(s) shared with this comment:</strong>
@@ -39,7 +39,7 @@
                     {% for resource in comment.resources.all %}
                         <li>
                             <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
-                            {% if resource.description %}<br>{{ resource.description }}{% endif %}
+                            {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
                         </li>
                     {% endfor %}
                 </ul>

@@ -10,12 +10,14 @@ from .models import (
     Vote,
     Tag,
 )
+# admin import/export functionality
+from import_export.admin import ImportExportModelAdmin
 
 
 # Subject Admin
 
 @admin.register(Subject)
-class SubjectAdmin(admin.ModelAdmin):
+class SubjectAdmin(ImportExportModelAdmin):
 
     list_display = ('name', 'slug', 'short_description')
     search_fields = ('name',)
@@ -25,7 +27,7 @@ class SubjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(ImportExportModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -57,7 +59,7 @@ class CommentInline(admin.TabularInline):
 # POST ADMIN
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(ImportExportModelAdmin):
 
     list_display = (
         'title',
@@ -89,7 +91,7 @@ class PostAdmin(admin.ModelAdmin):
 # COMMENT ADMIN
 
 @admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(ImportExportModelAdmin):
 
     list_display = ('author', 'post', 'approved', 'created_on')
     list_filter = ('approved', 'created_on')
@@ -99,7 +101,7 @@ class CommentAdmin(admin.ModelAdmin):
 # RESOURCE ADMIN
 
 @admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
+class ResourceAdmin(ImportExportModelAdmin):
 
     list_display = ('title', 'post', 'added_by', 'created_on')
     search_fields = ('title', 'description')

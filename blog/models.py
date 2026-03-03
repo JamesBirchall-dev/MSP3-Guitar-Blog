@@ -15,7 +15,7 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from ckeditor.fields import RichTextField
+
 
 # STATUS CHOICES (For Draft / Published posts)
 
@@ -44,10 +44,10 @@ LEVEL_CHOICES = [
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
-    # detailed description shown on subject page
-    description = RichTextField(blank=True, null=True)
+    short_description = models.TextField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     # short description for listing pages
-    short_description = RichTextField(max_length=255, blank=True, null=True)
+    short_description = models.TextField(max_length=255, blank=True, null=True)
 
     tags = models.ManyToManyField(
         'Tag',

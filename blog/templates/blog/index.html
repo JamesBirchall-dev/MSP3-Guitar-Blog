@@ -73,11 +73,11 @@
                         <!-- Post Meta -->
                         <p class="text-muted small">
                             <strong>Subject:</strong> {{ post.subject.name }}<br>
-                            <strong>Level:</strong> {{ post.min.level|title }}<br>
+                            <strong>Level:</strong> {{ post.min_level|title }}<br>
                         </p>
                         <!-- Post Preview -->
                         <p class="card-text">
-                            {{ post.content|truncatechars:150 }}
+                            {{ post.content|safe }}
                         </p>
                     </div>
                     <div class="card-footer bg-white border-0">
@@ -112,7 +112,7 @@
                     </h5>
                     <!-- Resource description -->
                      <p>
-                        {{ resource.description|truncatewords:20 }}
+                        {{ resource.description|safe }}
                     </p>
 
                     <!-- Resource Meta -->
