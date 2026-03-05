@@ -32,7 +32,7 @@ class RegisterForm(UserCreationForm):
 
 class PostForm(forms.ModelForm):
     # Form for creating/editing posts
-    content = forms.CharField(widget=forms.Textarea())
+    content = forms.CharField(widget=SummernoteWidget())
     slug = forms.CharField(required=False, widget=SummernoteWidget())
     min_level = forms.ChoiceField(choices=LEVEL_CHOICES, required=True)
 
@@ -65,16 +65,16 @@ class CommentForm(forms.ModelForm):
     resource_url = forms.URLField(
         required=False, label='Resource URL'
     )
+    resource_description = forms.CharField(
+        widget=SummernoteWidget(), required=False,
+        label='Resource Description'
+    )
 
     def clean_resource_url(self):
         url = self.cleaned_data.get('resource_url')
         if url and not url.startswith(('http://', 'https://')):
             url = 'https://' + url
         return url
-    resource_description = forms.CharField(
-        widget=forms.Textarea(), required=False,
-        label='Resource Description'
-    )
 
     class Meta:
         model = Comment
@@ -101,6 +101,7 @@ class ResourceForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    bio = forms.CharField(widget=SummernoteWidget(), required=False)
     # Form for editing the Profile model's role and bio fields
 
     def __init__(self, *args, **kwargs):
