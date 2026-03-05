@@ -157,9 +157,7 @@ class Post(models.Model):
     subject = models.ForeignKey(
         Subject,
         on_delete=models.CASCADE,
-        related_name="posts",
-        null=True,
-        blank=True
+        related_name="posts"
     )
 
     # tags for filtering

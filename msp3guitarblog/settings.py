@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'msp3guitarblog',
     'blog.apps.BlogConfig',
-    'import_export'
+    'import_export',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [

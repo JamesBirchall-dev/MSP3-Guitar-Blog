@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Post, Comment, Resource, Profile, LEVEL_CHOICES
+from django_summernote.widgets import SummernoteWidget
 
 
 class RegisterForm(UserCreationForm):
@@ -32,8 +33,19 @@ class RegisterForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     # Form for creating/editing posts
     content = forms.CharField(widget=forms.Textarea())
-    slug = forms.CharField(required=False, widget=forms.HiddenInput())
+    slug = forms.CharField(required=False, widget=SummernoteWidget())
     min_level = forms.ChoiceField(choices=LEVEL_CHOICES, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set default subject to 'Uncategorized' if creating a new post
+        if not self.instance.pk:
+            try:
+                from .models import Subject
+                uncategorized = Subject.objects.get(slug="uncategorized")
+                self.fields['subject'].initial = uncategorized.pk
+            except Subject.DoesNotExist:
+                pass
 
     class Meta:
         model = Post
@@ -44,7 +56,7 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    content = forms.CharField(widget=forms.Textarea())
+    content = forms.CharField(widget=SummernoteWidget())
     # Form for creating/editing comments (replies)
     resource_title = forms.CharField(
         max_length=200, required=False,
@@ -53,6 +65,12 @@ class CommentForm(forms.ModelForm):
     resource_url = forms.URLField(
         required=False, label='Resource URL'
     )
+
+    def clean_resource_url(self):
+        url = self.cleaned_data.get('resource_url')
+        if url and not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+        return url
     resource_description = forms.CharField(
         widget=forms.Textarea(), required=False,
         label='Resource Description'
@@ -70,6 +88,12 @@ class CommentForm(forms.ModelForm):
 
 class ResourceForm(forms.ModelForm):
     # Form for creating/editing resources
+
+    def clean_url(self):
+        url = self.cleaned_data.get('url')
+        if url and not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+        return url
 
     class Meta:
         model = Resource

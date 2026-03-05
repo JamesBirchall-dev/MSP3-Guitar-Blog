@@ -8,7 +8,6 @@ from .forms import (
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-import markdown
 
 
 def index(request):
@@ -42,16 +41,8 @@ def index(request):
         resources = resources.none()
     elif content_type == 'resource':
         posts = posts.none()
-
-    posts = posts.order_by("-created_on")
-    resources = resources.order_by("-created_on")
-
+    # Summernote: No markdown conversion needed; content is already HTML
     subjects = Subject.objects.all().order_by("name")
-
-    for post in posts:
-        post.content = markdown.markdown(post.content)
-    for resource in resources:
-        resource.description = markdown.markdown(resource.description)
 
     context = {
         "posts": posts,
@@ -182,14 +173,7 @@ def post_detail(request, slug):
                         )
             return redirect("post_detail", slug=slug)
 
-    # Render post content as HTML from markdown
-    post.content = markdown.markdown(post.content)
-    for comment in comments:
-        comment.content = markdown.markdown(comment.content)
-        for resource in getattr(comment, 'resources', []):
-            resource.description = markdown.markdown(resource.description)
-    for resource in resources:
-        resource.description = markdown.markdown(resource.description)
+    # Summernote: No markdown conversion needed; content is already HTML
 
     context = {
         "post": post,

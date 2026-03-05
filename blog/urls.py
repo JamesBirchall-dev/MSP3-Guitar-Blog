@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
         views.subject_detail_view,
         name='subject_detail'
     ),
+    path('summernote/', include('django_summernote.urls')),
 
     # Home feed URL
     path('', views.index, name='index'),
