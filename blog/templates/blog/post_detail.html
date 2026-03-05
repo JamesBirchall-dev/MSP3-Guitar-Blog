@@ -13,6 +13,12 @@
 <p>{{ post.content|safe }}</p>
 <hr>
 
+
+{% if user.is_authenticated and post.author == user %}
+    <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">Edit Post</a>
+    <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger">Delete Post</a>
+{% endif %}
+
 <hr>
 
 
@@ -30,6 +36,10 @@
                     {{ comment.vote_total }}
                 </a>
             {% endif %}
+            {% if user.is_authenticated and comment.author == user %}
+                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            {% endif %}
         </div>
         <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
         {% if comment.resources.all %}
@@ -40,6 +50,10 @@
                         <li>
                             <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
+                            {% if user.is_authenticated and resource.added_by == user %}
+                                <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

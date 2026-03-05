@@ -288,6 +288,95 @@ def create_post(request):
     return render(request, "blog/create_post.html", {"form": form})
 
 
+# --- POST EDIT/DELETE ---
+@login_required
+def edit_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if post.author != request.user:
+        return redirect('post_detail', slug=slug)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', slug=post.slug)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+
+@login_required
+def delete_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if post.author != request.user:
+        return redirect('post_detail', slug=slug)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('index')
+    return render(request, 'blog/delete_post.html', {'post': post})
+
+
+# --- COMMENT EDIT/DELETE ---
+@login_required
+def edit_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return redirect('post_detail', slug=comment.post.slug)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', slug=comment.post.slug)
+    else:
+        form = CommentForm(instance=comment)
+    return render(
+        request,
+        'blog/edit_comment.html',
+        {'form': form, 'comment': comment}
+    )
+
+
+@login_required
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.author != request.user:
+        return redirect('post_detail', slug=comment.post.slug)
+    if request.method == 'POST':
+        comment.delete()
+        return redirect('post_detail', slug=comment.post.slug)
+    return render(request, 'blog/delete_comment.html', {'comment': comment})
+
+
+# --- RESOURCE EDIT/DELETE ---
+@login_required
+def edit_resource(request, pk):
+    resource = get_object_or_404(Resource, pk=pk)
+    if resource.added_by != request.user:
+        return redirect('post_detail', slug=resource.post.slug)
+    if request.method == 'POST':
+        form = ResourceForm(request.POST, instance=resource)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', slug=resource.post.slug)
+    else:
+        form = ResourceForm(instance=resource)
+    return render(
+        request,
+        'blog/edit_resource.html',
+        {'form': form, 'resource': resource}
+    )
+
+
+@login_required
+def delete_resource(request, pk):
+    resource = get_object_or_404(Resource, pk=pk)
+    if resource.added_by != request.user:
+        return redirect('post_detail', slug=resource.post.slug)
+    if request.method == 'POST':
+        resource.delete()
+        return redirect('post_detail', slug=resource.post.slug)
+    return render(request, 'blog/delete_resource.html', {'resource': resource})
+
+
 # comment voting view
 
 @login_required

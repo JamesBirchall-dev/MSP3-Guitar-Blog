@@ -19,6 +19,24 @@ urlpatterns = [
         name='subject_detail'
     ),
     path('summernote/', include('django_summernote.urls')),
+    path('post/<slug:slug>/edit/', views.edit_post, name='edit_post'),
+    path('post/<slug:slug>/delete/', views.delete_post, name='delete_post'),
+    path(
+        'comment/<int:pk>/edit/',
+        views.edit_comment,
+        name='edit_comment'
+    ),
+    path(
+        'comment/<int:pk>/delete/',
+        views.delete_comment,
+        name='delete_comment'
+    ),
+    path('resource/<int:pk>/edit/', views.edit_resource, name='edit_resource'),
+    path(
+        'resource/<int:pk>/delete/',
+        views.delete_resource,
+        name='delete_resource'
+    ),
 
     # Home feed URL
     path('', views.index, name='index'),
