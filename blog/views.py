@@ -232,6 +232,7 @@ def post_detail(request, slug):
                     if resource_title and resource_url:
                         Resource.objects.create(
                             comment=comment,
+                            post=post,  # Link resource to the post as well
                             added_by=request.user,
                             title=resource_title,
                             url=resource_url,
