@@ -1,77 +1,72 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block content %}
+<script>
+    // Django template variable outputs valid JSON here
+    const subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
+</script>
 
 <div class="container container-main">
     <div class="create-post-wrapper">
         <h2 class="create-title">Create New Post</h2>
 
-
-{% if form.errors %}
-    <div class="alert alert-danger">
-        <ul>
-        {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-        </ul>
-    </div>
-{% endif %}
-
-<form method="POST" class="card">
-    {% csrf_token %}
-
-<!--Top section -->
-
-<div class="post-meta-section">
-    <div class="row">
-        <div class="col-md-6">
-            <div class=""form-group-clean">
-            {{ form.subject.label_tag }}
-            {{ form.subject }}          
-            </div>
+            </ul>
         </div>
-    </div>  
-        <div class="col-md-6"
-            <div class="form-group-clean">
-                <label>Tags</label>
-                <div class="tag-container"></div>
-                    {% for checkbox in form.tags%}
-                        <label class="tag-badge checkbox-label">
-                            {{ checkbox.tag }}
-                            {{ checkbox.choice_label }}
-                        </label>
-                    {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="card">
+            {% csrf_token %}
+            <div class="post-meta-section">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-clean">
+                            {{ form.subject.label_tag }}
+                            {{ form.subject }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-clean">
+                            <label>Tags</label>
+                            <div id="tag-container">
+                                {% for checkbox in form.tags %}
+                                    <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}">
+                                        {{ checkbox.tag }}
+                                        {{ checkbox.choice_label }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div> 
-    </div> 
-<!--Main content section -->
-    <div class="post-content-section">
-        <div class="form-group-clean">
-            {{ form.title.label_tag }}
-            {{ form.title }}
-        </div>
-
-    <div class="form-group-clean">
-        {{ form.content.label_tag }}
-        {{ form.content }}
+            <div class="post-content-section">
+                <div class="form-group-clean">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                </div>
+                <div class="form-group-clean">
+                    {{ form.content.label_tag }}
+                    {{ form.content }}
+                </div>
+                <div class="form-group-clean">
+                    {{ form.min_level.label_tag }}
+                    {{ form.min_level }}
+                </div>
+                <div class="submit-section">
+                    <button type="submit" class="btn btn-primary">Create Post</button>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group-clean">
-        {{ form.min_level.label_tag }}
-        {{ form.min_level }}
-    </div>
-    
-    <div class="submit-section">
-        <button type="submit" class="btn btn-primary">
-            Create Post
-        </button>
-    </div>
-</form>
-
 </div>
-</div>
-   
+<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}

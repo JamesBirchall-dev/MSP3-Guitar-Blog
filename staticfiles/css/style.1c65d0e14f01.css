@@ -1,0 +1,353 @@
+/* Global Theme Styles */
+
+body {
+    background-color: #f5e0c4;
+    font-family: "opensans", sans-serif;
+    color: #2f2a26
+}
+
+.container-main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 3rem 1rem;
+}
+
+
+/* typography */
+
+/*headings*/
+
+h1, h2, h3, h4, h5 {
+    font-family: "montserrat", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand {
+    font-family: "varela Round", sans-serif;
+    font-size: 1.4rem;
+}
+
+small {
+    color: #7a6f66
+}
+
+/*Navbar*/
+
+.navbar {
+    background-color: #fff8ee !important;
+    border-bottom: 1px solid #e6dccf;
+}
+
+.navbar .nav-link {
+    color: #5a4a42 !important;
+    font-weight: 500;    
+}
+
+.nav-link:hover {
+    color: #8c6a6a !important;
+}
+
+/* Page Header */
+
+.page-header {
+    background-color: #fffaf3;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #e6dccf;
+    margin-bottom: 2rem;
+}
+
+.page-header h1,
+.page-header h2 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.page-header p {
+    color: #7a6f66;
+    margin-bottom: 0;
+}
+
+
+/* Subject Header */
+
+.subject-header {
+    background-color: #fffaf3;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e6dccf;
+    margin-bottom: 2rem;
+}
+
+/* Post Card */
+
+.card {
+    border-radius: 12px;;
+}
+
+.card-custom {
+    background: white;
+    border: 1px solid #e6dccf;
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.card-custom:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+/* Form Card - spacing and label styles */
+.card.form label {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.card input,
+.card select,
+.card textarea {
+    width: 100%;
+}
+
+.form-text {
+    font-size: 0.85rem;
+}
+
+/* tags */
+
+
+.tag-badge {
+    display: inline-block;
+    background-color: #efe6db;
+    color: #6b4f4f;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    margin: 3px 3px 3px 0;
+    transition: all 0.2s ease;
+}
+
+.tag-badge:hover {
+    background-color: #6b4f4f;
+    color: white;
+    border-radius: 30px;
+    padding: 6px 18px;
+    border: none;
+    font-size: 0.9rem;
+
+}
+
+.checkbox-label input{
+    display: none;
+}
+
+/* Summernote field containment for profile bio */
+.summernote-field {
+    position: relative;
+    padding: 8px 0 0 0;
+    margin-bottom: 1.5rem;
+}
+.summernote-field .note-editor {
+        border-radius: 8px;
+        border: 1px solid #e6dccf;
+        background: #fffaf3;
+        box-shadow: 0 2px 8px rgba(107,79,79,0.08);
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow-x: auto;
+        margin: 0;
+        padding: 0;
+}
+
+@media (max-width: 600px) {
+    .summernote-field .note-editor {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        font-size: 0.95em;
+        padding: 0 !important;
+        border-radius: 12px !important;
+    }
+    .note-toolbar {
+        padding: 2px 4px !important;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .summernote-field .note-editor {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+}
+
+.checkbox-label{
+    display: inline-block;
+    background: #efe6db;
+    color: #6b4f4f;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin: 4px;
+    cursor: pointer;
+    border: 1px solid #e6dccf;
+    transition: all 0.2s;    
+}
+
+
+.checkbox-label input:checked ~ * {
+    color: white;
+}
+
+.checkbox-label:has(input:checked) {
+    background:#6b4f4f;
+    color: white;
+}
+
+
+/* Buttons */
+
+
+.btn-custom {
+    background-color: #6b4f4f;
+    color: white;
+    border-radius: 30px;
+    padding: 6px 18px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-custom:hover {
+    background-color: #8c6a6a;
+    color: white;
+}
+
+/* Linkss */
+
+a {
+    color: #6b4f4f;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #8c6a6a;
+    text-decoration: underline;
+}
+
+/* Forms */ 
+
+/* Form inputs */
+input, select, textarea {
+    border-radius: 8px !important;
+}
+
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #e6dccf;
+}
+
+.form-control:focus {
+    border-color: #6b4f4f;
+    box-shadow: 0 0 0 0.2rem rgba(107,79,79,0.25);
+}
+
+/* Form Card */
+
+form.card {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+}
+
+.card-title a{
+    text-decoration: none;
+    color: #2c2c2c;;
+}
+
+card-title a:hover {
+    color: #8c6a6a;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+
+/* CREATE POST PAGE */
+
+.create-post-wrapper {
+    background: #fffaf3;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid #e6dccf;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3)
+}
+
+.create-title {
+    font-family: "montserrat", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+      margin-bottom: 2rem;
+}
+
+/* Top meta section (Subject and tags) */
+.post-meta-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e6dccf;
+}
+
+/* Main content textarea */
+
+.post-content-section {
+    margin-top: 1.5rem;
+}
+
+/*form spacing*/
+
+.form-group-clean label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* form inputs*/
+
+.form-group-clean input,
+.form-group-clean select,
+.form-group-clean textarea {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid #e6dccf;
+    padding: 10px 14px;
+    background: #fdc7c7;
+    font-family: "opensans", sans-serif;
+} 
+
+.form-group-clean textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.form-group-clean input:focus,
+.form-group-clean select:focus,
+.form-group-clean textarea:focus {
+    border-color: #6b4f4f;
+    box-shadow: 0 0 0 0.2rem rgba(107,79,79,0.25);
+}
+
+/* Tag layout in create/edit post */
+.tag-container {
+    margin-top: 0.5rem;
+}
+
+/*submit button alignment*/
+
+.submit-section {
+    margin-top: 2rem;
+    text-align: right;
+}

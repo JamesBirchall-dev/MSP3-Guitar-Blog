@@ -8,6 +8,7 @@ from .forms import (
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+import json
 
 
 def index(request):
@@ -284,8 +285,19 @@ def create_post(request):
 
     else:
         form = PostForm()
+        # Build subject-tag dictionary
+    subject_tags = {
+        str(subject.pk): [tag.name for tag in subject.tags.all()]
+        for subject in Subject.objects.all()
+    }
+    subject_tags_json = json.dumps(subject_tags)
 
-    return render(request, "blog/create_post.html", {"form": form})
+    # Pass to template context
+    context = {
+        'form': form,
+        'subject_tags_json': subject_tags_json,
+    }
+    return render(request, "blog/create_post.html", context)
 
 
 # --- POST EDIT/DELETE ---

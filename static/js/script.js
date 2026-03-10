@@ -4,24 +4,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const subjectSelect = document.querySelector('select[name="subject"]');
     // get all tag label elements
     const tagLabels = document.querySelectorAll('.tag-badge.checkbox-label');
+    // add checked class to label if input is checked
+    tagLabels.forEach(function(label) {
+        const input = label.querySelector('input[type="checkbox"]');
+        if (input) {
+            // initial state
+            if (input.checked) {
+                label.classList.add('checked');
+            } else {
+                label.classList.remove('checked');
+            }
+            // listen for change
+            input.addEventListener('change', function() {
+                if (input.checked) {
+                    label.classList.add('checked');
+                } else {
+                    label.classList.remove('checked');
+                }
+            });
+        }
+    });
     // function to filter tags based on selected subject
     function filterTags() {
-        // get selected subject
-        const selectedSubject = subjectSelect.value;
-        // loop through each tag label and show/hide based on whether it matches the selected subject
+        const selectedSubjectId = subjectSelect.value;
+        const tags = subjectTags[selectedSubjectId] || [];
+        console.log('Selected subject ID:', selectedSubjectId);
+        console.log('Available tags for subject:', tags);
         tagLabels.forEach(function(label) {
-            const subjects = label.getAttribute('data-subjects');
-            if (!selectedSubject) {
+            const tagName = label.getAttribute('data-tag');
+            console.log('Checking tag:', tagName, 'Visible:', !selectedSubjectId || tags.includes(tagName));
+            if (!selectedSubjectId || tags.includes(tagName)) {
                 label.style.display = '';
-            } else if (!subjects) {
-                label.style.display = 'none';
             } else {
-                const subjectList = subjects.split(',');
-                if (subjectList.includes(selectedSubject)) {
-                    label.style.display = '';
-                } else {
-                    label.style.display = 'none';
-                }
+                label.style.display = 'none';
             }
         });
     }
