@@ -242,6 +242,7 @@ class Resource(models.Model):
     title = models.CharField(max_length=200)
     url = models.URLField()
     description = models.TextField(blank=True)
+    verified = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

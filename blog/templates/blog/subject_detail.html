@@ -41,6 +41,12 @@
     {% for resource in resources %}
         <div class="card p-3 mb-3 shadow-sm">
             <h5>{{ resource.title }}</h5>
+            <h5>
+                {{ resource.title }}
+                {% if resource.verified %}
+                    <span title="Verified" style="color:#2ecc40;">&#10003;</span>
+                {% endif %}
+            </h5>
             <p>{{ resource.description|safe }}</p>
             <p class="text-muted small">
                 <strong>Subject:</strong> {{ resource.subject.name }}<br>
@@ -58,6 +64,14 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
                     </form>
+                    {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                        <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ resource.id }}">
+                                {% if resource.verified %}Unverify{% else %}Verify{% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
                 </small>
             </div>
         </div>

@@ -43,6 +43,10 @@ urlpatterns = [
          views.vote_resource,
          name='vote_resource'),
 
+    path('verify-resource/<int:resource_id>/',
+         views.verify_resource,
+         name='verify_resource'),
+
     # Home feed URL
     path('', views.index, name='index'),
 

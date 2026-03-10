@@ -59,7 +59,12 @@
                 <ul>
                     {% for resource in comment.resources.all %}
                         <li>
-                            <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
+                            <a href="{{ resource.url }}" target="_blank">
+                                {{ resource.title }}
+                                {% if resource.verified %}
+                                    <span title="Verified" style="color:#2ecc40;">&#10003;</span>
+                                {% endif %}
+                            </a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
                             <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
                             {% if user.is_authenticated %}
@@ -67,6 +72,14 @@
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
                                 </form>
+                                {% if user.profile.role == 'teacher' %}
+                                    <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ resource.id }}">
+                                            {% if resource.verified %}Unverify{% else %}Verify{% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                             {% if user.is_authenticated and resource.added_by == user %}
                                 <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>

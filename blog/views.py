@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment, Vote, Resource, Profile, Subject
 from django.db.models import Count, Q
@@ -9,6 +10,18 @@ from .forms import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import json
+
+
+@login_required
+def verify_resource(request, resource_id):
+    resource = get_object_or_404(Resource, id=resource_id)
+    profile = getattr(request.user, 'profile', None)
+    if not profile or profile.role != 'teacher':
+        return redirect(request.META.get("HTTP_REFERER", "index"))
+    # Toggle verification
+    resource.verified = not resource.verified
+    resource.save()
+    return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
 # TESTING AJAX
@@ -133,7 +146,10 @@ def home(request):
 
 def post_detail(request, slug):
     from django.db.models import Count
-    post = get_object_or_404(Post.objects.annotate(votes_total=Count('votes')), slug=slug)
+    post = get_object_or_404(
+        Post.objects.annotate(votes_total=Count('votes')),
+        slug=slug
+    )
 
     # order comments by vote count and then by creation date
     comments = post.comments.annotate(
