@@ -8,13 +8,21 @@
     Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> |
     <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> |
     {{ post.created_on }} |
-    <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span> likes
-    {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-success like-post-btn" data-post-id="{{ post.id }}">Like</button>
-        </form>
-    {% endif %}
+    <div class="like-section">
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}">
+                    {% if post.user_has_liked %}
+                        <i class="fas fa-heart text-danger"></i>
+                    {% else %}
+                        <i class="far fa-heart"></i>
+                    {% endif %}
+                </button>
+            </form>
+        {% endif %}
+        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span>
+    </div>
 </p>
 
 <!-- Post Content -->
@@ -44,7 +52,13 @@
                 <form method="POST" action="{% url 'vote_comment' comment.id %}" style="display:inline;">
                     {% csrf_token %}
                     <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.likes_total }}</span> likes
-                    <button type="submit" class="btn btn-sm btn-success like-post-btn" data-comment-id="{{ comment.id }}">Like</button>
+                    <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}">
+                        {% if comment.user_has_liked %}
+                            <i class="fas fa-heart text-danger"></i>
+                        {% else %}
+                            <i class="far fa-heart"></i>
+                        {% endif %}
+                    </button>
                 </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
@@ -66,12 +80,23 @@
                                 {% endif %}
                             </a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
-                            <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
-                            {% if user.is_authenticated %}
+                        <div class="position-relative">
+                            {% if resource.verified %}
+                                <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
+                            {% endif %}
+                            <div class="like-section">
                                 <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-success like-post-btn" data-resource-id="{{ resource.id }}">Like</button>
+                                    <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}">
+                                        {% if resource.user_has_liked %}
+                                            <i class="fas fa-heart text-danger"></i>
+                                        {% else %}
+                                            <i class="far fa-heart"></i>
+                                        {% endif %}
+                                    </button>
                                 </form>
+                                <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
+                            </div>
                                 {% if user.profile.role == 'teacher' %}
                                     <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
                                         {% csrf_token %}
@@ -81,6 +106,7 @@
                                     </form>
                                 {% endif %}
                             {% endif %}
+                        </div>
                             {% if user.is_authenticated and resource.added_by == user %}
                                 <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>

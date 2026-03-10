@@ -77,17 +77,29 @@
         <div class="col-md-6 mb-3">
             <div class="card shadow-sm p-3 h-100 border-start border-4 border-warning">
                 
-               <a href="{{ resource.url }}" target="_blank"
+        <div class="position-relative">
+            {% if resource.verified %}
+                <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
+            {% endif %}
+            <a href="{{ resource.url }}" target="_blank"
                 class="fw-semibold text-decoration-none">
-                 {{ resource.title }}
-                </a>
+                {{ resource.title }}
+            </a>
 
                 <small class="text-muted">
-                    <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
-                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-success like-post-btn" data-resource-id="{{ resource.id }}">Like</button>
-                    </form>
+                    <div class="like-section">
+                        <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}">
+                                {% if resource.user_has_liked %}
+                                    <i class="fas fa-heart text-danger"></i>
+                                {% else %}
+                                    <i class="far fa-heart"></i>
+                                {% endif %}
+                            </button>
+                        </form>
+                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
+                    </div>
                 </small>
             </div>
         </div>

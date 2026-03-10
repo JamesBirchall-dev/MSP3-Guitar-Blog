@@ -39,8 +39,21 @@ def index(request):
     ).annotate(likes_total=Count('likes')).order_by("-created_on")
 
     resources = Resource.objects.select_related(
-        "subject", "added_by", "post"
+        "subject",
+        "added_by",
+        "post"
     ).annotate(likes_total=Count('likes'))
+
+    # for like/unlike functionality
+    if request.user.is_authenticated:
+        for post in posts:
+            post.user_has_liked = post.likes.filter(
+                user=request.user
+            ).exists()
+        for resource in resources:
+            resource.user_has_liked = resource.likes.filter(
+                user=request.user
+            ).exists()
 
     subject_slug = request.GET.get('subject')
     if subject_slug:
@@ -127,9 +140,20 @@ def home(request):
     elif content_type == 'resource':
         posts = posts.none()  # Exclude posts
 
+    if request.user.is_authenticated:
+        for post in posts:
+            post.user_has_liked = Like.objects.filter(
+                user=request.user,
+                post=post
+            ).exists()
+        for resource in resources:
+            resource.user_has_liked = Like.objects.filter(
+                user=request.user,
+                resource=resource
+            ).exists()
+
     posts = posts.order_by("-created_on")
     resources = resources.order_by("-created_on")
-
     subjects = Subject.objects.all().order_by("name")
 
     context = {
@@ -160,6 +184,22 @@ def post_detail(request, slug):
     resources = post.resources.annotate(
         likes_total=Count('likes')
     ).order_by('-likes_total', '-created_on')
+
+    if request.user.is_authenticated:
+        post.user_has_liked = Like.objects.filter(
+            user=request.user,
+            post=post
+        ).exists()
+        for comment in comments:
+            comment.user_has_liked = Like.objects.filter(
+                user=request.user,
+                comment=comment
+            ).exists()
+        for resource in resources:
+            resource.user_has_liked = Like.objects.filter(
+                user=request.user,
+                resource=resource
+            ).exists()
 
     comment_form = CommentForm()
     resource_form = ResourceForm()
@@ -220,6 +260,23 @@ def profile_view(request, username):
     posts = user_obj.blog_posts.all().order_by("-created_on")
     comments = user_obj.comment_set.all().order_by("-created_on")
     resources = user_obj.resources.all().order_by("-created_on")
+
+    if request.user.is_authenticated:
+        for post in posts:
+            post.user_has_liked = Like.objects.filter(
+                user=request.user,
+                post=post
+            ).exists()
+        for comment in comments:
+            comment.user_has_liked = Like.objects.filter(
+                user=request.user,
+                comment=comment
+            ).exists()
+        for resource in resources:
+            resource.user_has_liked = Like.objects.filter(
+                user=request.user,
+                resource=resource
+            ).exists()
 
     context = {
         'profile_user': user_obj,
@@ -494,13 +551,24 @@ def subject_detail_view(request, slug):
         posts = subject.posts.all()
 
     from django.db.models import Count
+
     posts = posts.annotate(likes_total=Count('likes')).order_by("-created_on")
 
-    # Add resources for this subject, annotated with votes_total
-    from django.db.models import Count
     resources = subject.resources.all()\
         .select_related("subject", "added_by", "post")\
         .annotate(likes_total=Count('likes'))
+
+    if request.user.is_authenticated:
+        for post in posts:
+            post.user_has_liked = Like.objects.filter(
+                user=request.user,
+                post=post
+            ).exists()
+        for resource in resources:
+            resource.user_has_liked = Like.objects.filter(
+                user=request.user,
+                resource=resource
+            ).exists()
 
     tags = subject.tags.all()
 

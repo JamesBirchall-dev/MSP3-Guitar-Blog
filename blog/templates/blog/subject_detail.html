@@ -26,11 +26,19 @@
                 <small class="text-muted">
                     Added by {{ post.author }}
                     {{ post.created_on|date:"M d, Y" }}
-                    <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span> likes
-                    <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-success like-post-btn" data-post-id="{{ post.id }}">Like</button>
-                    </form>
+                    <div class="like-section">
+                        <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}">
+                                {% if post.user_has_liked %}
+                                    <i class="fas fa-heart text-danger"></i>
+                                {% else %}
+                                    <i class="far fa-heart"></i>
+                                {% endif %}
+                            </button>
+                        </form>
+                        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span>
+                    </div>
                 </small>
             </div>
         </div>
@@ -39,14 +47,11 @@
     {% endfor %}
     <!-- Resources for this subject -->
     {% for resource in resources %}
-        <div class="card p-3 mb-3 shadow-sm">
+        <div class="card p-3 mb-3 shadow-sm position-relative">
+            {% if resource.verified %}
+                <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
+            {% endif %}
             <h5>{{ resource.title }}</h5>
-            <h5>
-                {{ resource.title }}
-                {% if resource.verified %}
-                    <span title="Verified" style="color:#2ecc40;">&#10003;</span>
-                {% endif %}
-            </h5>
             <p>{{ resource.description|safe }}</p>
             <p class="text-muted small">
                 <strong>Subject:</strong> {{ resource.subject.name }}<br>
@@ -59,11 +64,19 @@
                 <small class="text-muted">
                     Added by {{ resource.added_by }}
                     {{ resource.created_on|date:"M d, Y" }}
-                    <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
-                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-success like-post-btn" data-resource-id="{{ resource.id }}">Like</button>
-                    </form>
+                    <div class="like-section">
+                        <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}">
+                                {% if resource.user_has_liked %}
+                                    <i class="fas fa-heart text-danger"></i>
+                                {% else %}
+                                    <i class="far fa-heart"></i>
+                                {% endif %}
+                            </button>
+                        </form>
+                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
+                    </div>
                     {% if user.is_authenticated and user.profile.role == 'teacher' %}
                         <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
                             {% csrf_token %}

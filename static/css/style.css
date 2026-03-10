@@ -227,6 +227,28 @@ small {
     color: white;
 }
 
+/* like button */
+
+.like-post-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.like-post-btn .fa-heart {
+    font-size: 1.3rem;
+    transition: color 0.2s ease;
+}
+
+.like-post-btn:hover .fa-heart {
+    color: #aa9393;
+}
+
+.like-post-btn .fa-heart.text-danger {
+    color: #e74c3c;
+}
+
 /* Linkss */
 
 a {
@@ -351,3 +373,26 @@ card-title a:hover {
     margin-top: 2rem;
     text-align: right;
 }
+
+.teacher-verified {
+    color: #2ecc40;
+    font-weight: 500;
+    font-size: 1.1em;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+.card.position-relative { position: relative; }
+.like-section {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+} 
