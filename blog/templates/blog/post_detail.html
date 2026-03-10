@@ -5,7 +5,16 @@
 <!-- Heading -->
 <h2>{{ post.title }}</h2>
 <p class="text-muted">
-    Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> | <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> | {{ post.created_on }}
+    Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> |
+    <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> |
+    {{ post.created_on }} |
+    <span class="post-vote-count" data-post-id="{{ post.id }}">{{ post.votes_total }}</span> votes
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'vote_post' post.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-post-id="{{ post.id }}">Upvote</button>
+        </form>
+    {% endif %}
 </p>
 
 <!-- Post Content -->
@@ -32,9 +41,11 @@
                 <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
             {% if user.is_authenticated %}
-                <a href="{% url 'vote_comment' comment.id %}" class="btn btn-sm btn-success ms-2">
-                    {{ comment.vote_total }}
-                </a>
+                <form method="POST" action="{% url 'vote_comment' comment.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <span class="post-vote-count" data-comment-id="{{ comment.id }}">{{ comment.votes_total }}</span> votes
+                    <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-comment-id="{{ comment.id }}">Upvote</button>
+                </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
                 <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
@@ -50,6 +61,13 @@
                         <li>
                             <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
+                            <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
+                            {% if user.is_authenticated %}
+                                <form method="POST" action="{% url 'vote_resource' resource.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
+                                </form>
+                            {% endif %}
                             {% if user.is_authenticated and resource.added_by == user %}
                                 <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>

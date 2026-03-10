@@ -82,9 +82,13 @@
                     </div>
                     <div class="card-footer bg-white border-0">
                         <small class="text-muted">
-                            By {{ post.author }}
+                            Added by {{ post.author }}
                             {{ post.created_on|date:"M d, Y" }}
-                            {{ post.vote_count }}
+                            <span class="post-vote-count" data-post-id="{{ post.id }}">{{ post.votes_total }}</span> votes
+                            <form method="POST" action="{% url 'vote_post' post.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-post-id="{{ post.id }}">Upvote</button>
+                            </form>
                         </small>
                     </div>
                 </div>
@@ -134,7 +138,11 @@
                     <small class="text-muted">
                         Added by {{ resource.added_by }}
                         {{ resource.created_on|date:"M d, Y" }}
-                        {{ resource.vote_count }} votes
+                        <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
+                        <form method="POST" action="{% url 'vote_resource' resource.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
+                        </form>
                     </small>
                 </div>
             </div>

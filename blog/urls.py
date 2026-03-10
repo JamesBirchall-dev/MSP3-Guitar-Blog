@@ -1,7 +1,9 @@
 from django.urls import path, include
 from . import views
+from .views import vote_post
 
 urlpatterns = [
+    path('vote-post/<int:post_id>/', vote_post, name='vote_post'),
     path('', views.home, name='home'),
     path('post/<slug:slug>/', views.post_detail, name='post_detail'),
     path(
@@ -37,6 +39,9 @@ urlpatterns = [
         views.delete_resource,
         name='delete_resource'
     ),
+    path('vote-resource/<int:resource_id>/',
+         views.vote_resource,
+         name='vote_resource'),
 
     # Home feed URL
     path('', views.index, name='index'),

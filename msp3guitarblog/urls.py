@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# from blog.views import ajax_test  # Import the AJAX test view
 
 urlpatterns = [
     path('admin/', admin.site.urls),

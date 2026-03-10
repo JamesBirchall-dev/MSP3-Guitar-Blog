@@ -83,8 +83,12 @@
                 </a>
 
                 <small class="text-muted">
-                    Votes: {{ resource.vote_count }} 
-                <small>
+                    <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
+                    <form method="POST" action="{% url 'vote_resource' resource.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
+                    </form>
+                </small>
             </div>
         </div>
     {% empty %}

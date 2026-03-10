@@ -11,15 +11,23 @@ from django.contrib.auth.models import User
 import json
 
 
+# TESTING AJAX
+# @csrf_exempt
+# def ajax_test(request):
+#    if request.method == 'POST':
+#        return JsonResponse({'message': 'AJAX request received!'})
+#    return JsonResponse({'message': 'Send a POST request to test AJAX.'})
+
+
 def index(request):
     # This view renders the main feed page (same as home)
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
-    ).order_by("-created_on")
+    ).annotate(votes_total=Count('votes')).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject", "added_by", "post"
-    )
+    ).annotate(votes_total=Count('votes'))
 
     subject_slug = request.GET.get('subject')
     if subject_slug:
@@ -73,11 +81,11 @@ def subject_list_view(request):
 def home(request):
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
-    ).order_by("-created_on")
+    ).annotate(votes_total=Count('votes')).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject", "added_by", "post"
-    )
+    ).annotate(votes_total=Count('votes'))
 
 
 #  Subject Filter
@@ -124,17 +132,18 @@ def home(request):
 
 
 def post_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug)
+    from django.db.models import Count
+    post = get_object_or_404(Post.objects.annotate(votes_total=Count('votes')), slug=slug)
 
     # order comments by vote count and then by creation date
     comments = post.comments.annotate(
-        vote_total=Count('votes')
-    ).order_by('-vote_total', '-created_on')
+        votes_total=Count('votes')
+    ).order_by('-votes_total', '-created_on')
 
     # Order resources by vote count then creation date
     resources = post.resources.annotate(
-        vote_total=Count('votes')
-    ).order_by('-vote_total', '-created_on')
+        votes_total=Count('votes')
+    ).order_by('-votes_total', '-created_on')
 
     comment_form = CommentForm()
     resource_form = ResourceForm()
@@ -388,6 +397,26 @@ def delete_resource(request, pk):
         return redirect('post_detail', slug=resource.post.slug)
     return render(request, 'blog/delete_resource.html', {'resource': resource})
 
+# Post voting view
+
+
+@login_required
+def vote_post(request, post_id):
+    if request.method != "POST":
+        return redirect("home")
+    post = get_object_or_404(Post, id=post_id)
+    if post.author == request.user:
+        # Prevent users from voting on their own posts
+        return redirect(request.META.get("HTTP_REFERER", "index"))
+    vote, created = Vote.objects.get_or_create(
+        user=request.user,
+        post=post
+    )
+    if not created:
+        # User has already voted, so remove the vote
+        vote.delete()
+    return redirect(request.META.get("HTTP_REFERER", "index"))
+
 
 # comment voting view
 
@@ -418,7 +447,10 @@ def vote_resource(request, resource_id):
     resource = get_object_or_404(Resource, id=resource_id)
     if resource.added_by == request.user:
         # Prevent users from voting on their own resources
-        return redirect("post_detail", slug=resource.post.slug)
+        if resource.post:
+            return redirect("post_detail", slug=resource.post.slug)
+        else:
+            return redirect("index")
     vote, created = Vote.objects.get_or_create(
         user=request.user,
         resource=resource
@@ -428,7 +460,10 @@ def vote_resource(request, resource_id):
         # User has already voted, so remove the vote
         vote.delete()
 
-    return redirect("post_detail", slug=resource.post.slug)
+    if resource.post:
+        return redirect("post_detail", slug=resource.post.slug)
+    else:
+        return redirect("index")
 
 
 # Subject detail view
@@ -442,13 +477,21 @@ def subject_detail_view(request, slug):
     else:
         posts = subject.posts.all()
 
-    posts = posts.order_by("-created_on")
+    from django.db.models import Count
+    posts = posts.annotate(votes_total=Count('votes')).order_by("-created_on")
+
+    # Add resources for this subject, annotated with votes_total
+    from django.db.models import Count
+    resources = subject.resources.all()\
+        .select_related("subject", "added_by", "post")\
+        .annotate(votes_total=Count('votes'))
 
     tags = subject.tags.all()
 
     return render(request, 'blog/subject_detail.html', {
         'subject': subject,
         'posts': posts,
+        'resources': resources,
         'tags': tags,
         'active_tag_slug': tag_slug,
     })

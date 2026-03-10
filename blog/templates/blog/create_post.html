@@ -4,7 +4,7 @@
 {% block content %}
 <script>
     // Django template variable outputs valid JSON here
-    const subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
+    window.subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
 </script>
 
 <div class="container container-main">
@@ -65,6 +65,8 @@
                     <button type="submit" class="btn btn-primary">Create Post</button>
                 </div>
             </div>
+            <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+            <button id="ajax-btn" type="button">Test AJAX</button>
         </form>
     </div>
 </div>
