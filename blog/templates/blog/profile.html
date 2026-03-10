@@ -25,15 +25,15 @@
                 <hr>
 
             <!-- Voting stats -->
-             <div class="col-6">
-                <h6 class="mb-0">Total Votes Received</h6>
-                <p class="fw-bold">{{ profile.total_votes_received }}</p>
-             </div>
+                 <div class="col-6">
+                     <h6 class="mb-0">Total Likes Received</h6>
+                     <p class="fw-bold">{{ profile.total_likes_received }}</p>
+                 </div>
 
-            <div class="col-6">
-                <h6 class="mb-0">Total Votes Cast</h6>
-                <p class="fw-bold">{{ profile.total_votes_cast }}</p>
-             </div>
+                <div class="col-6">
+                     <h6 class="mb-0">Total Likes Cast</h6>
+                     <p class="fw-bold">{{ profile.total_likes_cast }}</p>
+                 </div>
 
         </div>
 
@@ -83,10 +83,10 @@
                 </a>
 
                 <small class="text-muted">
-                    <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
-                    <form method="POST" action="{% url 'vote_resource' resource.id %}" style="display:inline;">
+                    <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
+                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
+                        <button type="submit" class="btn btn-sm btn-success like-post-btn" data-resource-id="{{ resource.id }}">Like</button>
                     </form>
                 </small>
             </div>

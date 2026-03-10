@@ -7,7 +7,7 @@
 # - Post (main learning posts)
 # - Comment (discussion responses)
 # - Resource (external learning links)
-# - Vote (upvoting system)
+# - Like (like system)
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -112,26 +112,25 @@ class Profile(models.Model):
     # reputation stats
 
     @property
-    def total_votes_received(self):
-        # Total votes on user's posts
-        post_votes = sum(
-            post.votes.count() for post in self.user.blog_posts.all()
+    def total_likes_received(self):
+        # Total likes on user's posts
+        post_likes = sum(
+            post.likes.count() for post in self.user.blog_posts.all()
         )
-        comment_votes = sum(
-            comment.votes.count()
+        comment_likes = sum(
+            comment.likes.count()
             for comment in self.user.comment_set.all()
         )
-        resource_votes = sum(
-            resource.votes.count()
+        resource_likes = sum(
+            resource.likes.count()
             for resource in self.user.resources.all()
         )
-
-        return post_votes + comment_votes + resource_votes
+        return post_likes + comment_likes + resource_likes
 
     @property
-    def total_votes_cast(self):
-        # Total votes user cast (upvoting others)
-        return self.user.vote_set.count()
+    def total_likes_cast(self):
+        # Total likes user cast (liking others)
+        return self.user.like_set.count()
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
@@ -192,8 +191,8 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def vote_count(self):
-        return self.votes.count()
+    def like_count(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title
@@ -260,8 +259,8 @@ class Resource(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def vote_count(self):
-        return self.votes.count()
+    def like_count(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title
@@ -289,8 +288,8 @@ class Comment(models.Model):
     approved = models.BooleanField(default=True)
 
     @property
-    def vote_count(self):
-        return self.votes.count()
+    def like_count(self):
+        return self.likes.count()
 
     def __str__(self):
         return f"Comment by {self.author} on {self.post}"
@@ -304,7 +303,7 @@ class Comment(models.Model):
 # Only one of post or reply should be filled.
 
 
-class Vote(models.Model):
+class Like(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
@@ -315,7 +314,7 @@ class Vote(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name='votes'
+        related_name='likes'
     )
 
     comment = models.ForeignKey(
@@ -323,7 +322,7 @@ class Vote(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name='votes'
+        related_name='likes'
     )
 
     resource = models.ForeignKey(
@@ -331,27 +330,26 @@ class Vote(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name='votes'
+        related_name='likes'
     )
 
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Prevents a user from voting twice
+        # Prevents a user from liking twice
         unique_together = ('user', 'post', 'comment', 'resource')
 
     def clean(self):
         # Ensure that only one of post, comment, or resource is set
-
         targets = [self.post, self.comment, self.resource]
         if sum(target is not None for target in targets) != 1:
             raise ValidationError(
-                "A vote must be associated with exactly one of "
+                "A like must be associated with exactly one of "
                 "post, comment, or resource."
             )
 
     def __str__(self):
-        return f"Vote by {self.user}"
+        return f"Like by {self.user}"
 
 
 # auto create Profile when User is created

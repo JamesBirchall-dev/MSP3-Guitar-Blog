@@ -8,11 +8,11 @@
     Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> |
     <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> |
     {{ post.created_on }} |
-    <span class="post-vote-count" data-post-id="{{ post.id }}">{{ post.votes_total }}</span> votes
+    <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span> likes
     {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'vote_post' post.id %}" style="display:inline;">
+        <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-post-id="{{ post.id }}">Upvote</button>
+            <button type="submit" class="btn btn-sm btn-success like-post-btn" data-post-id="{{ post.id }}">Like</button>
         </form>
     {% endif %}
 </p>
@@ -43,8 +43,8 @@
             {% if user.is_authenticated %}
                 <form method="POST" action="{% url 'vote_comment' comment.id %}" style="display:inline;">
                     {% csrf_token %}
-                    <span class="post-vote-count" data-comment-id="{{ comment.id }}">{{ comment.votes_total }}</span> votes
-                    <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-comment-id="{{ comment.id }}">Upvote</button>
+                    <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.likes_total }}</span> likes
+                    <button type="submit" class="btn btn-sm btn-success like-post-btn" data-comment-id="{{ comment.id }}">Like</button>
                 </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
@@ -66,11 +66,11 @@
                                 {% endif %}
                             </a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
-                            <span class="post-vote-count" data-resource-id="{{ resource.id }}">{{ resource.votes_total }}</span> votes
+                            <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
                             {% if user.is_authenticated %}
-                                <form method="POST" action="{% url 'vote_resource' resource.id %}" style="display:inline;">
+                                <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-success upvote-post-btn" data-resource-id="{{ resource.id }}">Upvote</button>
+                                    <button type="submit" class="btn btn-sm btn-success like-post-btn" data-resource-id="{{ resource.id }}">Like</button>
                                 </form>
                                 {% if user.profile.role == 'teacher' %}
                                     <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">

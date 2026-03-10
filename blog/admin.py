@@ -7,7 +7,7 @@ from .models import (
     Post,
     Comment,
     Resource,
-    Vote,
+    Like,
     Tag,
 )
 # admin import/export functionality
@@ -107,10 +107,10 @@ class ResourceAdmin(ImportExportModelAdmin):
     search_fields = ('title', 'description')
 
 
-# VOTE ADMIN
+# LIKE ADMIN
 
-@admin.register(Vote)
-class VoteAdmin(admin.ModelAdmin):
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'post', 'comment', 'created_on')
+    list_display = ('user', 'post', 'comment', 'resource', 'created_on')
     list_filter = ('created_on',)

@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Comment, Vote, Resource, Profile, Subject
+from .models import Post, Comment, Like, Resource, Profile, Subject
 from django.db.models import Count, Q
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -36,11 +36,11 @@ def index(request):
     # This view renders the main feed page (same as home)
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
-    ).annotate(votes_total=Count('votes')).order_by("-created_on")
+    ).annotate(likes_total=Count('likes')).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject", "added_by", "post"
-    ).annotate(votes_total=Count('votes'))
+    ).annotate(likes_total=Count('likes'))
 
     subject_slug = request.GET.get('subject')
     if subject_slug:
@@ -94,11 +94,11 @@ def subject_list_view(request):
 def home(request):
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
-    ).annotate(votes_total=Count('votes')).order_by("-created_on")
+    ).annotate(likes_total=Count('likes')).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject", "added_by", "post"
-    ).annotate(votes_total=Count('votes'))
+    ).annotate(likes_total=Count('likes'))
 
 
 #  Subject Filter
@@ -147,19 +147,19 @@ def home(request):
 def post_detail(request, slug):
     from django.db.models import Count
     post = get_object_or_404(
-        Post.objects.annotate(votes_total=Count('votes')),
+        Post.objects.annotate(likes_total=Count('likes')),
         slug=slug
     )
 
-    # order comments by vote count and then by creation date
+    # order comments by like count and then by creation date
     comments = post.comments.annotate(
-        votes_total=Count('votes')
-    ).order_by('-votes_total', '-created_on')
+        likes_total=Count('likes')
+    ).order_by('-likes_total', '-created_on')
 
-    # Order resources by vote count then creation date
+    # Order resources by like count then creation date
     resources = post.resources.annotate(
-        votes_total=Count('votes')
-    ).order_by('-votes_total', '-created_on')
+        likes_total=Count('likes')
+    ).order_by('-likes_total', '-created_on')
 
     comment_form = CommentForm()
     resource_form = ResourceForm()
@@ -417,64 +417,64 @@ def delete_resource(request, pk):
 
 
 @login_required
-def vote_post(request, post_id):
+def like_post(request, post_id):
     if request.method != "POST":
         return redirect("home")
     post = get_object_or_404(Post, id=post_id)
     if post.author == request.user:
-        # Prevent users from voting on their own posts
+        # Prevent users from liking their own posts
         return redirect(request.META.get("HTTP_REFERER", "index"))
-    vote, created = Vote.objects.get_or_create(
+    like, created = Like.objects.get_or_create(
         user=request.user,
         post=post
     )
     if not created:
-        # User has already voted, so remove the vote
-        vote.delete()
+        # User has already liked, so remove the like
+        like.delete()
     return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
-# comment voting view
+# comment like view
 
 @login_required
-def vote_comment(request, comment_id):
+def like_comment(request, comment_id):
     if request.method != "POST":
         return redirect("home")
     comment = get_object_or_404(Comment, id=comment_id)
     if comment.author == request.user:
-        # Prevent users from voting on their own comments
+        # Prevent users from liking their own comments
         return redirect("post_detail", slug=comment.post.slug)
-    vote, created = Vote.objects.get_or_create(
+    like, created = Like.objects.get_or_create(
         user=request.user,
         comment=comment
     )
 
     if not created:
-        # User has already voted, so remove the vote
-        vote.delete()
+        # User has already liked, so remove the like
+        like.delete()
 
     return redirect("post_detail", slug=comment.post.slug)
 
 
 @login_required
-def vote_resource(request, resource_id):
+def like_resource(request, resource_id):
     if request.method != "POST":
         return redirect("home")
     resource = get_object_or_404(Resource, id=resource_id)
     if resource.added_by == request.user:
-        # Prevent users from voting on their own resources
+        # Prevent users from liking their own resources
         if resource.post:
             return redirect("post_detail", slug=resource.post.slug)
         else:
             return redirect("index")
-    vote, created = Vote.objects.get_or_create(
+    like, created = Like.objects.get_or_create(
         user=request.user,
         resource=resource
     )
 
     if not created:
-        # User has already voted, so remove the vote
-        vote.delete()
+        # User has already liked, so remove the like
+        like.delete()
 
     if resource.post:
         return redirect("post_detail", slug=resource.post.slug)
@@ -494,13 +494,13 @@ def subject_detail_view(request, slug):
         posts = subject.posts.all()
 
     from django.db.models import Count
-    posts = posts.annotate(votes_total=Count('votes')).order_by("-created_on")
+    posts = posts.annotate(likes_total=Count('likes')).order_by("-created_on")
 
     # Add resources for this subject, annotated with votes_total
     from django.db.models import Count
     resources = subject.resources.all()\
         .select_related("subject", "added_by", "post")\
-        .annotate(votes_total=Count('votes'))
+        .annotate(likes_total=Count('likes'))
 
     tags = subject.tags.all()
 
