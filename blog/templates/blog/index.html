@@ -79,6 +79,13 @@
                         <p class="card-text">
                             {{ post.content|safe }}
                         </p>
+                        {% if post.tags.all %}
+                            <div class="post-tags mb-2">
+                                {% for tag in post.tags.all %}
+                                    <span class="badge bg-secondary">{{ tag.name }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="card-footer bg-white border-0">
                         <small class="text-muted">

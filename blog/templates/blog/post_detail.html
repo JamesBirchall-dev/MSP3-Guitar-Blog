@@ -8,6 +8,13 @@
     Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> |
     <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> |
     {{ post.created_on }} |
+    {% if post.tags.all %}
+        <div class="post-tags mb-2">
+            {% for tag in post.tags.all %}
+                <span class="badge bg-secondary">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="like-section">
         {% if user.is_authenticated %}
             <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
@@ -105,7 +112,6 @@
                                         </button>
                                     </form>
                                 {% endif %}
-                            {% endif %}
                         </div>
                             {% if user.is_authenticated and resource.added_by == user %}
                                 <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
