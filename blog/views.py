@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from .models import Post, Comment, Like, Resource, Profile, Subject
+from .models import Post, Comment, Like, Resource, Profile, Subject, Tag
 from django.db.models import Count, Q
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+from django.views.decorators.http import require_GET
 
 
 # Home view for root URL
@@ -55,6 +56,10 @@ def index(request):
     if subject_slug:
         posts = posts.filter(subject__slug=subject_slug)
         resources = resources.filter(subject__slug=subject_slug)
+
+    tag_slug = request.GET.getlist('tag')
+    if tag_slug:
+        posts = posts.filter(tags__slug__in=tag_slug)
 
     query = request.GET.get('q')
     if query:
@@ -116,12 +121,21 @@ def index(request):
 
     subjects = Subject.objects.all().order_by("name")
 
+    # Build subject-tag dictionary for AJAX
+    subject_tags = {
+        str(subject.pk): [tag.name for tag in subject.tags.all()]
+        for subject in subjects
+    }
+
+    tags = Tag.objects.all()
     context = {
         "feed": feed,
         "subjects": subjects,
         "active_subject": subject_slug,
         "active_type": content_type,
         "query": query,
+        "subject_tags_json": json.dumps(subject_tags),
+        "tags": tags,
     }
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, "blog/_feed_items.html", context)
@@ -224,6 +238,13 @@ def profile_view(request, username):
     ).order_by("-created_on")
 
     # Filtering
+    subject_slug = request.GET.get('subject')
+    if subject_slug:
+        posts = posts.filter(subject__slug=subject_slug)
+        resources = resources.filter(subject__slug=subject_slug)
+    tag_slugs = request.GET.getlist('tag')
+    if tag_slugs:
+        posts = posts.filter(tags__slug__in=tag_slugs)
     query = request.GET.get('q')
     content_type = request.GET.get('type')
     if query:
@@ -268,13 +289,27 @@ def profile_view(request, username):
         for item in combined_feed:
             item.user_has_liked = item.likes.filter(user=request.user).exists()
 
+    subjects = Subject.objects.all().order_by("name")
+    # Build subject-tag dictionary for AJAX (same as index)
+    subject_tags = {
+        str(subject.pk): [tag.name for tag in subject.tags.all()]
+        for subject in subjects
+    }
+    tags = Tag.objects.all()
     context = {
         'profile_user': user_obj,
         'profile': profile,
         'feed': feed,
         'query': query,
         'active_type': content_type,
+        'tags': tags,
+        'selected_tags': tag_slugs,
+        'subjects': subjects,
+        'active_subject': subject_slug,
+        'subject_tags_json': json.dumps(subject_tags),
     }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "blog/_feed_items.html", context)
     return render(request, 'blog/profile.html', context)
 
 
@@ -529,30 +564,34 @@ def like_resource(request, resource_id):
 def subject_detail_view(request, slug):
     subject = get_object_or_404(Subject, slug=slug)
 
-    tag_slug = request.GET.get('tag')
-    posts = subject.posts.all()
+    tag_slugs = request.GET.getlist('tag')
+    posts = subject.posts.filter(status=1)
     resources = subject.resources.all().select_related(
         "subject", "added_by", "post"
     )
-
-    # Filtering
     query = request.GET.get('q')
     content_type = request.GET.get('type')
-    if tag_slug:
-        posts = posts.filter(tags__slug=tag_slug)
-    if query:
-        posts = posts.filter(
-            Q(title__icontains=query) |
-            Q(content__icontains=query)
-        )
-        resources = resources.filter(
-            Q(title__icontains=query) |
-            Q(description__icontains=query)
-        )
-    if content_type == 'post':
+
+    # If tag filter show only posts matching tags
+    if tag_slugs and not content_type:
+        posts = posts.filter(tags__slug__in=tag_slugs)
         resources = resources.none()
-    elif content_type == 'resource':
-        posts = posts.none()
+    else:
+        if tag_slugs:
+            posts = posts.filter(tags__slug__in=tag_slugs)
+        if query:
+            posts = posts.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query)
+            )
+            resources = resources.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
+            )
+        if content_type == 'post':
+            resources = resources.none()
+        elif content_type == 'resource':
+            posts = posts.none()
 
     posts = posts.annotate(likes_total=Count('likes')).order_by("-created_on")
     resources = resources.annotate(likes_total=Count('likes'))
@@ -587,14 +626,18 @@ def subject_detail_view(request, slug):
 
     tags = subject.tags.all()
 
-    return render(request, 'blog/subject_detail.html', {
+    active_tag_slug = tag_slugs[0] if tag_slugs else None
+    context = {
         'subject': subject,
         'feed': feed,
         'tags': tags,
-        'active_tag_slug': tag_slug,
+        'active_tag_slug': active_tag_slug,
         'query': query,
         'active_type': content_type,
-    })
+    }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "blog/_feed_items.html", context)
+    return render(request, 'blog/subject_detail.html', context)
 
 
 def subject_list_view(request):
@@ -607,3 +650,16 @@ def subject_list_view(request):
 
 def base_view(request):
     return render(request, 'blog/base.html')
+
+
+@require_GET
+def get_subject_tags(request):
+    subject_id = request.GET.get('subject_id')
+    if not subject_id:
+        return JsonResponse({'tags': []})
+    try:
+        subject = Subject.objects.get(pk=subject_id)
+        tags = [tag.name for tag in subject.tags.all()]
+    except Subject.DoesNotExist:
+        tags = []
+    return JsonResponse({'tags': tags})

@@ -18,7 +18,7 @@
                 <select name="subject" id="subject" class="form-select">
                     <option value="">All Subjects</option>
                     {% for subject in subjects %}
-                        <option value="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
+                        <option value="{{ subject.slug }}" data-pk="{{ subject.pk }}" {% if subject.slug == active_subject %}selected{% endif %}>
                             {{ subject.name }}
                         </option>
                     {% endfor %}
@@ -35,6 +35,18 @@
             <div class="col-md-4">
                 <label class="form-label">Search:</label>
                 <input type="text" name="q" value="{{ query|default_if_none:'' }}" class="form-control" placeholder="Search posts and resources...">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Filter by Tags:</label>
+                <div class="form-text">Choose relevant tags for your filter. Only tags related to the selected subject will appear.</div>
+                <div id="tag-container">
+                    {% for tag in tags %}
+                        <label class="tag-badge checkbox-label" data-tag="{{ tag.name }}" style="display: none;">
+                            <input type="checkbox" name="tag" value="{{ tag.slug }}">
+                            {{ tag.name }}
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="row mt-2">

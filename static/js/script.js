@@ -1,5 +1,20 @@
 // wait for the DOM to load before running the script
 document.addEventListener('DOMContentLoaded', function() {
+        // AJAX handler for filter form submit
+        const filterForm = document.querySelector('form.card');
+        if (filterForm) {
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const params = new URLSearchParams(new FormData(filterForm)).toString();
+                fetch('?' + params, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('feed-container').innerHTML = html;
+                });
+            });
+        }
     // get subject dropdown element
     const subjectSelect = document.querySelector('select[name="subject"]');
     // get all tag label elements
@@ -24,26 +39,29 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    // function to filter tags based on selected subject
-    function filterTags() {
-        const selectedSubjectId = subjectSelect.value;
-        const tags = subjectTags[selectedSubjectId] || [];
-        console.log('Selected subject ID:', selectedSubjectId);
-        console.log('Available tags for subject:', tags);
-        tagLabels.forEach(function(label) {
-            const tagName = label.getAttribute('data-tag');
-            console.log('Checking tag:', tagName, 'Visible:', !selectedSubjectId || tags.includes(tagName));
-            if (!selectedSubjectId || tags.includes(tagName)) {
-                label.style.display = '';
-            } else {
-                label.style.display = 'none';
-            }
-        });
+    // function to filter tags based on selected subject using AJAX
+    function filterTagsAjax() {
+        const subjectSelect = document.querySelector('select[name="subject"]');
+        const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+        const selectedSubjectId = selectedOption.getAttribute('data-pk');
+        fetch(`/get-subject-tags/?subject_id=${selectedSubjectId}`)
+            .then(response => response.json())
+            .then(data => {
+                const tags = data.tags || [];
+                tagLabels.forEach(function(label) {
+                    const tagName = label.getAttribute('data-tag');
+                    if (!selectedSubjectId || tags.includes(tagName)) {
+                        label.style.display = '';
+                    } else {
+                        label.style.display = 'none';
+                    }
+                });
+            });
     }
 
     if (subjectSelect) {
-        subjectSelect.addEventListener('change', filterTags);
-        filterTags(); // Initial filter on page load
+        subjectSelect.addEventListener('change', filterTagsAjax);
+        filterTagsAjax(); // Initial filter on page load
     }
 });
 
@@ -95,18 +113,37 @@ $(document).ready(function() {
         });
     }
 
+    // function to filter tags based on selected subject using AJAX
+    function filterTagsAjax() {
+        const selectedSubjectId = subjectSelect.value;
+        // AJAX call to get tags for selected subject
+        fetch(`/get-subject-tags/?subject_id=${selectedSubjectId}`)
+            .then(response => response.json())
+            .then(data => {
+                const tags = data.tags || [];
+                tagLabels.forEach(function(label) {
+                    const tagName = label.getAttribute('data-tag');
+                    if (!selectedSubjectId || tags.includes(tagName)) {
+                        label.style.display = '';
+                    } else {
+                        label.style.display = 'none';
+                    }
+                });
+            });
+    }
+
     if (subjectSelect.length) {
-        subjectSelect.on('change', filterTags);
-        filterTags();
+        subjectSelect.on('change', filterTagsAjax);
+        filterTagsAjax(); // Initial filter on page load
     }
 
     // -------------------------
     // AJAX FORM HANDLER
     // -------------------------
 
-    $('form').on('submit', function(e) {
+    // Restrict AJAX handler to feed/filter forms only
+    $('form.feed-filter-form, form.profile-filter-form, form.subject-filter-form').on('submit', function(e) {
         e.preventDefault();
-
         $.ajax({
             url: window.location.pathname,
             data: $(this).serialize(),
