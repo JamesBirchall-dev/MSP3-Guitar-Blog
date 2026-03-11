@@ -119,9 +119,28 @@ class ResourceAdmin(ImportExportModelAdmin):
     search_fields = ('title', 'description')
 
 
-# LIKE ADMIN
+# LIKE RESOURCE & ADMIN
+class LikeResource(resources.ModelResource):
+    def dehydrate_post(self, obj):
+        return obj.post.title if obj.post else ''
+
+    def dehydrate_comment(self, obj):
+        return obj.comment.id if obj.comment else ''
+
+    def dehydrate_resource(self, obj):
+        return obj.resource.title if obj.resource else ''
+
+    class Meta:
+        model = Like
+        fields = ('id', 'user', 'post', 'comment', 'resource', 'created_on')
+
 
 @admin.register(Like)
 class LikeAdmin(ImportExportModelAdmin):
+    resource_class = LikeResource
     list_display = ('user', 'post', 'comment', 'resource', 'created_on')
-    list_filter = ('created_on',)
+    list_filter = ('user', 'post', 'comment', 'resource', 'created_on')
+    search_fields = ('user__username',)
+    autocomplete_fields = ['user', 'post', 'comment', 'resource']
+    # Optionally, customize form display:
+    # fields = ('user', 'post', 'comment', 'resource', 'created_on')

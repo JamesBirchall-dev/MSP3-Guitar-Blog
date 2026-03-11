@@ -521,10 +521,7 @@ def like_resource(request, resource_id):
     resource = get_object_or_404(Resource, id=resource_id)
     if resource.added_by == request.user:
         # Prevent users from liking their own resources
-        if resource.post:
-            return redirect("post_detail", slug=resource.post.slug)
-        else:
-            return redirect("index")
+        return redirect(request.META.get("HTTP_REFERER", "index"))
     like, created = Like.objects.get_or_create(
         user=request.user,
         resource=resource
@@ -534,10 +531,7 @@ def like_resource(request, resource_id):
         # User has already liked, so remove the like
         like.delete()
 
-    if resource.post:
-        return redirect("post_detail", slug=resource.post.slug)
-    else:
-        return redirect("index")
+    return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
 # Subject detail view
