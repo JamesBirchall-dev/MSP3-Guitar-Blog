@@ -39,8 +39,10 @@
 
 
 {% if user.is_authenticated and post.author == user %}
+<div class="action-row">
     <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">Edit Post</a>
     <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger">Delete Post</a>
+</div>
 {% endif %}
 
 <hr>
@@ -69,8 +71,8 @@
                 </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
-                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary">Edit Comment</a>
+                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete Comment</a>
             {% endif %}
         </div>
         <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
@@ -114,8 +116,10 @@
                                 {% endif %}
                         </div>
                             {% if user.is_authenticated and resource.added_by == user %}
-                                <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            <div class="action-row">
+                                <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit Resource</a>
+                                <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete Resource</a>
+                            </div>
                             {% endif %}
                         </li>
                     {% endfor %}

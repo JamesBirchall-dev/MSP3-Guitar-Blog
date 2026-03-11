@@ -1,75 +1,129 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
     <title>Guitar Learning Blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="{% static 'images/guitar-blog-favicon.png' %}" sizes="32x32" />
-    <link rel="icon" type="image/x-icon" href="{% static 'images/guitar-blog-favicon.ico' %}" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <meta
+      name="description"
+      content="A blog dedicated to guitar learning, featuring posts, resources, and a community of guitar enthusiasts."
+    >
+    <meta
+      name="keywords"
+      content="guitar, learning, blog, music, resources, community, teachers, students"
+    >
+    <meta name="author" content="James Birchall" />
+    <!-- Open Graph Meta Tags-->
+    <meta property="og:title" content="Guitar Learning Blog" />
+    <meta
+      property="og:description"
+      content="A blog dedicated to guitar learning, featuring posts, resources, and a community of guitar enthusiasts."
+    >
+    <meta
+      property="og:image"
+      content="{% static 'images/guitar-blog-logo.webp' %}"
+    >
+    <meta
+      property="og:url"
+      content="https://msp3-guitar-blog-heroku-c8e0734e4d0d.herokuapp.com/"
+    >
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" >
+    <meta name="twitter:title" content="Guitar Learning Blog" >
+    <meta
+      name="twitter:description"
+      content="A blog dedicated to guitar learning, featuring posts, resources, and a community of guitar enthusiasts."
+    >
+    <meta
+      name="twitter:image"
+      content="{% static 'images/guitar-blog-logo.webp' %}"
+    >
+    <!-- Favicons-->
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'images/guitar-blog-favicon.png' %}"
+      sizes="32x32"
+    >
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/guitar-blog-favicon.ico' %}"
+    >
     <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+  </head>
+  <body>
+    <!-- Navbar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'subject_list' %}">
-        <img src="{% static 'images/guitar-blog-logo.webp' %}" alt="Logo" height="40">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-                        
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profile' user.username %}">
-                                {{ user.username }}
-                            </a>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'index' %}">Home Feed</a>
-                        </li>
-                        {% if user.profile.role == 'teacher' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'create_post' %}">
-                                Create Post
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'subject_list' %}">
-                                Subjects
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'subject_list' %}">
+          <img
+            src="{% static 'images/guitar-blog-logo.webp' %}"
+            alt="Logo"
+            height="40"
+          >
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' user.username %}">
+                {{ user.username }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">Home Feed</a>
+            </li>
+            {% if user.profile.role == 'teacher' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'create_post' %}">
+                Create Post
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'subject_list' %}"> Subjects </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+            {% endif %}
+          </ul>
         </div>
+      </div>
     </nav>
-    <div class="container mt-4">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <div class="container mt-4">{% block content %} {% endblock %}</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
-        
-</body>
+  </body>
 </html>

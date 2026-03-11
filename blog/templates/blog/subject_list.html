@@ -8,7 +8,7 @@
     <h1>Learning Subjects</h1>
     <p>Explore various subjects to enhance your guitar skills. Click on a subject to see related posts and resources.</p>
 </div>
-
+<!-- Subject Cards -->
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Explore Subjects</h2>
     <div class="row">
@@ -21,11 +21,11 @@
                             {{ subject.name }}
                         </a>
                     </h4>
-
+                    <!-- Short Description maintained in DB-->
                     <p class="card-text text-muted">
                         {{ subject.short_description|default:"No short description available."|safe }}
                     </p>
-
+                    <!-- Post Count -->
                     <div class="mt-auto">
                         <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary w-100 mt-3">Read More</a>
                        <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary btn-lg my-3">

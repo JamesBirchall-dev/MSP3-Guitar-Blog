@@ -7,12 +7,13 @@
 <div class="subject-description">
     {{ subject.description|safe }}
 </div>
-
+<!--display all posts for this subject-->
 <a href="{% url 'subject_detail' subject.slug %}"
-   class="btn btn-sm {% if not active_tag %}btn-dark{% else %}btn-outline-dark{% endif %}>
+   class="btn btn-sm {% if not active_tag %}btn-dark{% else %}btn-outline-dark{% endif %}"
+   aria-label="Show all posts for {{ subject.name }}">
     All
 </a>
-
+<!--posts-->
 <div class="container mt-4">
     {% for post in posts %}
         <div class="card p-3 mb-3 shadow-sm">
@@ -29,6 +30,7 @@
                     {% endfor %}
                 </div>
             {% endif %}
+            <!-- Like Section -->
             <div class="card-footer bg-white border-0">
                 <small class="text-muted">
                     Added by {{ post.author }}
@@ -50,6 +52,7 @@
             </div>
         </div>
     {% empty %}
+    <!-- No posts message -->
         <p>No posts found for this subject.</p>
     {% endfor %}
     <!-- Resources for this subject -->
@@ -67,6 +70,7 @@
                     <a href="{% url 'post_detail' resource.post.slug %}">{{ resource.post.title }}</a>
                 {% endif %}
             </p>
+            <!-- like-->
             <div class="card-footer bg-white border-0">
                 <small class="text-muted">
                     Added by {{ resource.added_by }}
@@ -84,6 +88,7 @@
                         </form>
                         <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
                     </div>
+                    <!-- Teacher Verify Button (only visible to teachers) -->
                     {% if user.is_authenticated and user.profile.role == 'teacher' %}
                         <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
                             {% csrf_token %}
@@ -96,7 +101,7 @@
             </div>
         </div>
     {% endfor %}
-
+    <!-- No Posts or Resources Message -->
     {% if not posts and not resources %}
         <div class="col-12">
             <p class="text-center">No posts or resources found. Try adjusting your filters or search terms.</p>

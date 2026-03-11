@@ -1,28 +1,28 @@
 {% extends "blog/base.html" %}
 {% load static %}
-
 {% block content %}
 <script>
-    // Django template variable outputs valid JSON here
+    // Django template variable outputs valid JSON here. Pass subjexxt_tags_json from the view context.
     window.subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
 </script>
-
+<!-- Create Post Form (should only be visible to role: teacher)-->
 <div class="container container-main">
+    <!-- Wrapper for the create post form -->
     <div class="create-post-wrapper">
         <h2 class="create-title">Create New Post</h2>
-
         {% if form.errors %}
+        <!-- Display form errors -->
         <div class="alert alert-danger">
             <ul>
-            {% for field, errors in form.errors.items %}
+                {% for field, errors in form.errors.items %}
                 {% for error in errors %}
-                    <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
                 {% endfor %}
-            {% endfor %}
+                {% endfor %}
             </ul>
         </div>
         {% endif %}
-
+        <!-- Form for creating a new post -->
         <form method="POST" class="card">
             {% csrf_token %}
             <div class="post-meta-section">
@@ -35,13 +35,14 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group-clean">
+                            <!-- Tag selection, tags should only appear based on subject assignment-->
                             <label>Tags</label>
                             <div id="tag-container">
                                 {% for checkbox in form.tags %}
-                                    <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}">
-                                        {{ checkbox.tag }}
-                                        {{ checkbox.choice_label }}
-                                    </label>
+                                <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}">
+                                    {{ checkbox.tag }}
+                                    {{ checkbox.choice_label }}
+                                </label>
                                 {% endfor %}
                             </div>
                         </div>
@@ -65,8 +66,6 @@
                     <button type="submit" class="btn btn-primary">Create Post</button>
                 </div>
             </div>
-            <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
-            <button id="ajax-btn" type="button">Test AJAX</button>
         </form>
     </div>
 </div>
