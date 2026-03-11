@@ -120,3 +120,44 @@ $(document).ready(function() {
     });
 
 });
+
+    // Click event for like buttons
+    $(document).on('click', '.like-post-btn', function(e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var form = $btn.closest('form');
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        success: function(data) {
+            // Update like count for post
+            var postId = $btn.data('post-id');
+            if (postId) {
+                $('.post-like-count[data-post-id="' + postId + '"]').text(data.like_count);
+            }
+            // Update like count for resource
+            var resourceId = $btn.data('resource-id');
+            if (resourceId) {
+                $('.post-like-count[data-resource-id="' + resourceId + '"]').text(data.like_count);
+            }
+            // Update like count for comment
+            var commentId = $btn.data('comment-id');
+            if (commentId) {
+                $('.post-like-count[data-comment-id="' + commentId + '"]').text(data.like_count);
+            }
+            // Update icon
+            if (data.liked) {
+                $btn.find('i').removeClass('far').addClass('fas text-danger');
+            } else {
+                $btn.find('i').removeClass('fas text-danger').addClass('far');
+            }
+        },
+        error: function(xhr) {
+            alert('Error: ' + xhr.statusText);
+        }
+    });
+});

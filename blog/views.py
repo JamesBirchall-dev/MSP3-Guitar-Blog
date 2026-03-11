@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from .models import Post, Comment, Like, Resource, Profile, Subject
 from django.db.models import Count, Q
 from django.contrib.auth import login, logout
@@ -123,7 +124,7 @@ def index(request):
         "query": query,
     }
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return render(request, "blog/feed_items.html", context)
+        return render(request, "blog/_feed_items.html", context)
     return render(request, "blog/index.html", context)
 
 
@@ -467,15 +468,17 @@ def like_post(request, post_id):
         return redirect("home")
     post = get_object_or_404(Post, id=post_id)
     if post.author == request.user:
-        # Prevent users from liking their own posts
         return redirect(request.META.get("HTTP_REFERER", "index"))
     like, created = Like.objects.get_or_create(
         user=request.user,
         post=post
     )
     if not created:
-        # User has already liked, so remove the like
         like.delete()
+    liked = Like.objects.filter(user=request.user, post=post).exists()
+    like_count = post.likes.count()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'like_count': like_count})
     return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
@@ -487,17 +490,17 @@ def like_comment(request, comment_id):
         return redirect("home")
     comment = get_object_or_404(Comment, id=comment_id)
     if comment.author == request.user:
-        # Prevent users from liking their own comments
         return redirect("post_detail", slug=comment.post.slug)
     like, created = Like.objects.get_or_create(
         user=request.user,
         comment=comment
     )
-
     if not created:
-        # User has already liked, so remove the like
         like.delete()
-
+    liked = Like.objects.filter(user=request.user, comment=comment).exists()
+    like_count = comment.likes.count()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'like_count': like_count})
     return redirect("post_detail", slug=comment.post.slug)
 
 
@@ -507,17 +510,17 @@ def like_resource(request, resource_id):
         return redirect("home")
     resource = get_object_or_404(Resource, id=resource_id)
     if resource.added_by == request.user:
-        # Prevent users from liking their own resources
         return redirect(request.META.get("HTTP_REFERER", "index"))
     like, created = Like.objects.get_or_create(
         user=request.user,
         resource=resource
     )
-
     if not created:
-        # User has already liked, so remove the like
         like.delete()
-
+    liked = Like.objects.filter(user=request.user, resource=resource).exists()
+    like_count = resource.likes.count()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'like_count': like_count})
     return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
