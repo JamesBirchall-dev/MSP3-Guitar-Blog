@@ -211,39 +211,67 @@ def post_detail(request, slug):
 
 def profile_view(request, username):
     user_obj = get_object_or_404(User, username=username)
-
-    # makes sure a profile exists for the user, creates one if not
     profile, created = Profile.objects.get_or_create(user=user_obj)
 
-    posts = user_obj.blog_posts.all().order_by("-created_on")
-    comments = user_obj.comment_set.all().order_by("-created_on")
-    resources = user_obj.resources.all().order_by("-created_on")
+    posts = user_obj.blog_posts.all().annotate(
+        likes_total=Count('likes')
+    ).order_by("-created_on")
+    resources = user_obj.resources.all().annotate(
+        likes_total=Count('likes')
+    ).order_by("-created_on")
 
+    # Filtering
+    query = request.GET.get('q')
+    content_type = request.GET.get('type')
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
+        resources = resources.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query)
+        )
+    if content_type == 'post':
+        resources = resources.none()
+    elif content_type == 'resource':
+        posts = posts.none()
+
+    posts = list(posts)
+    for post in posts:
+        post.item_type = 'post'
+    resources = list(resources)
+    for resource in resources:
+        resource.item_type = 'resource'
+
+    combined_feed = posts + resources
+    combined_feed.sort(
+        key=lambda x: x.created_on,
+        reverse=True
+    )
+
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(combined_feed, 10)
+    try:
+        feed = paginator.page(page)
+    except PageNotAnInteger:
+        feed = paginator.page(1)
+    except EmptyPage:
+        feed = paginator.page(paginator.num_pages)
+
+    # Like/unlike functionality
     if request.user.is_authenticated:
-        for post in posts:
-            post.user_has_liked = Like.objects.filter(
-                user=request.user,
-                post=post
-            ).exists()
-        for comment in comments:
-            comment.user_has_liked = Like.objects.filter(
-                user=request.user,
-                comment=comment
-            ).exists()
-        for resource in resources:
-            resource.user_has_liked = Like.objects.filter(
-                user=request.user,
-                resource=resource
-            ).exists()
+        for item in combined_feed:
+            item.user_has_liked = item.likes.filter(user=request.user).exists()
 
     context = {
         'profile_user': user_obj,
         'profile': profile,
-        'posts': posts,
-        'comments': comments,
-        'resources': resources,
+        'feed': feed,
+        'query': query,
+        'active_type': content_type,
     }
-
     return render(request, 'blog/profile.html', context)
 
 
@@ -497,39 +525,70 @@ def subject_detail_view(request, slug):
     subject = get_object_or_404(Subject, slug=slug)
 
     tag_slug = request.GET.get('tag')
-    if tag_slug:
-        posts = subject.posts.filter(tags__slug=tag_slug)
-    else:
-        posts = subject.posts.all()
+    posts = subject.posts.all()
+    resources = subject.resources.all().select_related(
+        "subject", "added_by", "post"
+    )
 
-    from django.db.models import Count
+    # Filtering
+    query = request.GET.get('q')
+    content_type = request.GET.get('type')
+    if tag_slug:
+        posts = posts.filter(tags__slug=tag_slug)
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
+        resources = resources.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query)
+        )
+    if content_type == 'post':
+        resources = resources.none()
+    elif content_type == 'resource':
+        posts = posts.none()
 
     posts = posts.annotate(likes_total=Count('likes')).order_by("-created_on")
+    resources = resources.annotate(likes_total=Count('likes'))
 
-    resources = subject.resources.all()\
-        .select_related("subject", "added_by", "post")\
-        .annotate(likes_total=Count('likes'))
+    posts = list(posts)
+    for post in posts:
+        post.item_type = 'post'
+    resources = list(resources)
+    for resource in resources:
+        resource.item_type = 'resource'
 
+    combined_feed = posts + resources
+    combined_feed.sort(
+        key=lambda x: x.created_on,
+        reverse=True
+    )
+
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(combined_feed, 10)
+    try:
+        feed = paginator.page(page)
+    except PageNotAnInteger:
+        feed = paginator.page(1)
+    except EmptyPage:
+        feed = paginator.page(paginator.num_pages)
+
+    # Like/unlike functionality
     if request.user.is_authenticated:
-        for post in posts:
-            post.user_has_liked = Like.objects.filter(
-                user=request.user,
-                post=post
-            ).exists()
-        for resource in resources:
-            resource.user_has_liked = Like.objects.filter(
-                user=request.user,
-                resource=resource
-            ).exists()
+        for item in combined_feed:
+            item.user_has_liked = item.likes.filter(user=request.user).exists()
 
     tags = subject.tags.all()
 
     return render(request, 'blog/subject_detail.html', {
         'subject': subject,
-        'posts': posts,
-        'resources': resources,
+        'feed': feed,
         'tags': tags,
         'active_tag_slug': tag_slug,
+        'query': query,
+        'active_type': content_type,
     })
 
 
