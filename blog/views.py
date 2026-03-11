@@ -122,6 +122,8 @@ def index(request):
         "active_type": content_type,
         "query": query,
     }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "blog/feed_items.html", context)
     return render(request, "blog/index.html", context)
 
 

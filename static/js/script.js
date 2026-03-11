@@ -49,22 +49,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 $(document).ready(function() {
+
     // get subject dropdown element
     const subjectSelect = $('select[name="subject"]');
+
     // get all tag label elements
     const tagLabels = $('.tag-badge.checkbox-label');
+
     // add checked class to label if input is checked
     tagLabels.each(function() {
         const label = $(this);
         const input = label.find('input[type="checkbox"]');
+
         if (input.length) {
-            // initial state
             if (input.prop('checked')) {
                 label.addClass('checked');
             } else {
                 label.removeClass('checked');
             }
-            // listen for change
+
             input.on('change', function() {
                 if (input.prop('checked')) {
                     label.addClass('checked');
@@ -74,13 +77,16 @@ $(document).ready(function() {
             });
         }
     });
+
     // function to filter tags based on selected subject
     function filterTags() {
         const selectedSubjectId = subjectSelect.val();
         const tags = window.subjectTags[selectedSubjectId] || [];
+
         tagLabels.each(function() {
             const label = $(this);
             const tagName = label.data('tag');
+
             if (!selectedSubjectId || tags.includes(tagName)) {
                 label.show();
             } else {
@@ -88,28 +94,29 @@ $(document).ready(function() {
             }
         });
     }
+
     if (subjectSelect.length) {
         subjectSelect.on('change', filterTags);
-        filterTags(); // Initial filter on page load
+        filterTags();
     }
-    // Ajax
-    const ajaxBtn = $('#ajax-btn');
-    if (ajaxBtn.length) {
-        ajaxBtn.on('click', function() {
-            $.ajax({
-                url: '/ajax-test/',
-                type: 'POST',
-                data: {
-                    key1: 'value1',
-                    csrfmiddlewaretoken: $('#csrf-token').val()
-                },
-                success: function(response) {
-                    alert('Success: ' + response.message);
-                },
-                error: function(xhr, status, error) {
-                    alert('Error: ' + error);
-                }
-            });
+
+    // -------------------------
+    // AJAX FORM HANDLER
+    // -------------------------
+
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: window.location.pathname,
+            data: $(this).serialize(),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                $('#feed-container').html(data);
+            }
         });
-    }
+    });
+
 });
