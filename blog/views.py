@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment, Like, Resource, Profile, Subject
 from django.db.models import Count, Q
@@ -9,7 +8,13 @@ from .forms import (
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+
+
+# Home view for root URL
+def home(request):
+    return index(request)
 
 
 @login_required
@@ -44,17 +49,7 @@ def index(request):
         "post"
     ).annotate(likes_total=Count('likes'))
 
-    # for like/unlike functionality
-    if request.user.is_authenticated:
-        for post in posts:
-            post.user_has_liked = post.likes.filter(
-                user=request.user
-            ).exists()
-        for resource in resources:
-            resource.user_has_liked = resource.likes.filter(
-                user=request.user
-            ).exists()
-
+    # FILTERING HAPPENS HERE, ON QUERYSETS:
     subject_slug = request.GET.get('subject')
     if subject_slug:
         posts = posts.filter(subject__slug=subject_slug)
@@ -76,94 +71,56 @@ def index(request):
         resources = resources.none()
     elif content_type == 'resource':
         posts = posts.none()
-    # Summernote: No markdown conversion needed; content is already HTML
-    subjects = Subject.objects.all().order_by("name")
 
-    context = {
-        "posts": posts,
-        "resources": resources,
-        "subjects": subjects,
-        "active_subject": subject_slug,
-        "active_type": content_type,
-        "query": query,
-    }
-    return render(request, "blog/index.html", context)
+    # Now convert to lists and combine
+    posts = list(posts)
+    for post in posts:
+        post.item_type = 'post'
 
+    resources = list(resources)
+    for resource in resources:
+        resource.item_type = 'resource'
 
-def base_view(request):
-    return render(request, 'blog/base.html')
+    combined_feed = posts + resources
+    combined_feed.sort(key=lambda x: x.created_on, reverse=True)
 
+    print("\n\n==================== INDEX VIEW EXECUTED ===================\n")
+    print("******** DEBUG FEED COUNTS ********")
+    print(f"posts count = {len(posts)}")
+    print(f"resources count = {len(resources)}")
+    print(f"combined_feed count = {len(combined_feed)}")
+    print("***********************************\n")
 
-def subject_list_view(request):
-    subjects = Subject.objects.annotate(
-        post_count=Count('posts')
-    ).order_by('name')
-    return render(request, 'blog/subject_list.html', {'subjects': subjects})
+    # Pagination logic
+    page = request.GET.get('page', 1)
+    paginator = Paginator(combined_feed, 10)
+    try:
+        feed = paginator.page(page)
+    except PageNotAnInteger:
+        feed = paginator.page(1)
+    except EmptyPage:
+        feed = paginator.page(paginator.num_pages)
 
-
-# HOME PAGE VIEW
-# Displays all published posts and resources
-
-def home(request):
-    posts = Post.objects.filter(status=1).select_related(
-        "subject", "author"
-    ).annotate(likes_total=Count('likes')).order_by("-created_on")
-
-    resources = Resource.objects.select_related(
-        "subject", "added_by", "post"
-    ).annotate(likes_total=Count('likes'))
-
-
-#  Subject Filter
-    subject_slug = request.GET.get('subject')
-    if subject_slug:
-        posts = posts.filter(subject__slug=subject_slug)
-        resources = resources.filter(subject__slug=subject_slug)
-
-# search filter
-    query = request.GET.get('q')
-    if query:
-        posts = posts.filter(
-            Q(title__icontains=query) |
-            Q(content__icontains=query)
-        )
-
-        resources = resources.filter(
-            Q(title__icontains=query) |
-            Q(description__icontains=query)
-        )
-
-# content ttype filter (post vs resource)
-    content_type = request.GET.get('type')
-    if content_type == 'post':
-        resources = resources.none()  # Exclude resources
-    elif content_type == 'resource':
-        posts = posts.none()  # Exclude posts
-
+    # Like/unlike functionality for paginated feed
     if request.user.is_authenticated:
-        for post in posts:
-            post.user_has_liked = Like.objects.filter(
-                user=request.user,
-                post=post
-            ).exists()
-        for resource in resources:
-            resource.user_has_liked = Like.objects.filter(
-                user=request.user,
-                resource=resource
-            ).exists()
+        for item in combined_feed:
+            if item.item_type == 'post':
+                item.user_has_liked = item.likes.filter(
+                    user=request.user
+                ).exists()
+            elif item.item_type == 'resource':
+                item.user_has_liked = item.likes.filter(
+                    user=request.user
+                ).exists()
 
-    posts = posts.order_by("-created_on")
-    resources = resources.order_by("-created_on")
     subjects = Subject.objects.all().order_by("name")
 
     context = {
-        "posts": posts,
-        "resources": resources,
+        "feed": feed,
         "subjects": subjects,
         "active_subject": subject_slug,
         "active_type": content_type,
         "query": query,
-
     }
     return render(request, "blog/index.html", context)
 
@@ -574,3 +531,15 @@ def subject_detail_view(request, slug):
         'tags': tags,
         'active_tag_slug': tag_slug,
     })
+
+
+def subject_list_view(request):
+    subjects = Subject.objects.annotate(
+        post_count=Count('posts'),
+        resource_count=Count('resources')
+    ).order_by('name')
+    return render(request, 'blog/subject_list.html', {'subjects': subjects})
+
+
+def base_view(request):
+    return render(request, 'blog/base.html')
