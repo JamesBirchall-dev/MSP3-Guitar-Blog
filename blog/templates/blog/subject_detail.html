@@ -1,4 +1,4 @@
-{% extends 'blog/base.html' %}
+{% extends "blog/base.html" %}
 
 {% block content %}
 
@@ -7,105 +7,184 @@
 <div class="subject-description">
     {{ subject.description|safe }}
 </div>
-<!--display all posts for this subject-->
-<a href="{% url 'subject_detail' subject.slug %}"
-   class="btn btn-sm {% if not active_tag %}btn-dark{% else %}btn-outline-dark{% endif %}"
-   aria-label="Show all posts for {{ subject.name }}">
-    All
-</a>
-<!--posts-->
-<div class="container mt-4">
-    {% for post in posts %}
-        <div class="card p-3 mb-3 shadow-sm">
-            <h5>
-                <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
-            </h5>
-            <p class="text-muted small">
-                <strong>Subject:</strong> {{ post.subject.name }}<br>
-            </p>
-            {% if post.tags.all %}
-                <div class="post-tags mb-2">
-                    {% for tag in post.tags.all %}
-                        <span class="badge bg-secondary">{{ tag.name }}</span>
-                    {% endfor %}
+
+<!-- Filter/Search Form -->
+<div class="container">
+    <form method="GET" class="card p-3 mb-4 shadow-sm">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Filter by Content Type:</label>
+                <select name="type" id="type" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
+                    <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Search:</label>
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search posts and resources...">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-12 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Combined Feed Loop -->
+{% for item in feed %}
+    {% if item.item_type == 'post' %}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">Post</span>
+                            <h5 class="card-title">
+                                <a href="{% url 'post_detail' item.slug %}">
+                                    {{ item.title }}
+                                </a>
+                            </h5>
+                            <p class="text-muted small">
+                                <strong>Subject:</strong> {{ item.subject.name }}<br>
+                                <strong>Level:</strong> {{ item.min_level|title }}<br>
+                            </p>
+                            <p class="card-text">
+                                {{ item.content|safe }}
+                            </p>
+                            {% if item.tags.all %}
+                                <div class="post-tags mb-2">
+                                    {% for tag in item.tags.all %}
+                                        <span class="badge bg-secondary">{{ tag.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <small class="text-muted">
+                                Added by {{ item.author }}
+                                {{ item.created_on|date:"M d, Y" }}
+                                <div class="like-section">
+                                    <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}">
+                                            {% if item.user_has_liked %}
+                                                <i class="fas fa-heart text-danger"></i>
+                                            {% else %}
+                                                <i class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.likes_total }}</span>
+                                </div>
+                            </small>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-            <!-- Like Section -->
-            <div class="card-footer bg-white border-0">
-                <small class="text-muted">
-                    Added by {{ post.author }}
-                    {{ post.created_on|date:"M d, Y" }}
-                    <div class="like-section">
-                        <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}">
-                                {% if post.user_has_liked %}
-                                    <i class="fas fa-heart text-danger"></i>
-                                {% else %}
-                                    <i class="far fa-heart"></i>
-                                {% endif %}
-                            </button>
-                        </form>
-                        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span>
-                    </div>
-                </small>
             </div>
         </div>
-    {% empty %}
-    <!-- No posts message -->
-        <p>No posts found for this subject.</p>
-    {% endfor %}
-    <!-- Resources for this subject -->
-    {% for resource in resources %}
-        <div class="card p-3 mb-3 shadow-sm position-relative">
-            {% if resource.verified %}
-                <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
-            {% endif %}
-            <h5>{{ resource.title }}</h5>
-            <p>{{ resource.description|safe }}</p>
-            <p class="text-muted small">
-                <strong>Subject:</strong> {{ resource.subject.name }}<br>
-                {% if resource.post %}
-                    <strong>From</strong>
-                    <a href="{% url 'post_detail' resource.post.slug %}">{{ resource.post.title }}</a>
-                {% endif %}
-            </p>
-            <!-- like-->
-            <div class="card-footer bg-white border-0">
-                <small class="text-muted">
-                    Added by {{ resource.added_by }}
-                    {{ resource.created_on|date:"M d, Y" }}
-                    <div class="like-section">
-                        <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}">
-                                {% if resource.user_has_liked %}
-                                    <i class="fas fa-heart text-danger"></i>
-                                {% else %}
-                                    <i class="far fa-heart"></i>
+    {% elif item.item_type == 'resource' %}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="card h-100 shadow-sm border-start border-4 border-warning position-relative">
+                        {% if item.verified %}
+                            <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
+                        {% endif %}
+                        <div class="card-body">
+                            <span class="badge bg-warning text-dark mb-2">Resource</span>
+                            <h5>
+                                <a href="{{ item.url }}" target="_blank">
+                                    {{ item.title }}
+                                </a>
+                            </h5>
+                            <p>
+                                {{ item.description|safe }}
+                            </p>
+                            <p class="text-muted small">
+                                <strong>Subject:</strong> {{ item.subject.name }}<br>
+                                {% if item.post %}
+                                    <strong>From</strong>
+                                    <a href="{% url 'post_detail' item.post.slug %}">
+                                        {{ item.post.title }}
+                                    </a>
                                 {% endif %}
-                            </button>
-                        </form>
-                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
+                            </p>
+  
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <small class="text-muted">
+                                Added by {{ item.added_by }}
+                                {{ item.created_on|date:"M d, Y" }}
+                                <div class="like-section">
+                                    <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
+                                            {% if item.user_has_liked %}
+                                                <i class="fas fa-heart text-danger"></i>
+                                            {% else %}
+                                                <i class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.likes_total }}</span>
+                                </div>
+                                {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                                    <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
+                                            {% if item.verified %}Unverify{% else %}Verify{% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </small>
+                        </div>
                     </div>
-                    <!-- Teacher Verify Button (only visible to teachers) -->
-                    {% if user.is_authenticated and user.profile.role == 'teacher' %}
-                        <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ resource.id }}">
-                                {% if resource.verified %}Unverify{% else %}Verify{% endif %}
-                            </button>
-                        </form>
-                    {% endif %}
-                </small>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-    <!-- No Posts or Resources Message -->
-    {% if not posts and not resources %}
-        <div class="col-12">
-            <p class="text-center">No posts or resources found. Try adjusting your filters or search terms.</p>
         </div>
     {% endif %}
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center">No posts or resources found. Try adjusting your filters or search terms.</p>
+            </div>
+{% endfor %}
+
+<!-- Pagination -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if feed.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ feed.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page {{ feed.number }} of {{ feed.paginator.num_pages }}
+                        </span>
+                    </li>
+                    {% if feed.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ feed.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div> 
 </div>
 {% endblock %}
