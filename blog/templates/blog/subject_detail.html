@@ -39,6 +39,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="row mt-2">
             <div class="col-md-12 d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary px-5">Apply</button>
@@ -46,7 +47,32 @@
         </div>
     </form>
 </div>
-
+<!-- Pagination Controls -->
+{% if feed.has_other_pages %}
+<nav aria-label="Feed pagination">
+  <ul class="pagination justify-content-center">
+    {% if feed.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ feed.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Previous">
+          &laquo; Previous
+        </a>
+      </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <span class="page-link">
+        Page {{ feed.number }} of {{ feed.paginator.num_pages }}
+      </span>
+    </li>
+    {% if feed.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ feed.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Next">
+          Next &raquo;
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
 <!-- Combined Feed Loop -->
 <div id="feed-container">
     {% for item in feed %}
@@ -165,4 +191,31 @@
             <p class="text-center">No posts or resources found. Try adjusting your filters or search terms.</p>
         </div>
     {% endfor %}
+    <!-- Pagination Controls -->
+{% if feed.has_other_pages %}
+<nav aria-label="Feed pagination">
+  <ul class="pagination justify-content-center">
+    {% if feed.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ feed.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Previous">
+          &laquo; Previous
+        </a>
+      </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <span class="page-link">
+        Page {{ feed.number }} of {{ feed.paginator.num_pages }}
+      </span>
+    </li>
+    {% if feed.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ feed.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Next">
+          Next &raquo;
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
 {% endblock %}
