@@ -62,7 +62,7 @@ class Subject(models.Model):
     """
 
     name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, db_index=True)
     short_description = models.TextField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     # short description for listing pages
@@ -101,7 +101,7 @@ class Subject(models.Model):
 class Tag(models.Model):
     # Tags are used to label posts with specific topics.
     name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, db_index=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -188,10 +188,10 @@ class Post(models.Model):
 
     Posts belong to a Subject and can include Tags.
     """
-    title = models.CharField(max_length=200, unique=True)
+    title = models.CharField(max_length=200, unique=True, db_index=True)
 
     # Used for SEO-friendly URLs
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, db_index=True)
 
     # Author of the post
     author = models.ForeignKey(

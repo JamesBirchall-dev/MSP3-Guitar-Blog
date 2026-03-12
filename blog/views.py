@@ -129,7 +129,9 @@ def index(request):
 
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
-    ).annotate(likes_total=Count('likes')).order_by("-created_on")
+    ).prefetch_related("tags").annotate(
+        likes_total=Count('likes')
+        ).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject",
