@@ -294,14 +294,15 @@ def post_detail(request, slug):
                 )
                 if resource_title or resource_url or resource_description:
                     if resource_title and resource_url:
-                        Resource.objects.create(
+                        resource, created = Resource.objects.get_or_create(
                             comment=comment,
-                            post=post,  # Link resource to the post as well
+                            post=post,
                             added_by=request.user,
                             title=resource_title,
                             url=resource_url,
-                            description=resource_description or '',
+                            description=resource_description or "",
                         )
+
             return redirect("post_detail", slug=slug)
 
     # Summernote: No markdown conversion needed; content is already HTML
@@ -363,6 +364,16 @@ def profile_view(request, username):
         key=lambda x: x.created_on,
         reverse=True
     )
+
+    # Remove duplicates for comments and resources
+    unique_feed = []
+    seen_ids = set()
+    for item in combined_feed:
+        unique_id = getattr(item, 'id', None)
+        if unique_id and unique_id not in seen_ids:
+            unique_feed.append(item)
+            seen_ids.add(unique_id)
+    combined_feed = unique_feed
 
     # Pagination
     page = request.GET.get('page', 1)
