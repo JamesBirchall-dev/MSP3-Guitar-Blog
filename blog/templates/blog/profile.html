@@ -16,7 +16,7 @@
 <div class="card mb-4 shadow-sm">
   <div class="card-body">
     <h5 class="card-title">Bio</h5>
-    <p>{{ profile.bio|default:"No bio provided."|linebreaksbr }}</p>
+    <p>{{ profile.bio|default:"No bio provided."|safe }}</p>
     <hr>
     <h6>Stats</h6>
     <ul class="list-unstyled mb-0">
