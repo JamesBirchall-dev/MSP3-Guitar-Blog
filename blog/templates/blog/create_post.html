@@ -1,12 +1,13 @@
 {% extends "blog/base.html" %}
 {% load static %}
+<main>
 {% block content %}
 <script>
     // Django template variable outputs valid JSON here. Pass subjexxt_tags_json from the view context.
     window.subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
 </script>
 <!-- Create Post Form (should only be visible to role: teacher)-->
-<div class="container container-main">
+    <div class="container container-main">
     <!-- Wrapper for the create post form -->
     <div class="create-post-wrapper">
         <h2 class="create-title">Create New Post</h2>
@@ -76,3 +77,4 @@
 </div>
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
+</main>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 <!doctype html>
 <html lang="en"> 
   <head>
@@ -28,6 +29,10 @@
       property="og:url"
       content="https://msp3-guitar-blog-heroku-c8e0734e4d0d.herokuapp.com/"
     >
+    <!-- preconnect for performance-->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" >
     <meta name="twitter:title" content="Guitar Learning Blog" >
@@ -52,16 +57,17 @@
       href="{% static 'images/guitar-blog-favicon.ico' %}"
     >
     <!-- Bootstrap CDN -->
+    {% compress css %}
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     >
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <!-- Font Awesome CDN -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     >
+    {% endcompress %}
   </head>
   <body>
     <!-- Navbar-->
@@ -71,7 +77,8 @@
           <img
             src="{% static 'images/guitar-blog-logo.webp' %}"
             alt="Logo"
-            height="40"
+            width="200"
+            height="57"
           >
         </a>
         <button
@@ -122,8 +129,10 @@
       </div>
     </nav>
     <div class="container mt-4">{% block content %} {% endblock %}</div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
+    {% compress js %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="{% static 'js/jquery.min.js' %}" defer></script>
+    <script src="{% static 'js/script.js' %}" defer></script>
+    {% endcompress %}
   </body>
 </html>

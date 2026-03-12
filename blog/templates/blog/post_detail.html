@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
-
 {% block content %}
+<main>
 
 <!-- Heading -->
 <h2>{{ post.title }}</h2>
@@ -19,7 +19,7 @@
         {% if user.is_authenticated %}
             <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}">
+                <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}" aria-label="Like post">
                     {% if post.user_has_liked %}
                         <i class="fas fa-heart text-danger"></i>
                     {% else %}
@@ -61,7 +61,7 @@
                 <form method="POST" action="{% url 'like_comment' comment.id %}" style="display:inline;">
                     {% csrf_token %}
                     <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.likes_total }}</span> likes
-                    <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}">
+                    <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}" aria-label="Like comment">
                         {% if comment.user_has_liked %}
                             <i class="fas fa-heart text-danger"></i>
                         {% else %}
@@ -155,3 +155,4 @@
 {% endif %}
 
 {% endblock %}
+</main>

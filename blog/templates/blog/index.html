@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
-
 {% block content %}
+<main>
 
 <!--PAGE HEADER-->
 
@@ -14,7 +14,7 @@
     <form method="GET" class="card p-3 mb-4 shadow-sm">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
-                <label class="form-label">Filter by Subject:</label>
+                <label class="form-label" for="subject">Filter by Subject:</label>
                 <select name="subject" id="subject" class="form-select">
                     <option value="">All Subjects</option>
                     {% for subject in subjects %}
@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Filter by Content Type:</label>
+                <label class="form-label" for="type">Filter by Content Type:</label>
                 <select name="type" id="type" class="form-select">
                     <option value="">All Types</option>
                     <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
@@ -130,3 +130,4 @@
 {% endif %}
 </div>
 {% endblock %}
+</main>

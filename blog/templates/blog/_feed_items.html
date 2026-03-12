@@ -7,11 +7,11 @@
                     <div class="card h-100 shadow-sm border-start border-4 border-primary position-relative">
                         <div class="card-body">
                             <span class="badge bg-primary mb-2">Post</span>
-                            <h5 class="card-title">
+                            <h4 class="card-title">
                                 <a href="{% url 'post_detail' item.slug %}">
                                     {{ item.title }}
                                 </a>
-                            </h5>
+                            </h4>
                             <p class="text-muted small">
                                 <strong>Subject:</strong> {{ item.subject.name }}<br>
                                 <strong>Level:</strong> {{ item.min_level|title }}<br>
@@ -34,7 +34,7 @@
                                 <div class="like-section">
                                     <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;">
                                         {% csrf_token %}
-                                        <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}">
+                                        <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}" aria-label="Like post">
                                             {% if item.user_has_liked %}
                                                 <i class="fas fa-heart text-danger"></i>
                                             {% else %}
@@ -61,11 +61,11 @@
                         {% endif %}
                         <div class="card-body">
                             <span class="badge bg-warning text-dark mb-2">Resource</span>
-                            <h5>
+                            <h4>
                                 <a href="{{ item.url }}" target="_blank">
                                     {{ item.title }}
                                 </a>
-                            </h5>
+                            </h4>
                             <p>
                                 {{ item.description|safe }}
                             </p>

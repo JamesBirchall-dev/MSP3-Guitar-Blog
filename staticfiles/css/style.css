@@ -1,4 +1,13 @@
 /* Global Theme Styles */
+a {
+    color: #0056b3 !important;
+    text-decoration: underline !important;
+    font-weight: bold !important;
+}
+a:hover, a:focus {
+    color: #003366 !important;
+    background-color: #f0f8ff !important;
+}
 
 body {
     background-color: #f5e0c4;
@@ -100,6 +109,15 @@ small {
 }
 
 /* Form Card - spacing and label styles */
+.card.form {
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    background: #fffaf3;
+    border-radius: 20px;
+    border: 1px solid #e6dccf;
+    margin-bottom: 2rem;
+}
+
 .card.form label {
     font-weight: 500;
     margin-bottom: 4px;
@@ -109,6 +127,16 @@ small {
 .card select,
 .card textarea {
     width: 100%;
+    border-radius: 14px;
+    border: 1px solid #e6dccf;
+    padding: 10px 14px;
+    background: #fdc7c7;
+    font-family: "opensans", sans-serif;
+    margin-top: 0.25rem;
+}
+
+.subject-section {
+    margin-bottom: 1.5rem;
 }
 
 .form-text {
@@ -227,16 +255,26 @@ small {
     color: white;
 }
 
-/* Linkss */
+/* like button */
 
-a {
-    color: #6b4f4f;
-    text-decoration: none;
+.like-post-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
-a:hover {
-    color: #8c6a6a;
-    text-decoration: underline;
+.like-post-btn .fa-heart {
+    font-size: 1.3rem;
+    transition: color 0.2s ease;
+}
+
+.like-post-btn:hover .fa-heart {
+    color: #aa9393;
+}
+
+.like-post-btn .fa-heart.text-danger {
+    color: #e74c3c;
 }
 
 /* Forms */ 
@@ -287,6 +325,11 @@ card-title a:hover {
     box-shadow: 0 8px 20px rgba(0,0,0,0.3)
 }
 
+.create-post-wrapper, .card.form {
+    max-width: 800px;
+    margin: auto;
+}
+
 .create-title {
     font-family: "montserrat", sans-serif;
     font-weight: 600;
@@ -309,40 +352,13 @@ card-title a:hover {
 
 /*form spacing*/
 
-.form-group-clean label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-/* form inputs*/
-
-.form-group-clean input,
-.form-group-clean select,
-.form-group-clean textarea {
-    width: 100%;
-    border-radius: 14px;
-    border: 1px solid #e6dccf;
-    padding: 10px 14px;
-    background: #fdc7c7;
-    font-family: "opensans", sans-serif;
-} 
-
-.form-group-clean textarea {
-    min-height: 180px;
-    resize: vertical;
-}
-
-.form-group-clean input:focus,
-.form-group-clean select:focus,
-.form-group-clean textarea:focus {
-    border-color: #6b4f4f;
-    box-shadow: 0 0 0 0.2rem rgba(107,79,79,0.25);
-}
 
 /* Tag layout in create/edit post */
 .tag-container {
     margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 /*submit button alignment*/
@@ -350,4 +366,27 @@ card-title a:hover {
 .submit-section {
     margin-top: 2rem;
     text-align: right;
+}
+
+.teacher-verified {
+    color: #005a00; /* dark green for better contrast */
+    font-weight: 700;
+    font-size: 1.1em;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid #005a00; /* add border for extra contrast */
+}
+
+.card.position-relative { position: relative; }
+.like-section {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }

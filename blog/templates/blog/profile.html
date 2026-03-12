@@ -1,80 +1,82 @@
 {% extends "blog/base.html" %}
-
 {% block content %}
+<main>
 
 <div class="page-header mb-4">
-    <h1>{{ profile_user.username }}'s Profile</h1>
-    <p class="text-muted">
-        Member role: {{ profile.get_role_display }} | Joined on {{ profile_user.date_joined|date:"F j, Y" }}
-    </p>
-    {% if request.user == profile_user %}
-        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-primary mt-2">Edit Profile</a>
-    {% endif %}
+  <h1>{{ profile_user.username }}'s Profile</h1>
+  <p class="text-muted">
+    Member role: {{ profile.get_role_display }} | Joined on {{ profile_user.date_joined|date:"F j, Y" }}
+  </p>
+  {% if request.user == profile_user %}
+    <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-primary mt-2">Edit Profile</a>
+  {% endif %}
 </div>
 
 <!-- Bio and Stats Card -->
 <div class="card mb-4 shadow-sm">
-    <div class="card-body">
-        <h5 class="card-title">Bio</h5>
-        <p>{{ profile.bio|default:"No bio provided."|linebreaksbr }}</p>
-        <hr>
-        <h6>Stats</h6>
-        <ul class="list-unstyled mb-0">
-            <li><strong>Total Likes Received:</strong> {{ profile.total_likes_received }}</li>
-            <li><strong>Total Likes Cast:</strong> {{ profile.total_likes_cast }}</li>
-        </ul>
-    </div>
+  <div class="card-body">
+    <h5 class="card-title">Bio</h5>
+    <p>{{ profile.bio|default:"No bio provided."|linebreaksbr }}</p>
+    <hr>
+    <h6>Stats</h6>
+    <ul class="list-unstyled mb-0">
+      <li><strong>Total Likes Received:</strong> {{ profile.total_likes_received }}</li>
+      <li><strong>Total Likes Cast:</strong> {{ profile.total_likes_cast }}</li>
+    </ul>
+  </div>
 </div>
 </div>
 
 <!-- Profile Summary Card -->
 <!-- Filter bar-->
  <div class="container">
-    <form method="GET" class="card p-3 mb-4 shadow-sm">
-        <div class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label">Filter by Subject:</label>
-                <select name="subject" id="subject" class="form-select">
-                    <option value="">All Subjects</option>
-                    {% for subject in subjects %}
-                        <option value="{{ subject.slug }}" data-pk="{{ subject.pk }}" {% if subject.slug == active_subject %}selected{% endif %}>
-                            {{ subject.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Filter by Content Type:</label>
-                <select name="type" id="type" class="form-select">
-                    <option value="">All Types</option>
-                    <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
-                    <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Search:</label>
-                <input type="text" name="q" value="{{ query|default_if_none:'' }}" class="form-control" placeholder="Search posts and resources...">
-            </div>
-            <div class="col-md-5">
-                <label class="form-label">Filter by Tags:</label>
-                <div class="form-text">Choose relevant tags for your filter. Only tags related to the selected subject will appear.</div>
-                <div id="tag-container">
-                    {% for tag in tags %}
-                        <label class="tag-badge checkbox-label" data-tag="{{ tag.name }}" style="display: none;">
-                            <input type="checkbox" name="tag" value="{{ tag.slug }}">
-                            {{ tag.name }}
-                        </label>
-                    {% endfor %}
-                </div>
-            </div>
+  <form method="GET" class="card p-3 mb-4 shadow-sm">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label">Filter by Subject:</label>
+        <select name="subject" id="subject" class="form-select">
+          <option value="">All Subjects</option>
+          {% for subject in subjects %}
+            <option value="{{ subject.slug }}" data-pk="{{ subject.pk }}" {% if subject.slug == active_subject %}selected{% endif %}>
+              {{ subject.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Filter by Content Type:</label>
+        <select name="type" id="type" class="form-select">
+          <option value="">All Types</option>
+          <option value="post" {% if active_type == "post" %}selected{% endif %}>Posts</option>
+          <option value="resource" {% if active_type == "resource" %}selected{% endif %}>Resources</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Search:</label>
+        <input type="text" name="q" value="{{ query|default_if_none:'' }}" class="form-control" placeholder="Search posts and resources...">
+      </div>
+      <div class="col-md-5">
+        <label class="form-label">Filter by Tags:</label>
+        <div class="form-text">Choose relevant tags for your filter. Only tags related to the selected subject will appear.</div>
+        <div id="tag-container">
+          {% for tag in tags %}
+            <label class="tag-badge checkbox-label" data-tag="{{ tag.name }}" style="display: none;">
+              <input type="checkbox" name="tag" value="{{ tag.slug }}">
+              {{ tag.name }}
+            </label>
+          {% endfor %}
         </div>
-        <div class="row mt-2">
-            <div class="col-md-12 d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary px-5">Apply</button>
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary px-5">Apply</button>
+      </div>
+    </div>
+  </form>
 </div>
+</main>
+{% endblock %}
 <!-- Pagination Controls -->
 {% if feed.has_other_pages %}
 <nav aria-label="Feed pagination">
@@ -133,3 +135,4 @@
 </nav>
 {% endif %}
 {% endblock %}
+</main>
