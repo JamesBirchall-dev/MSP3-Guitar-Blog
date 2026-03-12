@@ -1,6 +1,16 @@
+/* Ensure subject name link is always black */
+.subject-name-link {
+    color: #222 !important;
+    font-weight: 700;
+    text-decoration: none !important;
+}
+.subject-name-link:hover, .subject-name-link:focus {
+    color: #0056b3 !important;
+    text-decoration: underline !important;
+}
 /* Global Theme Styles */
 a {
-    color: #0056b3 !important;
+    color: #ffffff !important;
     text-decoration: underline !important;
     font-weight: bold !important;
 }

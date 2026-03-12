@@ -639,6 +639,7 @@ def delete_resource(request, pk):
 
 @login_required
 def like_post(request, post_id):
+
     if request.method != "POST":
         return redirect("home")
     post = get_object_or_404(Post, id=post_id)
