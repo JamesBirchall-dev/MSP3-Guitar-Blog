@@ -11,11 +11,13 @@ This file contains all controller logic for the site, including:
 • Subject browsing and filtering
 • Authentication (register/login/logout)
 • AJAX endpoints for dynamic UI updates
+• Messaging framework integration for user feedback
 
 The views coordinate between:
 - Models (database structure)
 - Forms (user input)
 - Templates (presentation layer)
+- Messaging framework (user feedback)
 """
 
 # Django shortcuts for common view operations
@@ -50,10 +52,13 @@ import json
 # Restricts a view to GET requests only
 from django.views.decorators.http import require_GET
 
+# Messaging framework for user feedback
+from django.contrib import messages
 
 # -----------------------------------------------------
 # HOME ROUTING VIEW
 # -----------------------------------------------------
+
 
 def home(request):
 
@@ -425,7 +430,11 @@ def edit_profile(request):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
+            messages.success(request, "Profile updated.")
             return redirect('profile', username=request.user.username)
+        else:
+            messages.error(
+                request, "There was an error updating your profile.")
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'blog/edit_profile.html', {'form': form})
@@ -445,7 +454,12 @@ def register_view(request):
                 user.profile.role = role
                 user.profile.save()
             login(request, user)
+            messages.success(
+                request, "Registration successful! You are now logged in.")
             return redirect('home')
+        else:
+            messages.error(
+                request, "There was an error with your registration.")
     else:
         form = RegisterForm()
     return render(request, 'blog/register.html', {'form': form})
@@ -457,7 +471,10 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, "Login successful!")
             return redirect('index')
+        else:
+            messages.error(request, "Invalid credentials or error logging in.")
     else:
         form = AuthenticationForm()
     return render(request, 'blog/login.html', {'form': form})
@@ -465,6 +482,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.info(request, "You have been logged out.")
     return redirect('index')
 
 
@@ -490,8 +508,10 @@ def create_post(request):
             post.status = 1  # Set post as published
             post.save()
             form.save_m2m()  # Save tags
+            messages.success(request, "Post created successfully!")
             return redirect("home")
-
+        else:
+            messages.error(request, "There was an error creating your post.")
     else:
         form = PostForm()
         # Build subject-tag dictionary
@@ -519,7 +539,10 @@ def edit_post(request, slug):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
+            messages.success(request, "Post updated successfully!")
             return redirect('post_detail', slug=post.slug)
+        else:
+            messages.error(request, "There was an error updating your post.")
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
@@ -532,7 +555,9 @@ def delete_post(request, slug):
         return redirect('post_detail', slug=slug)
     if request.method == 'POST':
         post.delete()
+        messages.success(request, "Post deleted successfully.")
         return redirect('index')
+    messages.error(request, "There was an error deleting the post.")
     return render(request, 'blog/delete_post.html', {'post': post})
 
 
@@ -546,7 +571,11 @@ def edit_comment(request, pk):
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
+            messages.success(request, "Comment updated.")
             return redirect('post_detail', slug=comment.post.slug)
+        else:
+            messages.error(
+                request, "There was an error updating your comment.")
     else:
         form = CommentForm(instance=comment)
     return render(
@@ -563,6 +592,7 @@ def delete_comment(request, pk):
         return redirect('post_detail', slug=comment.post.slug)
     if request.method == 'POST':
         comment.delete()
+        messages.success(request, "Comment deleted.")
         return redirect('post_detail', slug=comment.post.slug)
     return render(request, 'blog/delete_comment.html', {'comment': comment})
 
@@ -577,7 +607,11 @@ def edit_resource(request, pk):
         form = ResourceForm(request.POST, instance=resource)
         if form.is_valid():
             form.save()
+            messages.success(request, "Resource updated.")
             return redirect('post_detail', slug=resource.post.slug)
+        else:
+            messages.error(
+                request, "There was an error updating the resource.")
     else:
         form = ResourceForm(instance=resource)
     return render(
@@ -594,7 +628,10 @@ def delete_resource(request, pk):
         return redirect('post_detail', slug=resource.post.slug)
     if request.method == 'POST':
         resource.delete()
+        messages.success(request, "Resource deleted.")
         return redirect('post_detail', slug=resource.post.slug)
+    else:
+        messages.error(request, "There was an error deleting the resource.")
     return render(request, 'blog/delete_resource.html', {'resource': resource})
 
 # Post voting view
