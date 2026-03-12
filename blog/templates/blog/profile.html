@@ -7,6 +7,24 @@
     <p class="text-muted">
         Member role: {{ profile.get_role_display }} | Joined on {{ profile_user.date_joined|date:"F j, Y" }}
     </p>
+    {% if request.user == profile_user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-primary mt-2">Edit Profile</a>
+    {% endif %}
+</div>
+
+<!-- Bio and Stats Card -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">Bio</h5>
+        <p>{{ profile.bio|default:"No bio provided."|linebreaksbr }}</p>
+        <hr>
+        <h6>Stats</h6>
+        <ul class="list-unstyled mb-0">
+            <li><strong>Total Likes Received:</strong> {{ profile.total_likes_received }}</li>
+            <li><strong>Total Likes Cast:</strong> {{ profile.total_likes_cast }}</li>
+        </ul>
+    </div>
+</div>
 </div>
 
 <!-- Profile Summary Card -->

@@ -444,7 +444,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('index')
     else:
         form = AuthenticationForm()
     return render(request, 'blog/login.html', {'form': form})
@@ -452,7 +452,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 
 # restrict post creation to logged-in users
