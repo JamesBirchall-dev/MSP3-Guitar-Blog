@@ -51,7 +51,8 @@
 <h4>Comments & Learning Resources</h4>
 
 {% for comment in comments %}
-    <div class="card mb-3 p-3">
+    <div class="card comment-card mb-3 p-3">
+        <div class="comment-header">Comment</div>
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <strong><a href="{% url 'profile' comment.author.username %}">{{ comment.author.username }}</a></strong>
@@ -76,12 +77,28 @@
             {% endif %}
         </div>
         <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
-        {% if comment.resources.all %}
-            <div class="comment-resources mt-2">
-                <strong>Resource(s) shared with this comment:</strong>
-                <ul>
-                    {% for resource in comment.resources.all %}
-                        <li>
+        {% with resources=comment.resources.all %}
+            {% if resources.count %}
+                <div class="comment-resources resource-block mt-2">
+                    <div class="resource-header">Resource(s) shared with this comment:</div>
+                    <ul>
+                        {% for resource in resources %}
+                        <li class="resource-item">
+                            <div class="position-relative">
+                                <div class="like-section resource-like">
+                                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
+                                        <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}" aria-label="Like resource">
+                                            {% if resource.user_has_liked %}
+                                                <i class="fas fa-heart text-danger"></i>
+                                            {% else %}
+                                                <i class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                             <a href="{{ resource.url }}" target="_blank">
                                 {{ resource.title }}
                                 {% if resource.verified %}
@@ -89,23 +106,10 @@
                                 {% endif %}
                             </a>
                             {% if resource.description %}<br>{{ resource.description|safe }}{% endif %}
-                        <div class="position-relative">
-                            {% if resource.verified %}
-                                <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
-                            {% endif %}
-                            <div class="like-section">
-                                <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}">
-                                        {% if resource.user_has_liked %}
-                                            <i class="fas fa-heart text-danger"></i>
-                                        {% else %}
-                                            <i class="far fa-heart"></i>
-                                        {% endif %}
-                                    </button>
-                                </form>
-                                <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span>
-                            </div>
+                            <div class="position-relative">
+                                {% if resource.verified %}
+                                    <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
+                                {% endif %}
                                 {% if user.profile.role == 'teacher' %}
                                     <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
                                         {% csrf_token %}
@@ -114,23 +118,23 @@
                                         </button>
                                     </form>
                                 {% endif %}
-                        </div>
+                            </div>
                             {% if user.is_authenticated and resource.added_by == user %}
                             <div class="action-row">
                                 <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit Resource</a>
                                 <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete Resource</a>
                             </div>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}
     </div>
 {% empty %}
     <p>No comments yet. Be the first to comment!</p>
-{% endfor %}
-
+{% endfor %}    
 <!-- Comment Form for new top-level comment -->
 
 {% if user.is_authenticated %}
