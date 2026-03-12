@@ -79,7 +79,7 @@
                             </div>
                             <div class="card-footer bg-white border-0">
                                 <small class="text-muted">
-                                    Added by {{ item.author }}
+                                    Added by <a href="{% url 'profile' item.author.username %}">{{ item.author }}</a>
                                     {{ item.created_on|date:"M d, Y" }}
                                     <div class="like-section">
                                         <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;">
