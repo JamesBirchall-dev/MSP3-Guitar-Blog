@@ -58,11 +58,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
     }
-
-    if (subjectSelect) {
-        subjectSelect.addEventListener('change', filterTagsAjax);
-        filterTagsAjax(); // Initial filter on page load
-    }
+    
+        if (subjectSelect) {
+            subjectSelect.addEventListener('change', filterTagsAjax);
+            const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+            const selectedSubjectId = selectedOption && selectedOption.getAttribute('data-pk');
+            if (selectedSubjectId && selectedSubjectId !== 'null') {
+                filterTagsAjax();
+            }
+        }
 });
 
 
@@ -95,7 +99,7 @@ $(document).ready(function() {
             });
         }
     });
-
+    });
     // function to filter tags based on selected subject
     function filterTags() {
         const selectedSubjectId = subjectSelect.val();
@@ -113,12 +117,19 @@ $(document).ready(function() {
         });
     }
 
-    // function to filter tags based on selected subject using AJAX
     function filterTagsAjax() {
         const selectedSubjectId = subjectSelect.value;
-        // AJAX call to get tags for selected subject
+        if (!selectedSubjectId || selectedSubjectId === 'null') {
+            // Do not make AJAX call if subject_id is invalid
+            return;
+        }
         fetch(`/get-subject-tags/?subject_id=${selectedSubjectId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const tags = data.tags || [];
                 tagLabels.forEach(function(label) {
@@ -129,12 +140,10 @@ $(document).ready(function() {
                         label.style.display = 'none';
                     }
                 });
+            })
+            .catch(error => {
+                console.error('Error fetching tags:', error);
             });
-    }
-
-    if (subjectSelect.length) {
-        subjectSelect.on('change', filterTagsAjax);
-        filterTagsAjax(); // Initial filter on page load
     }
 
     // -------------------------
@@ -154,9 +163,7 @@ $(document).ready(function() {
                 $('#feed-container').html(data);
             }
         });
-    });
-
-});
+    })
 
     // Click event for like buttons
     $(document).on('click', '.like-post-btn', function(e) {
