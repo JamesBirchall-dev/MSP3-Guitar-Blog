@@ -1,5 +1,13 @@
-# User and Registration Forms
+"""
+Forms used for user input in the application.
 
+Includes forms for:
+- User registration
+- Post creation
+- Comment submission
+- Resource submission
+- Profile editing
+"""
 
 from django import forms
 from django.contrib.auth.models import User
@@ -10,9 +18,10 @@ from django_summernote.widgets import SummernoteWidget
 
 class RegisterForm(UserCreationForm):
 
-    # Extends Django's built-in UserCreationForm to
-    # include email and role fields
-
+    """
+    Extends Django's UserCreationForm to include
+    email and skill level selection.
+    """
     email = forms.EmailField(required=True)
     role = forms.ChoiceField(
         choices=[
@@ -29,9 +38,15 @@ class RegisterForm(UserCreationForm):
         # Fields to include in the registration form
         fields = ['username', 'email', 'password1', 'password2', 'role']
 
+# -----------------------------------------------------
+# POST FORM
+# -----------------------------------------------------
+
 
 class PostForm(forms.ModelForm):
-    # Form for creating/editing posts
+    """
+    Form used for creating and editing learning posts.
+    """
     content = forms.CharField(widget=SummernoteWidget())
     slug = forms.CharField(required=False, widget=SummernoteWidget())
     min_level = forms.ChoiceField(choices=LEVEL_CHOICES, required=True)
@@ -53,11 +68,14 @@ class PostForm(forms.ModelForm):
         widgets = {
             'tags': forms.CheckboxSelectMultiple(),
         }
+# -----------------------------------------------------
+# COMMENT FORM
+# -----------------------------------------------------
 
 
 class CommentForm(forms.ModelForm):
     content = forms.CharField(widget=SummernoteWidget())
-    # Form for creating/editing comments (replies)
+    # Optional Form for creating/editing comments (replies)
     resource_title = forms.CharField(
         max_length=200, required=False,
         label='Resource Title'
