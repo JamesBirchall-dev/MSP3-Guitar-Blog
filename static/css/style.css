@@ -173,47 +173,8 @@ small {
 }
 
 /* Summernote field containment for profile bio */
-.summernote-field {
-    position: relative;
-    padding: 8px 0 0 0;
-    margin-bottom: 1.5rem;
-}
-.summernote-field .note-editor {
-        border-radius: 8px;
-        border: 1px solid #e6dccf;
-        background: #fffaf3;
-        box-shadow: 0 2px 8px rgba(107,79,79,0.08);
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-        overflow-x: auto;
-        margin: 0;
-        padding: 0;
-}
-
-@media (max-width: 600px) {
-    .summernote-field .note-editor {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-        font-size: 0.95em;
-        padding: 0 !important;
-        border-radius: 12px !important;
-    }
-    .note-toolbar {
-        padding: 2px 4px !important;
-    }
-}
 
 
-@media (max-width: 600px) {
-    .summernote-field .note-editor {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
-    }
-}
 
 .checkbox-label{
     display: inline-block;

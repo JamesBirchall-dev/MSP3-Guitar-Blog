@@ -103,16 +103,16 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'index' %}">Home Feed</a>
             </li>
-            {% if user.profile.role == 'teacher' %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'create_post' %}">
-                Create Post
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'subject_list' %}"> Subjects </a>
-            </li>
-            {% endif %}
+              {% if user.profile.role == 'teacher' %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_post' %}">
+                  Create Post
+                </a>
+              </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'subject_list' %}"> Subjects </a>
+              </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
