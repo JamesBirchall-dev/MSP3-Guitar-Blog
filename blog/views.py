@@ -1,26 +1,90 @@
+"""
+Views for the Guitar Learning Blog application.
+
+This file contains all controller logic for the site, including:
+
+• Feed generation (home/index)
+• Post detail and discussion threads
+• User profiles
+• Post / comment / resource CRUD operations
+• Like/voting functionality
+• Subject browsing and filtering
+• Authentication (register/login/logout)
+• AJAX endpoints for dynamic UI updates
+
+The views coordinate between:
+- Models (database structure)
+- Forms (user input)
+- Templates (presentation layer)
+"""
+
+# Django shortcuts for common view operations
 from django.shortcuts import render, get_object_or_404, redirect
+
+# Used for returning AJAX responses
 from django.http import JsonResponse
+
+# Application models
 from .models import Post, Comment, Like, Resource, Profile, Subject, Tag
+
+# Query utilities for aggregation and complex filtering
 from django.db.models import Count, Q
+
+# Authentication utilities
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+# Application forms
 from .forms import (
     RegisterForm, PostForm, CommentForm, ResourceForm, ProfileForm
 )
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+
+# Pagination utilities
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+# Used for AJAX data serializati
 import json
+
+# Restricts a view to GET requests only
 from django.views.decorators.http import require_GET
 
 
-# Home view for root URL
+# -----------------------------------------------------
+# HOME ROUTING VIEW
+# -----------------------------------------------------
+
 def home(request):
+
+    """
+    Root URL view.
+
+    This function simply forwards the request to the
+    main feed view (`index`). This allows the homepage
+    route to remain clean while keeping feed logic
+    centralized in a single function.
+    """
+
     return index(request)
 
 
 @login_required
 def verify_resource(request, resource_id):
+    """
+    Allows teachers to verify or unverify a learning resource.
+
+    Verification is used to highlight trusted resources added
+    by the community. Only users with the 'teacher' role can
+    toggle verification status.
+
+    Behaviour:
+    • Finds the resource by ID
+    • Confirms the logged-in user is a teacher
+    • Toggles the verified flag
+    • Redirects back to the referring page
+    """
+
     resource = get_object_or_404(Resource, id=resource_id)
     profile = getattr(request.user, 'profile', None)
     if not profile or profile.role != 'teacher':
@@ -31,16 +95,38 @@ def verify_resource(request, resource_id):
     return redirect(request.META.get("HTTP_REFERER", "index"))
 
 
-# TESTING AJAX
-# @csrf_exempt
-# def ajax_test(request):
-#    if request.method == 'POST':
-#        return JsonResponse({'message': 'AJAX request received!'})
-#    return JsonResponse({'message': 'Send a POST request to test AJAX.'})
+# -----------------------------------------------------
+# MAIN FEED VIEW (INDEX)
+# -----------------------------------------------------
 
 
 def index(request):
-    # This view renders the main feed page (same as home)
+    """
+    Main homepage feed displaying posts and resources.
+
+    The feed combines two content types:
+    • Posts (learning articles created by teachers)
+    • Resources (community shared learning materials)
+
+    Features implemented in this view:
+
+    - Filtering by subject
+    - Filtering by tag
+    - Full text search
+    - Content type filtering (posts vs resources)
+    - Combined chronological feed
+    - Pagination
+    - Like status detection
+    - AJAX partial rendering
+
+    The feed is constructed by:
+    1. Querying posts and resources separately
+    2. Applying filters to each queryset
+    3. Converting them into a unified list
+    4. Sorting by creation date
+    5. Paginating the combined results
+    """
+
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
     ).annotate(likes_total=Count('likes')).order_by("-created_on")
@@ -51,16 +137,22 @@ def index(request):
         "post"
     ).annotate(likes_total=Count('likes'))
 
-    # FILTERING HAPPENS HERE, ON QUERYSETS:
+    # -------------------------------------------------
+    # FEED FILTERING
+    # -------------------------------------------------
+
+    # Filter by subject if provided
     subject_slug = request.GET.get('subject')
     if subject_slug:
         posts = posts.filter(subject__slug=subject_slug)
         resources = resources.filter(subject__slug=subject_slug)
 
+    # Filter by tags if provided (supports multiple tags)
     tag_slug = request.GET.getlist('tag')
     if tag_slug:
         posts = posts.filter(tags__slug__in=tag_slug)
 
+    # Filter by search query if provided
     query = request.GET.get('q')
     if query:
         posts = posts.filter(
@@ -72,6 +164,7 @@ def index(request):
             Q(description__icontains=query)
         )
 
+    # Filter by content type if specified
     content_type = request.GET.get('type')
     if content_type == 'post':
         resources = resources.none()
@@ -90,14 +183,10 @@ def index(request):
     combined_feed = posts + resources
     combined_feed.sort(key=lambda x: x.created_on, reverse=True)
 
-    print("\n\n==================== INDEX VIEW EXECUTED ===================\n")
-    print("******** DEBUG FEED COUNTS ********")
-    print(f"posts count = {len(posts)}")
-    print(f"resources count = {len(resources)}")
-    print(f"combined_feed count = {len(combined_feed)}")
-    print("***********************************\n")
+    # -------------------------------------------------
+    # PAGINATION
+    # -------------------------------------------------
 
-    # Pagination logic
     page = request.GET.get('page', 1)
     paginator = Paginator(combined_feed, 10)
     try:
@@ -137,13 +226,14 @@ def index(request):
         "subject_tags_json": json.dumps(subject_tags),
         "tags": tags,
     }
+    # If request was made via AJAX, return only feed items
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, "blog/_feed_items.html", context)
+    # Otherwise render full page
     return render(request, "blog/index.html", context)
 
 
 def post_detail(request, slug):
-    from django.db.models import Count
     post = get_object_or_404(
         Post.objects.annotate(likes_total=Count('likes')),
         slug=slug
@@ -635,15 +725,18 @@ def subject_detail_view(request, slug):
         'query': query,
         'active_type': content_type,
     }
+
+    # If request was made via AJAX, return only feed items
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, "blog/_feed_items.html", context)
     return render(request, 'blog/subject_detail.html', context)
 
 
 def subject_list_view(request):
+    from django.db.models import Q
     subjects = Subject.objects.annotate(
-        post_count=Count('posts'),
-        resource_count=Count('resources')
+        post_count=Count('posts', filter=Q(posts__status=1), distinct=True),
+        resource_count=Count('resources', distinct=True)
     ).order_by('name')
     return render(request, 'blog/subject_list.html', {'subjects': subjects})
 

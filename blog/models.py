@@ -1,13 +1,22 @@
+"""
+Models for the Guitar Learning Blog / Forum application.
 
-# Models for the Guitar Learning Blog / Forum application.
+This file defines the core database structure:
 
-# This file defines:
-# - Subject (categories)
-# - Profile (user role extension)
-# - Post (main learning posts)
-# - Comment (discussion responses)
-# - Resource (external learning links)
-# - Like (like system)
+- Subject (content categories)
+- Tag (topic labels)
+- Profile (extends the Django User model)
+- Post (main learning content)
+- Comment (discussion responses)
+- Resource (external learning materials)
+- Like (voting system)
+
+Relationships:
+Users → create Posts, Comments, and Resources.
+Posts → belong to Subjects and may have Tags.
+Resources → may be attached to Posts or Comments.
+Likes
+"""
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -16,15 +25,18 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# -----------------------------------------------------
+# CONSTANTS
+# -----------------------------------------------------
 
-# STATUS CHOICES (For Draft / Published posts)
+# Post publishing status
 
 STATUS = (
     (0, "Draft"),
     (1, "Published"),
 )
 
-# SKILL LEVEL CHOICES (Used for users and posts)
+# Skill levels used for users and post difficulty
 
 LEVEL_CHOICES = [
     ('beginner', 'Beginner'),
@@ -33,15 +45,22 @@ LEVEL_CHOICES = [
     ('teacher', 'Teacher'),
 ]
 
+# -----------------------------------------------------
 # SUBJECT MODEL
-# Represents categories like:
-# - Practice
-# - Equipment
-# - Song Learning
-# - Music Theory
+# -----------------------------------------------------
 
 
 class Subject(models.Model):
+    """
+    Represents a category of guitar learning content.
+
+    Example subjects:
+    - Practice
+    - Music Theory
+    - Equipment
+    - Song Learning
+    """
+
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
     short_description = models.TextField(max_length=255, blank=True, null=True)
@@ -56,24 +75,31 @@ class Subject(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        """
-        Automatically generate slug from name
-        if it hasn't been provided.
-        """
+        # Automatically generate slug from name if not provided.
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        """
-        String representation shown in admin.
-        """
+        # String representation shown in admin.
         return self.name
 
 
-# tags model
+# -----------------------------------------------------
+# TAG MODEL
+# -----------------------------------------------------
+    """
+    Tags are used to label posts with specific topics.
+
+    Example:
+    - Chords
+    - Fingerstyle
+    - Improvisation
+    """
+
 
 class Tag(models.Model):
+    # Tags are used to label posts with specific topics.
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(unique=True)
 
@@ -85,13 +111,22 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+# -----------------------------------------------------
 # PROFILE MODEL
-
-# Extends Django's built-in User model.
-# Adds skill level / role without replacing User.
+# -----------------------------------------------------
 
 
 class Profile(models.Model):
+
+    """
+    Extends Django's default User model.
+
+    Stores:
+    - user role / skill level
+    - biography
+    - reputation statistics
+    """
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -109,11 +144,16 @@ class Profile(models.Model):
         null=True
     )
 
-    # reputation stats
+    # -------------------------------------------------
+    # Reputation properties
+    # -------------------------------------------------
 
     @property
     def total_likes_received(self):
-        # Total likes on user's posts
+        """
+        Calculates the total number of likes received
+        across the user's posts, comments and resources.
+        """
         post_likes = sum(
             post.likes.count() for post in self.user.blog_posts.all()
         )
@@ -129,17 +169,25 @@ class Profile(models.Model):
 
     @property
     def total_likes_cast(self):
-        # Total likes user cast (liking others)
+        """
+        Total number of likes the user has given to others.
+        """
         return self.user.like_set.count()
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
 
+# -----------------------------------------------------
 # POST MODEL
-# Main learning content in the forum.
+# -----------------------------------------------------
 
 
 class Post(models.Model):
+    """
+    Main learning content created by teachers.
+
+    Posts belong to a Subject and can include Tags.
+    """
     title = models.CharField(max_length=200, unique=True)
 
     # Used for SEO-friendly URLs
@@ -183,9 +231,9 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Automatically generate slug from title
-        if it hasn't been provided.
+        Automatically generate slug from title.
         """
+
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -197,16 +245,21 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
+# -----------------------------------------------------
 # RESOURCE MODEL
-# External learning materials attached to a post.
-# Example:
-# - YouTube lesson
-# - Article
-# - PDF
+# -----------------------------------------------------
+
 
 class Resource(models.Model):
-    # assigns subject to resource for better organization and filtering
+    """
+    External learning materials attached to a post.
+
+    Example resources:
+    - YouTube lesson
+    - Article
+    - PDF
+    """
+
     subject = models.ForeignKey(
         Subject,
         on_delete=models.CASCADE,
@@ -214,7 +267,7 @@ class Resource(models.Model):
         null=True,
         blank=True
     )
-# A resource can be attached to either a post or a comment (reply).
+    # A resource can be attached to either a post or a comment (reply).
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -222,8 +275,7 @@ class Resource(models.Model):
         null=True,
         blank=True
     )
-# A resource can also be attached to a comment (reply)
-# for more specific guidance.
+    # A resource can also be attached to a comment (reply)
     comment = models.ForeignKey(
         'Comment',
         on_delete=models.CASCADE,
@@ -231,7 +283,7 @@ class Resource(models.Model):
         blank=True,
         related_name='resources'
     )
-# The user who added the resource (for attribution and voting)
+    # The user who added the resource (for attribution and voting)
     added_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -265,11 +317,17 @@ class Resource(models.Model):
     def __str__(self):
         return self.title
 
-# Comments Model
-# stores comments on posts and replies.
+# -----------------------------------------------------
+# COMMENTS MODEL
+# -----------------------------------------------------
 
 
 class Comment(models.Model):
+    """
+    Represents a comment or reply in the discussion.
+
+    Comments are associated with a specific post and can be liked by users.
+    """
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -294,16 +352,21 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.author} on {self.post}"
 
-# VOTE MODEL
-# Scalable voting system.
-# A user can vote on:
-# - A Post
-# - A Reply
-#
-# Only one of post or reply should be filled.
+# -----------------------------------------------------
+# VOTE/ LIKE MODEL
+# -----------------------------------------------------
 
 
 class Like(models.Model):
+    """
+    Represents a like (upvote) by a user on a post, comment, or resource.
+    A like can be associated with exactly one of these content types.
+    This allows users to show appreciation for helpful content and contributes
+    to the reputation system.
+    The unique_together constraint ensures a user can only like a specific
+    Piece of content once.
+    """
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
