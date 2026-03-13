@@ -243,9 +243,7 @@ class Post(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    @property
-    def like_count(self):
-        return self.likes.count()
+    # Removed like_count property. Use annotate() in queries.
 
     def __str__(self):
         return self.title
@@ -315,9 +313,7 @@ class Resource(models.Model):
 
         super().save(*args, **kwargs)
 
-    @property
-    def like_count(self):
-        return self.likes.count()
+    # Removed like_count property. Use annotate() in queries.
 
     def __str__(self):
         return self.title
@@ -350,9 +346,7 @@ class Comment(models.Model):
 
     approved = models.BooleanField(default=True)
 
-    @property
-    def like_count(self):
-        return self.likes.count()
+    # Removed like_count property. Use annotate() in queries.
 
     def __str__(self):
         return f"Comment by {self.author} on {self.post}"

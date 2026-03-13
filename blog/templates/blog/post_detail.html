@@ -28,7 +28,7 @@
                 </button>
             </form>
         {% endif %}
-        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.likes_total }}</span>
+        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.like_count }}</span>
     </div>
 </p>
 
@@ -61,7 +61,7 @@
             {% if user.is_authenticated %}
                 <form method="POST" action="{% url 'like_comment' comment.id %}" style="display:inline;">
                     {% csrf_token %}
-                    <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.likes_total }}</span> likes
+                    <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.like_count }}</span> likes
                     <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}" aria-label="Like comment">
                         {% if comment.user_has_liked %}
                             <i class="fas fa-heart text-danger"></i>
@@ -88,7 +88,7 @@
                                 <div class="like-section resource-like">
                                     <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
                                         {% csrf_token %}
-                                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.likes_total }}</span> likes
+                                        <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.like_count }}</span> likes
                                         <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}" aria-label="Like resource">
                                             {% if resource.user_has_liked %}
                                                 <i class="fas fa-heart text-danger"></i>

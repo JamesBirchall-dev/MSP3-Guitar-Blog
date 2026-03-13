@@ -135,14 +135,14 @@ def index(request):
     posts = Post.objects.filter(status=1).select_related(
         "subject", "author"
     ).prefetch_related("tags").annotate(
-        likes_total=Count('likes')
+        like_count=Count('likes')
         ).order_by("-created_on")
 
     resources = Resource.objects.select_related(
         "subject",
         "added_by",
         "post"
-    ).annotate(likes_total=Count('likes'))
+    ).annotate(like_count=Count('likes'))
 
     # -------------------------------------------------
     # FEED FILTERING
@@ -242,19 +242,19 @@ def index(request):
 
 def post_detail(request, slug):
     post = get_object_or_404(
-        Post.objects.annotate(likes_total=Count('likes')),
+        Post.objects.annotate(like_count=Count('likes')),
         slug=slug
     )
 
     # order comments by like count and then by creation date
     comments = post.comments.annotate(
-        likes_total=Count('likes')
-    ).order_by('-likes_total', '-created_on')
+        like_count=Count('likes')
+    ).order_by('-like_count', '-created_on')
 
     # Order resources by like count then creation date
     resources = post.resources.annotate(
-        likes_total=Count('likes')
-    ).order_by('-likes_total', '-created_on')
+            like_count=Count('likes')
+    ).order_by('-like_count', '-created_on')
 
     if request.user.is_authenticated:
         post.user_has_liked = Like.objects.filter(
@@ -332,7 +332,7 @@ def profile_view(request, username):
         likes_total=Count('likes')
     ).order_by("-created_on")
     resources = user_obj.resources.all().annotate(
-        likes_total=Count('likes')
+        like_count=Count('likes')
     ).order_by("-created_on")
 
     # Filtering
@@ -734,8 +734,8 @@ def subject_detail_view(request, slug):
         elif content_type == 'resource':
             posts = posts.none()
 
-    posts = posts.annotate(likes_total=Count('likes')).order_by("-created_on")
-    resources = resources.annotate(likes_total=Count('likes'))
+    posts = posts.annotate(like_count=Count('likes')).order_by("-created_on")
+    resources = resources.annotate(like_count=Count('likes'))
 
     posts = list(posts)
     for post in posts:

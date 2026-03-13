@@ -181,12 +181,12 @@ $(document).ready(function() {
             // Update like count for post
             var postId = $btn.data('post-id');
             if (postId) {
-                $('.post-like-count[data-post-id="' + postId + '"]').text(data.like_count);
+                $('.post-like-count[data-post-id="' + postId + '"]').text(data.like_count + ' Likes');
             }
             // Update like count for resource
             var resourceId = $btn.data('resource-id');
             if (resourceId) {
-                $('.post-like-count[data-resource-id="' + resourceId + '"]').text(data.like_count);
+                $('.post-like-count[data-resource-id="' + resourceId + '"]').text(data.like_count + ' Likes');
             }
             // Update like count for comment
             var commentId = $btn.data('comment-id');

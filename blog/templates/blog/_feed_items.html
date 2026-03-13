@@ -42,7 +42,7 @@
                                             {% endif %}
                                         </button>
                                     </form>
-                                    <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.likes_total }}</span>
+                                    <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
                                 </div>
                             </small>
                         </div>
@@ -94,7 +94,7 @@
                                             {% endif %}
                                         </button>
                                     </form>
-                                    <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.likes_total }}</span>
+                                    <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
                                 </div>
                                 {% if user.is_authenticated and user.profile.role == 'teacher' %}
                                     <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;">
