@@ -1,18 +1,10 @@
-/* Ensure subject name link is always black */
-.subject-name-link {
-    color: #222 !important;
-    font-weight: 700;
-    text-decoration: none !important;
-}
-.subject-name-link:hover, .subject-name-link:focus {
-    color: #0056b3 !important;
-    text-decoration: underline !important;
-}
+
 /* Global Theme Styles */
 a {
-    color: #ffffff !important;
+    color: #509fee !important;
     text-decoration: underline !important;
     font-weight: bold !important;
+    background-color: #f8f8f8 !important;
 }
 a:hover, a:focus {
     color: #003366 !important;
@@ -89,7 +81,7 @@ small {
 }
 
 
-/* Subject Header */
+/* Subject Header and card */
 
 .subject-header {
     background-color: #fffaf3;
@@ -97,6 +89,17 @@ small {
     border-radius: 16px;
     border: 1px solid #e6dccf;
     margin-bottom: 2rem;
+}
+
+/* Ensure subject name link is always black */
+.subject-name-link {
+    color: #222 !important;
+    font-weight: 700;
+    text-decoration: none !important;
+}
+.subject-name-link:hover, .subject-name-link:focus {
+    color: #0056b3 !important;
+    text-decoration: underline !important;
 }
 
 /* Post Card */
@@ -170,7 +173,7 @@ small {
 
 .tag-badge:hover {
     background-color: #6b4f4f;
-    color: white;
+    color: #003366 !important;
     border-radius: 30px;
     padding: 6px 18px;
     border: none;
@@ -200,12 +203,12 @@ small {
 
 
 .checkbox-label input:checked ~ * {
-    color: white;
+    color: #003366 !important;
 }
 
 .checkbox-label:has(input:checked) {
     background:#6b4f4f;
-    color: white;
+    color: #003366 !important;
 }
 
 
@@ -214,7 +217,7 @@ small {
 
 .btn-custom {
     background-color: #6b4f4f;
-    color: white;
+    color: #003366 !important;
     border-radius: 30px;
     padding: 6px 18px;
     border: none;
@@ -223,7 +226,7 @@ small {
 
 .btn-custom:hover {
     background-color: #8c6a6a;
-    color: white;
+    color: #003366 !important;
 }
 
 /* like button */
@@ -277,7 +280,7 @@ form.card {
     color: #2c2c2c;;
 }
 
-card-title a:hover {
+.card-title a:hover {
     color: #8c6a6a;
 }
 
