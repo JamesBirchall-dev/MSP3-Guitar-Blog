@@ -1,13 +1,13 @@
 
 /* Global Theme Styles */
 a {
-    color: #509fee !important;
+    color: #1d5996 !important;
     text-decoration: underline !important;
     font-weight: bold !important;
     background-color: #f8f8f8 !important;
 }
 a:hover, a:focus {
-    color: #003366 !important;
+    color: #3b6a99 !important;
     background-color: #f0f8ff !important;
 }
 

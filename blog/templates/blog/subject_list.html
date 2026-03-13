@@ -17,7 +17,7 @@
             <div class="card h-100 shadow">
                 <div class="card-body d-flex flex-column">
                     <h4 class="card-title">
-                        <a href="{% url 'subject_detail' subject.slug %}" class="subject-name-link">
+                        <a href="{% url 'subject_detail' subject.slug %}" class="subject-name-link" aria-label="View subject: {{ subject.name }}">
                             {{ subject.name }}
                         </a>
                     </h4>
@@ -27,10 +27,10 @@
                     </p>
                     <!-- Post Count -->
                     <div class="mt-auto">
-                        <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary w-100 mt-3">Read More</a>
-                        <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary btn-lg my-3">
-                            {{ subject.post_count }} posts &nbsp;|&nbsp; {{ subject.resource_count }} resources
-                        </a>
+                        <div class="subject-count-text mb-2">
+                            <strong>{{ subject.post_count }} posts &nbsp;|&nbsp; {{ subject.resource_count }} resources</strong>
+                        </div>
+                        <a href="{% url 'subject_detail' subject.slug %}" class="btn btn-primary w-100 mt-3" aria-label="Read more about subject: {{ subject.name }}">Read More</a>
                     </div>
                 </div>
             </div>

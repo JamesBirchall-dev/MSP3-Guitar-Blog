@@ -5,8 +5,8 @@
 <!-- Heading -->
 <h2>{{ post.title }}</h2>
 <p class="text-muted">
-    Subject: <a href="{% url 'subject_detail' post.subject.slug %}">{{ post.subject }}</a> |
-    <a href="{% url 'profile' post.author.username %}">By {{ post.author }}</a> |
+    Subject: <a href="{% url 'subject_detail' post.subject.slug %}" aria-label="View subject: {{ post.subject }}">{{ post.subject }}</a> |
+    <a href="{% url 'profile' post.author.username %}" aria-label="View profile: {{ post.author }}">By {{ post.author }}</a> |
     {{ post.created_on }} |
     {% if post.tags.all %}
         <div class="post-tags mb-2">
@@ -40,8 +40,8 @@
 
 {% if user.is_authenticated and post.author == user %}
 <div class="action-row">
-    <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary">Edit Post</a>
-    <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger">Delete Post</a>
+    <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary" aria-label="Edit post: {{ post.title }}">Edit Post</a>
+    <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger" aria-label="Delete post: {{ post.title }}">Delete Post</a>
 </div>
 {% endif %}
 
@@ -55,7 +55,7 @@
         <div class="comment-header">Comment</div>
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <strong><a href="{% url 'profile' comment.author.username %}">{{ comment.author.username }}</a></strong>
+                <strong><a href="{% url 'profile' comment.author.username %}" aria-label="View profile: {{ comment.author.username }}">{{ comment.author.username }}</a></strong>
                 <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
             {% if user.is_authenticated %}
@@ -72,8 +72,8 @@
                 </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
-                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary">Edit Comment</a>
-                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete Comment</a>
+                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary" aria-label="Edit comment">Edit Comment</a>
+                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete comment">Delete Comment</a>
             {% endif %}
         </div>
         <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
@@ -99,7 +99,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <a href="{{ resource.url }}" target="_blank">
+                            <a href="{{ resource.url }}" target="_blank" aria-label="Open resource: {{ resource.title }}">
                                 {{ resource.title }}
                                 {% if resource.verified %}
                                     <span title="Verified" style="color:#2ecc40;">&#10003;</span>
@@ -121,8 +121,8 @@
                             </div>
                             {% if user.is_authenticated and resource.added_by == user %}
                             <div class="action-row">
-                                <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary">Edit Resource</a>
-                                <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger">Delete Resource</a>
+                                <a href="{% url 'edit_resource' resource.pk %}" class="btn btn-sm btn-outline-primary" aria-label="Edit resource: {{ resource.title }}">Edit Resource</a>
+                                <a href="{% url 'delete_resource' resource.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete resource: {{ resource.title }}">Delete Resource</a>
                             </div>
                         {% endif %}
                     </li>
@@ -154,7 +154,7 @@
     </form>
 {% else %}
     <p class="mt-4">
-        <a href="{% url 'login' %}">Login</a> to add a comment.
+        <a href="{% url 'login' %}" aria-label="Login to add a comment">Login</a> to add a comment.
     </p>
 {% endif %}
 

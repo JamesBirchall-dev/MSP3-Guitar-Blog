@@ -8,7 +8,7 @@
                         <div class="card-body">
                             <span class="badge bg-primary mb-2">Post</span>
                             <h4 class="card-title">
-                                <a href="{% url 'post_detail' item.slug %}">
+                                <a href="{% url 'post_detail' item.slug %}" aria-label="View post: {{ item.title }}">
                                     {{ item.title }}
                                 </a>
                             </h4>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="card-footer bg-white border-0">
                             <small class="text-muted">
-                                  Added by <a href="{% url 'profile' item.author.username %}">{{ item.author }}</a>
+                                  Added by <a href="{% url 'profile' item.author.username %}" aria-label="View profile: {{ item.author }}">{{ item.author }}</a>
                                 {{ item.created_on|date:"M d, Y" }}
                                 <div class="like-section">
                                     <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;" class="like-form">
@@ -62,7 +62,7 @@
                         <div class="card-body">
                             <span class="badge bg-warning text-dark mb-2">Resource</span>
                             <h4>
-                                <a href="{{ item.url }}" target="_blank">
+                                <a href="{{ item.url }}" target="_blank" aria-label="Open resource: {{ item.title }}">
                                     {{ item.title }}
                                 </a>
                             </h4>
@@ -73,7 +73,7 @@
                                 <strong>Subject:</strong> {{ item.subject.name }}<br>
                                 {% if item.post %}
                                     <strong>From</strong>
-                                    <a href="{% url 'post_detail' item.post.slug %}">
+                                    <a href="{% url 'post_detail' item.post.slug %}" aria-label="View parent post: {{ item.post.title }}">
                                         {{ item.post.title }}
                                     </a>
                                 {% endif %}
@@ -81,7 +81,7 @@
                         </div>
                         <div class="card-footer bg-white border-0">
                             <small class="text-muted">
-                                  Added by <a href="{% url 'profile' item.added_by.username %}">{{ item.added_by }}</a>
+                                  Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
                                 {{ item.created_on|date:"M d, Y" }}
                                 <div class="like-section">
                                     <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
