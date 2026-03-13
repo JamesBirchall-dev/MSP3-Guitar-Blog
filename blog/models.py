@@ -24,6 +24,7 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import Count, Sum
 
 # -----------------------------------------------------
 # CONSTANTS
@@ -152,18 +153,22 @@ class Profile(models.Model):
     def total_likes_received(self):
         """
         Calculates the total number of likes received
-        across the user's posts, comments and resources.
+        across the user's posts, comments and resources using aggregation.
         """
-        post_likes = sum(
-            post.likes.count() for post in self.user.blog_posts.all()
+        post_likes = (
+            self.user.blog_posts
+            .annotate(num_likes=Count("likes"))
+            .aggregate(total=Sum("num_likes"))["total"] or 0
         )
-        comment_likes = sum(
-            comment.likes.count()
-            for comment in self.user.comment_set.all()
+        comment_likes = (
+            self.user.comment_set
+            .annotate(num_likes=Count("likes"))
+            .aggregate(total=Sum("num_likes"))["total"] or 0
         )
-        resource_likes = sum(
-            resource.likes.count()
-            for resource in self.user.resources.all()
+        resource_likes = (
+            self.user.resources
+            .annotate(num_likes=Count("likes"))
+            .aggregate(total=Sum("num_likes"))["total"] or 0
         )
         return post_likes + comment_likes + resource_likes
 
