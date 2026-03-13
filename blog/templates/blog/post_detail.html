@@ -17,7 +17,7 @@
     {% endif %}
     <div class="like-section">
         {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;">
+            <form method="POST" action="{% url 'like_post' post.id %}" style="display:inline;" class="like-form">
                 {% csrf_token %}
                 <button type="submit" class="like-post-btn" data-post-id="{{ post.id }}" aria-label="Like post">
                     {% if post.user_has_liked %}
@@ -59,7 +59,7 @@
                 <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
             {% if user.is_authenticated %}
-                <form method="POST" action="{% url 'like_comment' comment.id %}" style="display:inline;">
+                <form method="POST" action="{% url 'like_comment' comment.id %}" style="display:inline;" class="like-form">
                     {% csrf_token %}
                     <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.like_count }}</span> likes
                     <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}" aria-label="Like comment">
@@ -86,7 +86,7 @@
                         <li class="resource-item">
                             <div class="position-relative">
                                 <div class="like-section resource-like">
-                                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;">
+                                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;" class="like-form">
                                         {% csrf_token %}
                                         <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.like_count }}</span> likes
                                         <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}" aria-label="Like resource">
@@ -111,7 +111,7 @@
                                     <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
                                 {% endif %}
                                 {% if user.profile.role == 'teacher' %}
-                                    <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;">
+                                    <form method="POST" action="{% url 'verify_resource' resource.id %}" style="display:inline;" class="verify-form">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ resource.id }}">
                                             {% if resource.verified %}Unverify{% else %}Verify{% endif %}
@@ -139,7 +139,7 @@
 
 {% if user.is_authenticated %}
     <h4 class="mt-4">Add a Comment</h4>
-    <form method="POST">
+    <form method="POST" class="comment-form">
         {% csrf_token %}
         {{ comment_form.content.label_tag }}<br>
         {{ comment_form.content }}<br><br>

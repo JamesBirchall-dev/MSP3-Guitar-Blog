@@ -496,7 +496,7 @@ def create_post(request):
 
     # only allow users with a role of 'teacher'
     if profile.role != 'teacher':
-        return redirect('home')
+        return redirect('index')
 
     # Allows logged-in users to create a post.
     if request.method == "POST":
@@ -509,7 +509,7 @@ def create_post(request):
             post.save()
             form.save_m2m()  # Save tags
             messages.success(request, "Post created successfully!")
-            return redirect("home")
+            return redirect("index")
         else:
             messages.error(request, "There was an error creating your post.")
     else:
@@ -525,6 +525,7 @@ def create_post(request):
     context = {
         'form': form,
         'subject_tags_json': subject_tags_json,
+        'subjects': Subject.objects.all().order_by("name"),
     }
     return render(request, "blog/create_post.html", context)
 
