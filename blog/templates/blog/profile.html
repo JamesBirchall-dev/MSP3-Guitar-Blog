@@ -4,7 +4,7 @@
 
 <div class="page-header mb-4">
   <h1>{{ profile_user.username }}'s Profile</h1>
-  <p class="text-muted">
+  <span class="text-muted">
     Member role: {{ profile.get_role_display }} | Joined on {{ profile_user.date_joined|date:"F j, Y" }}
   </p>
   {% if request.user == profile_user %}

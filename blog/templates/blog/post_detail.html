@@ -4,7 +4,7 @@
 
 <!-- Heading -->
 <h2>{{ post.title }}</h2>
-<p class="text-muted">
+<span class="text-muted">
     Subject: <a href="{% url 'subject_detail' post.subject.slug %}" aria-label="View subject: {{ post.subject }}">{{ post.subject }}</a> |
     <a href="{% url 'profile' post.author.username %}" aria-label="View profile: {{ post.author }}">By {{ post.author }}</a> |
     {{ post.created_on }} |
@@ -76,7 +76,7 @@
                 <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete comment">Delete Comment</a>
             {% endif %}
         </div>
-        <p class="mt-2 mb-0">{{ comment.content|safe }}</p>
+        <span class="mt-2 mb-0">{{ comment.content|safe }}</span>
         {% with resources=comment.resources.all %}
             {% if resources.count %}
                 <div class="comment-resources resource-block mt-2">
@@ -153,7 +153,7 @@
         <button type="submit" name="comment_submit" class="btn btn-primary mt-2">Add Comment</button>
     </form>
 {% else %}
-    <p class="mt-4">
+    <span class="mt-4">
         <a href="{% url 'login' %}" aria-label="Login to add a comment">Login</a> to add a comment.
     </p>
 {% endif %}
