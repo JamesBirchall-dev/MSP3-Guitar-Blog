@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load static %}
 <main>
 {% block content %}
 
@@ -65,6 +66,8 @@
         </form>
     </div>
  </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'summernote/summernote.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script
  {% endblock %}
 </main>
