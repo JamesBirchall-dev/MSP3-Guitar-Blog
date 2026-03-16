@@ -9,7 +9,8 @@
 </div>
 
 <!-- Filter/Search Form -->
- <div class="container">
+<div class="container mt-4">
+    <h3>🎸 Learn Guitar</h3>
     <form method="GET" class="card p-3 mb-4 shadow-sm">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
@@ -39,7 +40,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="row mt-2">
             <div class="col-md-12 d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary px-5">Apply</button>
@@ -47,6 +47,7 @@
         </div>
     </form>
 </div>
+
 <!-- Pagination Controls -->
 {% if feed.has_other_pages %}
 <nav aria-label="Feed pagination">
@@ -72,6 +73,7 @@
     {% endif %}
   </ul>
 </nav>
+</div>
 {% endif %}
 <!-- Combined Feed Loop -->
 <div id="feed-container">
@@ -82,19 +84,17 @@
                     <div class="col-md-10 col-lg-8">
                         <div class="card h-100 shadow-sm border-start border-4 border-primary position-relative">
                             <div class="card-body">
-                                <span class="badge bg-primary mb-2">Post</span>
-                                <h5 class="card-title">
-                                    <a href="{% url 'post_detail' item.slug %}">
+                                    <span class="badge bg-primary mb-2">Post</span>
+                                    <h4 class="card-title">
                                         <a href="{% url 'post_detail' item.slug %}" aria-label="View post: {{ item.title }}">{{ item.title }}</a>
-                                    </a>
-                                </h5>
-                                <span class="text-muted small">
-                                    <strong>Subject:</strong> {{ item.subject.name }}<br>
-                                    <strong>Level:</strong> {{ item.min_level|title }}<br>
-                                </p>
-                                <span class="card-text">
-                                    {{ item.content|safe }}
-                                </p>
+                                    </h4>
+                                    <div class="text-muted small">
+                                        <strong>Subject:</strong> {{ item.subject.name }}<br>
+                                        <strong>Level:</strong> {{ item.min_level|title }}<br>
+                                    </div>
+                                    <div class="card-text">
+                                        {{ item.content|safe }}
+                                    </div>
                                 {% if item.tags.all %}
                                     <div class="post-tags mb-2">
                                         {% for tag in item.tags.all %}
@@ -104,23 +104,23 @@
                                 {% endif %}
                             </div>
                             <div class="card-footer bg-white border-0">
-                                <small class="text-muted">
+                                <div class="text-muted">
                                      Added by <a href="{% url 'profile' item.author.username %}" aria-label="View profile: {{ item.author }}">{{ item.author }}</a>
                                     {{ item.created_on|date:"M d, Y" }}
-                                    <div class="like-section">
-                                        <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;" class="like-form">
-                                            {% csrf_token %}
-                                            <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}">
-                                                {% if item.user_has_liked %}
-                                                    <i class="fas fa-heart text-danger"></i>
-                                                {% else %}
-                                                    <i class="far fa-heart"></i>
-                                                {% endif %}
-                                            </button>
-                                        </form>
-                                        <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.like_count }}</span>
-                                    </div>
-                                </small>
+                                </div>
+                                <div class="like-section">
+                                    <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;" class="like-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}">
+                                            {% if item.user_has_liked %}
+                                                <i class="fas fa-heart text-danger"></i>
+                                            {% else %}
+                                                <i class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.like_count }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,50 +136,46 @@
                             {% endif %}
                             <div class="card-body">
                                 <span class="badge bg-warning text-dark mb-2">Resource</span>
-                                <h5>
-                                    <a href="{{ item.url }}" target="_blank">
+                                    <h3>
                                         <a href="{{ item.url }}" target="_blank" aria-label="Open resource: {{ item.title }}">{{ item.title }}</a>
-                                    </a>
-                                </h5>
-                                <p>
+                                    </h3>
+                                <div class="resource-description">
                                     {{ item.description|safe }}
-                                </p>
-                                <span class="text-muted small">
+                                </div>
+                                <div class="text-muted small">
                                     <strong>Subject:</strong> {{ item.subject.name }}<br>
                                     {% if item.post %}
                                         <strong>From</strong>
-                                        <a href="{% url 'post_detail' item.post.slug %}">
-                                            <a href="{% url 'post_detail' item.post.slug %}" aria-label="View parent post: {{ item.post.title }}">{{ item.post.title }}</a>
-                                        </a>
+                                        <a href="{% url 'post_detail' item.post.slug %}" aria-label="View parent post: {{ item.post.title }}">{{ item.post.title }}</a>
                                     {% endif %}
-                                </p>
+                                </div>
                             </div>
                             <div class="card-footer bg-white border-0">
-                                <small class="text-muted">
+                                <div class="text-muted">
                                      Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
                                     {{ item.created_on|date:"M d, Y" }}
-                                    <div class="like-section">
-                                        <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
-                                            {% csrf_token %}
-                                            <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
-                                                {% if item.user_has_liked %}
-                                                    <i class="fas fa-heart text-danger"></i>
-                                                {% else %}
-                                                    <i class="far fa-heart"></i>
-                                                {% endif %}
-                                            </button>
-                                        </form>
-                                        <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count }}</span>
-                                    </div>
-                                    {% if user.is_authenticated and user.profile.role == 'teacher' %}
-                                        <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;" class="verify-form">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
-                                                {% if item.verified %}Unverify{% else %}Verify{% endif %}
-                                            </button>
-                                        </form>
-                                    {% endif %}
-                                </small>
+                                </div>
+                                <div class="like-section">
+                                    <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
+                                            {% if item.user_has_liked %}
+                                                <i class="fas fa-heart text-danger"></i>
+                                            {% else %}
+                                                <i class="far fa-heart"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count }}</span>
+                                </div>
+                                {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                                    <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;" class="verify-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
+                                            {% if item.verified %}Unverify{% else %}Verify{% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -192,31 +188,34 @@
         </div>
     {% endfor %}
     <!-- Pagination Controls -->
+
 {% if feed.has_other_pages %}
-<nav aria-label="Feed pagination">
-  <ul class="pagination justify-content-center">
-    {% if feed.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ feed.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Previous">
-          &laquo; Previous
-        </a>
-      </li>
-    {% endif %}
-    <li class="page-item disabled">
-      <span class="page-link">
-        Page {{ feed.number }} of {{ feed.paginator.num_pages }}
-      </span>
-    </li>
-    {% if feed.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ feed.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Next">
-          Next &raquo;
-        </a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
+    <nav aria-label="Feed pagination">
+        <ul class="pagination justify-content-center">
+            {% if feed.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ feed.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Previous">
+                &laquo; Previous
+                </a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page {{ feed.number }} of {{ feed.paginator.num_pages }}
+                </span>
+            </li>
+            {% if feed.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ feed.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_type %}&type={{ active_type }}{% endif %}" aria-label="Next">
+                Next &raquo;
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endif %}
 
 {% endblock %}
 </main>
+</body>
+</html>

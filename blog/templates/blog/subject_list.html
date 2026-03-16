@@ -16,15 +16,16 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">
+                    <h3 class="card-title">
                         <a href="{% url 'subject_detail' subject.slug %}" class="subject-name-link" aria-label="View subject: {{ subject.name }}">
                             {{ subject.name }}
                         </a>
-                    </h4>
+                    </h3>
                     <!-- Short Description maintained in DB-->
-                    <span class="card-text text-muted">
+                    <div class="card-text text-muted">
                         {{ subject.short_description|default:"No short description available."|safe }}
-                    </p>
+                        
+                    </div>
                     <!-- Post Count -->
                     <div class="mt-auto">
                         <div class="subject-count-text mb-2">
@@ -38,5 +39,7 @@
     {% empty %}
         <p>No subjects found.</p>
     {% endfor %}
+    </div>
+</div>    
 </main>
     {% endblock %}
