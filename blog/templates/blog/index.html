@@ -7,6 +7,8 @@
 <div class="page-header">
     <h1>Guitar Learning Blog</h1>
     <p>Your go-to resource for all things guitar. Explore posts, subjects, and resources to enhance your guitar skills.</p>    
+    <h2>Explore our learning subjects, posts and resources</h2>
+    <p>Click <a href="{% url 'subject_list' %}">here</a> to browse our content!</p>
 </div>
 
 <!-- Filter bar-->
@@ -88,7 +90,7 @@
         {% include "blog/_feed_items.html" %}
 </div>
 
-<div class="container mt-4">
+    <div class="container mt-4">
         <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-auto">
@@ -119,8 +121,8 @@
                     {% endif %}
                 </ul>
             </nav>
+            </div>
         </div>
-    </div>
 </div>
 
   {% if feed|length == 0 %}
@@ -129,5 +131,5 @@
     </div>
 {% endif %}
 </div>
+    </main>
 {% endblock %}
-</main>

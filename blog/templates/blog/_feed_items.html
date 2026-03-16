@@ -7,18 +7,18 @@
                     <div class="card h-100 shadow-sm border-start border-4 border-primary position-relative">
                         <div class="card-body">
                             <span class="badge bg-primary mb-2">Post</span>
-                            <h4 class="card-title">
+                            <h3 class="card-title">
                                 <a href="{% url 'post_detail' item.slug %}" aria-label="View post: {{ item.title }}">
                                     {{ item.title }}
                                 </a>
-                            </h4>
-                            <span class="text-muted small">
+                            </h3>
+                            <div class="text-muted small">
                                 <strong>Subject:</strong> {{ item.subject.name }}<br>
                                 <strong>Level:</strong> {{ item.min_level|title }}<br>
-                            </p>
-                            <span class="card-text">
+                            </div>
+                            <div class="card-text">
                                 {{ item.content|safe }}
-                            </p>
+                            </div>
                             {% if item.tags.all %}
                                 <div class="post-tags mb-2">
                                     {% for tag in item.tags.all %}
@@ -61,15 +61,14 @@
                         {% endif %}
                         <div class="card-body">
                             <span class="badge bg-warning text-dark mb-2">Resource</span>
-                            <h4>
+                            <h3>
                                 <a href="{{ item.url }}" target="_blank" aria-label="Open resource: {{ item.title }}">
                                     {{ item.title }}
                                 </a>
-                            </h4>
-                            <p>
+                            </h3>
                                 {{ item.description|safe }}
-                            </p>
-                            <span class="text-muted small">
+                            
+                            <div class="text-muted small">
                                 <strong>Subject:</strong> {{ item.subject.name }}<br>
                                 {% if item.post %}
                                     <strong>From</strong>
@@ -77,7 +76,7 @@
                                         {{ item.post.title }}
                                     </a>
                                 {% endif %}
-                            </p>
+                            </div>
                         </div>
                         <div class="card-footer bg-white border-0">
                             <small class="text-muted">
