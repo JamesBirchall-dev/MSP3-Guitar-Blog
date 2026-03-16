@@ -25,48 +25,42 @@
             {% csrf_token %}
             <div class="post-meta-section">
                 <div class="row">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{ form.subject.label_tag }}
-                                <div class="form-text">Select the main subject for your post.</div>
-                                <select name="subject" class="form-select">
-                                    {% for subject in subjects %}
-                                        <option value="{{ subject.pk }}" data-pk="{{ subject.pk }}">
-                                        {{ subject.name }}
-                                        </option>
-                                    {% endfor %}
-                                    </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Tags</label>
-                                <div class="form-text">Choose relevant tags for your post. Only tags related to the selected subject will appear.</div>
-                                <div id="tag-container">
-                                    {% for checkbox in form.tags %}
-                                    <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}" style="display: none;">
-                                        {{ checkbox.tag }}
-                                        {{ checkbox.choice_label }}
-                                    </label>
-                                    {% endfor %}
-                                </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ form.subject.label_tag }}
+                            <div class="form-text">Select the main subject for your post.</div>
+                            <select name="subject" class="form-select" id="id_subject">
+                                {% for subject in subjects %}
+                                    <option value="{{ subject.pk }}" data-pk="{{ subject.pk }}">
+                                    {{ subject.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span id="tags-label" class="form-label">Tags</span>
+                            <div class="form-text">Choose relevant tags for your post. Only tags related to the selected subject will appear.</div>
+                            <div id="tag-container" aria-labelledby="tags-label">
+                                {% for checkbox in form.tags %}
+                                <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}" style="display: none;">
+                                    {{ checkbox.tag }} {{ checkbox.choice_label }}
+                                </label>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                  </div>  
-                    </div>
                 </div>
             </div>
-            <div class="card form">
             <div class="post-content-section">
                 <div class="form-group">
                     {{ form.title.label_tag }}
                     {{ form.title }}
                 </div>
-                <div class="container-fluid">  
                 <div class="form-group">
                     {{ form.content.label_tag }}
-                    {{ form.content }}
-                </div>
+                    {% for widget in form.content.subwidgets %}
+                        {{ widget }}
+                    {% endfor %}
                 </div>
                 <div class="form-group">
                     {{ form.min_level.label_tag }}
@@ -76,7 +70,6 @@
                     <button type="submit" class="btn btn-primary">Create Post</button>
                 </div>
             </div>
-            </div>  
         </form>
     </div>
 </div>
