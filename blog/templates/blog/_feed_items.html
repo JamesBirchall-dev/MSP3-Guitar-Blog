@@ -1,6 +1,6 @@
 {% for item in feed %}
     {% if item.item_type == 'post' %}
-        <!-- Post Card: use 'item' everywhere instead of 'post' -->
+        <!-- Post Card -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8">
@@ -29,33 +29,33 @@
                         </div>
                         <div class="card-footer bg-white border-0">
                             <small class="text-muted">
-                                  Added by <a href="{% url 'profile' item.author.username %}" aria-label="View profile: {{ item.author }}">{{ item.author }}</a>
+                                Added by <a href="{% url 'profile' item.author.username %}" aria-label="View profile: {{ item.author }}">{{ item.author }}</a>
                                 {{ item.created_on|date:"M d, Y" }}
-                                <div class="like-section">
-                                    <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;" class="like-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}" aria-label="Like post">
-                                            {% if item.user_has_liked %}
-                                                <i class="fas fa-heart text-danger"></i>
-                                            {% else %}
-                                                <i class="far fa-heart"></i>
-                                            {% endif %}
-                                        </button>
-                                    </form>
-                                    <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
-                                </div>
                             </small>
+                            <div class="like-section mt-1">
+                                <form method="POST" action="{% url 'like_post' item.id %}" style="display:inline;" class="like-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="like-post-btn" data-post-id="{{ item.id }}" aria-label="Like post">
+                                        {% if item.user_has_liked %}
+                                            <i class="fas fa-heart text-danger"></i>
+                                        {% else %}
+                                            <i class="far fa-heart"></i>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <span class="post-like-count" data-post-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     {% elif item.item_type == 'resource' %}
-        <!-- Resource Card: use 'item' everywhere instead of 'resource' -->
+        <!-- Resource Card -->
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8">
-                        <div class="card h-100 shadow-sm border-start border-4 border-warning position-relative">
+                    <div class="card h-100 shadow-sm border-start border-4 border-warning position-relative">
                         {% if item.verified %}
                             <span class="teacher-verified" title="Verified">&#10003; Teacher Verified</span>
                         {% endif %}
@@ -81,30 +81,32 @@
                         </div>
                         <div class="card-footer bg-white border-0">
                             <small class="text-muted">
-                                  Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
+                                Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
                                 {{ item.created_on|date:"M d, Y" }}
-                                <div class="like-section">
-                                    <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
-                                            {% if item.user_has_liked %}
-                                                <i class="fas fa-heart text-danger"></i>
-                                            {% else %}
-                                                <i class="far fa-heart"></i>
-                                            {% endif %}
-                                        </button>
-                                    </form>
-                                    <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
-                                </div>
-                                {% if user.is_authenticated and user.profile.role == 'teacher' %}
-                                    <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;" class="verify-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
-                                            {% if item.verified %}Unverify{% else %}Verify{% endif %}
-                                        </button>
-                                    </form>
-                                {% endif %}
                             </small>
+
+                            <div class="like-section mt-1">
+                                <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
+                                        {% if item.user_has_liked %}
+                                            <i class="fas fa-heart text-danger"></i>
+                                        {% else %}
+                                            <i class="far fa-heart"></i>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
+                            </div>
+
+                            {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                                <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;" class="verify-form mt-1">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
+                                        {% if item.verified %}Unverify{% else %}Verify{% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

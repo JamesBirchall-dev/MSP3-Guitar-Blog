@@ -72,6 +72,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $(document).ready(function() {
 
+        // -------------------------
+    // SUMMERNOTE EDITOR
+    // -------------------------
+    if ($('#id_content').length) {
+        $('#id_content').summernote({
+            height: 300,
+            width: '100%',
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline']],
+                ['para', ['ul', 'ol']],
+                ['insert', ['link', 'picture']],
+                ['view', ['fullscreen']]
+            ]
+        });
+    }
+
+
     // get subject dropdown element
     const subjectSelect = $('select[name="subject"]');
 

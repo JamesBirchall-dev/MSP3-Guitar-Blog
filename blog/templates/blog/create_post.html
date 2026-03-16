@@ -2,10 +2,7 @@
 {% load static %}
 <main>
 {% block content %}
-<script>
-    // Django template variable outputs valid JSON here. Pass subjexxt_tags_json from the view context.
-    window.subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
-</script>
+
 <!-- Create Post Form (should only be visible to role: teacher)-->
     <div class="container container-main">
     <!-- Wrapper for the create post form -->
@@ -65,9 +62,11 @@
                     {{ form.title.label_tag }}
                     {{ form.title }}
                 </div>
+                <div class="container-fluid">  
                 <div class="form-group">
                     {{ form.content.label_tag }}
                     {{ form.content }}
+                </div>
                 </div>
                 <div class="form-group">
                     {{ form.min_level.label_tag }}
@@ -81,6 +80,12 @@
         </form>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'summernote/summernote.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
+<script>
+    // Django template variable outputs valid JSON here. Pass subjexxt_tags_json from the view context.
+    window.subjectTags = JSON.parse('{{ subject_tags_json|safe }}');
+</script>
 {% endblock %}
 </main>

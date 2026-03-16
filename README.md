@@ -1063,7 +1063,7 @@ Routes are grouped by feature area.
 
 ---
 
-AJAX
+### AJAX
 
 | URL                  | Description                         |
 | -------------------- | ----------------------------------- |
