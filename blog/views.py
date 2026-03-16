@@ -241,6 +241,20 @@ def index(request):
 
 
 def post_detail(request, slug):
+    """
+    Display a single post with its comments and resources.
+
+    Features:
+    - Display comments ordered by like count then creation date.
+    - Display resources associated with the post.
+    - Show whether user has liked each item.
+    - Handle comment creation with optional resource attachment.
+
+    POST handling:
+    - Add comment to post
+    - Optionally create a resource attached to the comment
+    """
+
     post = get_object_or_404(
         Post.objects.annotate(like_count=Count('likes')),
         slug=slug
@@ -312,8 +326,6 @@ def post_detail(request, slug):
 
             return redirect("post_detail", slug=slug)
 
-    # Summernote: No markdown conversion needed; content is already HTML
-
     context = {
         "post": post,
         "comments": comments,
@@ -325,6 +337,16 @@ def post_detail(request, slug):
 
 
 def profile_view(request, username):
+    """
+    Display a user's profile with their posts and resources.
+
+    Features:
+    - Feed similar to index but only for specific user
+    - Filter by subject, tag, content type, and search query
+    - Pagination
+    - AJAX support for partial feed rendering
+    - Like/unlike detection for current user
+    """
     user_obj = get_object_or_404(User, username=username)
     profile, created = Profile.objects.get_or_create(user=user_obj)
 
@@ -425,6 +447,13 @@ def profile_view(request, username):
 
 @login_required
 def edit_profile(request):
+    """
+    Allow users to edit their profile.
+
+    Features:
+    - Update fields via ProfileForm
+    - Display success or error messages
+    """
     profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
@@ -439,11 +468,20 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
     return render(request, 'blog/edit_profile.html', {'form': form})
 
-
-# login/out and registration views
+# -----------------------------------------------------
+# AUTHENTICATION VIEWS
+# -----------------------------------------------------
 
 
 def register_view(request):
+    """
+    Handle user registration.
+
+    Steps:
+    - Display registration form
+    - On valid POST, create user and profile
+    - Assign role and log user in
+    """
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():

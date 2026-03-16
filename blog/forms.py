@@ -17,10 +17,15 @@ from django_summernote.widgets import SummernoteWidget
 
 
 class RegisterForm(UserCreationForm):
-
     """
-    Extends Django's UserCreationForm to include
-    email and skill level selection.
+    Extends Django's UserCreationForm to include:
+
+    - Email field (required)
+    - Role/Skill Level selection
+      Options: beginner, intermediate, advanced
+
+    This form is used for registering new users with
+    additional metadata stored in Profile.
     """
     email = forms.EmailField(required=True)
     role = forms.ChoiceField(
@@ -45,7 +50,14 @@ class RegisterForm(UserCreationForm):
 
 class PostForm(forms.ModelForm):
     """
-    Form used for creating and editing learning posts.
+    Form used for creating or editing learning posts.
+
+    Features:
+    - `content` rendered with Summernote rich text editor
+    - `slug` optional for custom URL slug
+    - `min_level` to indicate the minimum skill level required
+    - `subject` defaults to 'Uncategorized' if new post
+    - `tags` selectable via checkbox widget
     """
     content = forms.CharField(widget=SummernoteWidget())
     slug = forms.CharField(required=False, widget=SummernoteWidget())
@@ -74,6 +86,15 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    """
+    Form for creating or editing comments.
+
+    Supports optional creation of a resource when submitting a comment.
+    Fields:
+    - content: comment text (rich text)
+    - resource_title, resource_url,
+    resource_description: optional resource info
+    """
     content = forms.CharField(widget=SummernoteWidget())
     # Optional Form for creating/editing comments (replies)
     resource_title = forms.CharField(
@@ -105,8 +126,10 @@ class CommentForm(forms.ModelForm):
 
 
 class ResourceForm(forms.ModelForm):
-    # Form for creating/editing resources
-
+    """
+    Ensure the URL starts with http:// or https://.
+    Adds https:// by default if missing.
+    """
     def clean_url(self):
         url = self.cleaned_data.get('url')
         if url and not url.startswith(('http://', 'https://')):
@@ -119,6 +142,13 @@ class ResourceForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    """
+    Form for editing user profile.
+
+    Fields:
+    - role (skill level, excluding 'teacher' to prevent accidental role change)
+    - bio (rich text with Summernote)
+    """
     bio = forms.CharField(widget=SummernoteWidget(), required=False)
     # Form for editing the Profile model's role and bio fields
 
