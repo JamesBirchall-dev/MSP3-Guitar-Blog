@@ -1,0 +1,7 @@
+{# Custom Summernote widget template for valid HTML #}
+{% load static %}
+<div class="summernote-div">
+    <textarea name="{{ widget.name }}" id="{{ widget.attrs.id }}" hidden>{{ widget.value|default_if_none:"" }}</textarea>
+    <iframe id="{{ widget.attrs.id }}_iframe" src="{{ widget.summernote_editor_url }}" width="100%" height="300" style="border: none;"></iframe>
+</div>
+{# No cols, rows, width, height on div. No frameborder on iframe. No style tag in div. #}

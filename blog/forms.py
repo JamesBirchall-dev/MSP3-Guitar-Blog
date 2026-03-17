@@ -60,7 +60,7 @@ class PostForm(forms.ModelForm):
     - `tags` selectable via checkbox widget
     """
     content = forms.CharField(widget=SummernoteWidget())
-    slug = forms.CharField(required=False, widget=SummernoteWidget())
+    slug = forms.SlugField(required=False)
     min_level = forms.ChoiceField(choices=LEVEL_CHOICES, required=True)
 
     def __init__(self, *args, **kwargs):

@@ -192,6 +192,9 @@ SUMMERNOTE_CONFIG = {
     }
 }
 
+# Custom Summernote widget template for valid HTML
+SUMMERNOTE_WIDGET_TEMPLATE_PATH = 'summernote/widget.html'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
