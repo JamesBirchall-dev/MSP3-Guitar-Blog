@@ -73,11 +73,15 @@
                 </form>
             {% endif %}
             {% if user.is_authenticated and comment.author == user %}
-                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary" aria-label="Edit comment">Edit Comment</a>
-                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete comment">Delete Comment</a>
             {% endif %}
         </div>
         <div class="mt-2 mb-0">{{ comment.content|safe }}</div>
+        {% if user.is_authenticated and comment.author == user %}
+            <div class="action-row mt-2">
+                <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-sm btn-outline-primary" aria-label="Edit comment">Edit Comment</a>
+                <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete comment">Delete Comment</a>
+            </div>
+        {% endif %}
         {% with resources=comment.resources.all %}
             {% if resources.count %}
                 <div class="comment-resources resource-block mt-2">

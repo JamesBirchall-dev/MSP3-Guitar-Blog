@@ -1,11 +1,70 @@
 {% extends "blog/base.html" %}
+{% load static %}
 <main>
 {% block content %}
-<!-- Edit Comment Form -->
-<h2>Edit Post</h2>
-<form method="post" class="edit-post-form">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+
+<!-- Edit Post Form (same layout as create_post, no tag selection) -->
+<div class="container container-main">
+  <div class="create-post-wrapper">
+    <h2 class="create-title">Edit Post</h2>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+        <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <form method="POST" class="card create-post-form">
+      {% csrf_token %}
+      <div class="post-meta-section">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              {{ form.subject.label_tag }}
+              <div class="form-text">Select the main subject for your post.</div>
+              {{ form.subject }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+                  <div class="form-group">
+              <span id="tags-label" class="form-label">Tags</span>
+              <div class="form-text">Choose relevant tags for your post. Only tags related to the selected subject will appear.</div>
+              <div id="tag-container" aria-labelledby="tags-label">
+                {% for checkbox in form.tags %}
+                <label class="tag-badge checkbox-label" data-tag="{{ checkbox.choice_label }}" style="display: none;">
+                  {{ checkbox.tag }} {{ checkbox.choice_label }}
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+      <div class="post-content-section">
+        <div class="form-group">
+          {{ form.title.label_tag }}
+          {{ form.title }}
+        </div>
+        <div class="form-group">
+          {{ form.content.label_tag }}
+          {{ form.content }}
+        </div>
+        <div class="form-group">
+          {{ form.min_level.label_tag }}
+          {{ form.min_level }}
+        </div>
+        <div class="submit-section">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'summernote/summernote.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
 </main>

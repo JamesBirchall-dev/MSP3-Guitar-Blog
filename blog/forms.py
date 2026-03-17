@@ -130,6 +130,8 @@ class ResourceForm(forms.ModelForm):
     Ensure the URL starts with http:// or https://.
     Adds https:// by default if missing.
     """
+    description = forms.CharField(widget=SummernoteWidget())
+
     def clean_url(self):
         url = self.cleaned_data.get('url')
         if url and not url.startswith(('http://', 'https://')):

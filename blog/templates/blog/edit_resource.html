@@ -1,11 +1,50 @@
-{% extends "blog/base.html" %} 
+{% extends "blog/base.html" %}
+{% load static %}
 <main>
 {% block content %}
-<!-- Edit Resource Form -->
-<h2>Edit Resource</h2>
-<form method="post" class="edit-resource-form">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-lg-6">
+      <div class="card create-post-form mb-4">
+        <div class="card-body">
+          <h2>Edit Resource</h2>
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <ul>
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+          <form method="POST" class="edit-resource-form">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+              {{ form.title.label_tag }}
+              {{ form.title }}
+            </div>
+            <div class="form-group mb-3">
+              {{ form.url.label_tag }}
+              {{ form.url }}
+            </div>
+            <div class="form-group mb-3 summernote-field">
+              {{ form.description.label_tag }}
+              {{ form.description }}
+            </div>
+            <div class="submit-section">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'summernote/summernote.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
 </main>
