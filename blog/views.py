@@ -622,7 +622,6 @@ def delete_post(request, slug):
         post.delete()
         messages.success(request, "Post deleted successfully.")
         return redirect('index')
-    messages.error(request, "There was an error deleting the post.")
     return render(request, 'blog/delete_post.html', {'post': post})
 
 
