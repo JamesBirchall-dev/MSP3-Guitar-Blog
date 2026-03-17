@@ -187,8 +187,23 @@ def index(request):
     for resource in resources:
         resource.item_type = 'resource'
 
-    combined_feed = posts + resources
-    combined_feed.sort(key=lambda x: x.created_on, reverse=True)
+    sort = request.GET.get('sort', '-created_on')
+    # Sorting logic
+    if sort in ['created_on', '-created_on']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: x.created_on,
+            reverse=(sort == '-created_on')
+        )
+    elif sort in ['like_count', '-like_count']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: getattr(x, 'like_count', 0),
+            reverse=(sort == '-like_count')
+        )
+    else:
+        combined_feed = posts + resources
+        combined_feed.sort(key=lambda x: x.created_on, reverse=True)
 
     # -------------------------------------------------
     # PAGINATION
@@ -388,11 +403,22 @@ def profile_view(request, username):
     for resource in resources:
         resource.item_type = 'resource'
 
-    combined_feed = posts + resources
-    combined_feed.sort(
-        key=lambda x: x.created_on,
-        reverse=True
-    )
+    sort = request.GET.get('sort', '-created_on')
+    if sort in ['created_on', '-created_on']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: x.created_on,
+            reverse=(sort == '-created_on')
+        )
+    elif sort in ['like_count', '-like_count']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: getattr(x, 'like_count', 0),
+            reverse=(sort == '-like_count')
+        )
+    else:
+        combined_feed = posts + resources
+        combined_feed.sort(key=lambda x: x.created_on, reverse=True)
 
     # Remove duplicates for comments and resources
     unique_feed = []
@@ -783,11 +809,22 @@ def subject_detail_view(request, slug):
     for resource in resources:
         resource.item_type = 'resource'
 
-    combined_feed = posts + resources
-    combined_feed.sort(
-        key=lambda x: x.created_on,
-        reverse=True
-    )
+    sort = request.GET.get('sort', '-created_on')
+    if sort in ['created_on', '-created_on']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: x.created_on,
+            reverse=(sort == '-created_on')
+        )
+    elif sort in ['like_count', '-like_count']:
+        combined_feed = posts + resources
+        combined_feed.sort(
+            key=lambda x: getattr(x, 'like_count', 0),
+            reverse=(sort == '-like_count')
+        )
+    else:
+        combined_feed = posts + resources
+        combined_feed.sort(key=lambda x: x.created_on, reverse=True)
 
     # Pagination
     page = request.GET.get('page', 1)

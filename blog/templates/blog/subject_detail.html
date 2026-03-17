@@ -25,6 +25,15 @@
                 <label class="form-label">Search:</label>
                 <input type="text" name="q" value="{{ query|default_if_none:'' }}" class="form-control" placeholder="Search posts and resources...">
             </div>
+            <div class="col-md-2">
+                <label class="form-label">Sort By:</label>
+                <select name="sort" class="form-select">
+                    <option value="-created_on" {% if sort == '-created_on' %}selected{% endif %}>Newest First</option>
+                    <option value="created_on" {% if sort == 'created_on' %}selected{% endif %}>Oldest First</option>
+                    <option value="-like_count" {% if sort == '-like_count' %}selected{% endif %}>Most Likes</option>
+                    <option value="like_count" {% if sort == 'like_count' %}selected{% endif %}>Least Likes</option>
+                </select>
+            </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-12">
