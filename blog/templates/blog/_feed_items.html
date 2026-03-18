@@ -47,8 +47,8 @@
                             </div>
                                 {% if user.is_authenticated and item.author == user %}
                                     <div class="action-row mt-2">
-                                        <a href="{% url 'edit_post' item.slug %}" class="btn btn-sm btn-outline-primary" aria-label="Edit post: {{ item.title }}">Edit Post</a>
-                                        <a href="{% url 'delete_post' item.slug %}" class="btn btn-sm btn-outline-danger" aria-label="Delete post: {{ item.title }}">Delete Post</a>
+                                        <a href="{% url 'edit_post' item.slug %}" class="btn btn-sm btn-outline-primary px-1 py-0" aria-label="Edit post: {{ item.title }}">Edit Post</a>
+                                        <a href="{% url 'delete_post' item.slug %}" class="btn btn-sm btn-outline-danger px-1 py-0" aria-label="Delete post: {{ item.title }}">Delete Post</a>
                                     </div>
                                 {% endif %}
                         </div>
@@ -85,10 +85,22 @@
                             </div>
                         </div>
                         <div class="card-footer bg-white border-0">
-                            <small class="text-muted">
-                                Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
-                                {{ item.created_on|date:"M d, Y" }}
-                            </small>
+                            {% if user.is_authenticated and user.profile.role == 'teacher' %}
+                                <div class="w-100 mb-1">
+                                    <form method="POST" action="{% url 'verify_resource' item.id %}" class="verify-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-info w-100" data-resource-id="{{ item.id }}">
+                                            {% if item.verified %}Unverify{% else %}Verify{% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                            <div class="w-100 mb-1">
+                                <small class="text-muted">
+                                    Added by <a href="{% url 'profile' item.added_by.username %}" aria-label="View profile: {{ item.added_by }}">{{ item.added_by }}</a>
+                                    {{ item.created_on|date:"M d, Y" }}
+                                </small>
+                            </div>
 
                             <div class="like-section mt-1">
                                 <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
@@ -103,19 +115,10 @@
                                 </form>
                                 <span class="post-like-count" data-resource-id="{{ item.id }}" aria-live="polite">{{ item.like_count|default:0 }} Likes</span>
                             </div>
-
-                            {% if user.is_authenticated and user.profile.role == 'teacher' %}
-                                <form method="POST" action="{% url 'verify_resource' item.id %}" style="display:inline;" class="verify-form mt-1">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-info" data-resource-id="{{ item.id }}">
-                                        {% if item.verified %}Unverify{% else %}Verify{% endif %}
-                                    </button>
-                                </form>
-                            {% endif %}
                                 {% if user.is_authenticated and item.added_by == user %}
                                     <div class="action-row mt-2">
-                                        <a href="{% url 'edit_resource' item.pk %}" class="btn btn-sm btn-outline-primary" aria-label="Edit resource: {{ item.title }}">Edit Resource</a>
-                                        <a href="{% url 'delete_resource' item.pk %}" class="btn btn-sm btn-outline-danger" aria-label="Delete resource: {{ item.title }}">Delete Resource</a>
+                                        <a href="{% url 'edit_resource' item.pk %}" class="btn btn-sm btn-outline-primary px-1 py-0" aria-label="Edit resource: {{ item.title }}">Edit Resource</a>
+                                        <a href="{% url 'delete_resource' item.pk %}" class="btn btn-sm btn-outline-danger px-1 py-0" aria-label="Delete resource: {{ item.title }}">Delete Resource</a>
                                     </div>
                                 {% endif %}
                         </div>
