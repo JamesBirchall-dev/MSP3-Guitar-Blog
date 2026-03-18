@@ -1,12 +1,25 @@
-# MSP3-Guitar-Blog
+# Guitar-Learning-Blog
 
-![Alt Text](/static/images/readmeimages/guitairblog-devices.png)
+![device view](/static/images/readmeimages/guitairblog-devices.png)
 
-## Scope & Content
+## Table of Contents
 
-### Scope
+- Project Rationale & Purpose
+- Target Audience
+- Features Overview
+- UX & Accessibility
+- Data Schema & Configuration
+- Testing Procedures
+- Deployment Instructions
+- Security Features
+- Development Process
+- Attribution
+- Screenshots & Demo
+- Known Issues & Future Improvements
 
-Concept:
+---
+
+## Project Rationale & Purpose
 
 As someone who has both taught guitar and learned independently, I have found that platforms such as YouTube provide an enormous amount of valuable content but can also be overwhelming for beginners and intermediate learners. With many different teachers, teaching philosophies, and lesson structures available, learners can often end up "going down rabbit holes" of content without developing a balanced or structured learning progression. This can lead to knowledge gaps in key areas such as technique, theory, or practice structure.
 
@@ -18,356 +31,7 @@ Content is organised into subjects and tags, and users can filter the feed to di
 
 Users can also like posts, comments, and resources, allowing the most helpful contributions to surface within the community.
 
-### Content & Wireframes
-
-#### 1. Global Structure - global navbar
-
-Primaary Navigation (top)
-
-**Home / Logo**
-
-- Returns the user to the main homepage feed.
-
-**Subjects**
-
-- Dropdown navigation displaying available subject areas.
-
-- Examples include:
-  - Practice
-  - Songs
-  - Equipment
-  - Music Theory
-  - Tips
-  - Listening
-
-**Search Bar**
-
-- Allows users to search across:
-  - post titles
-  - post content
-  - resource titles
-  - resource descriptions.
-
-**Profile**
-
-- Access to the logged-in user's profile page.
-- Displays the user's contributions and profile information.
-- Provides access to profile editing and logout functionality.
-
-#### 2. Home Page/ Main Feed Page - index.html
-
-The homepage displays the **main community feed**, combining posts and shared learning resources.
-
-This feed allows users to discover the latest or most relevant learning content across the platform.
-
-### Feed Wireframe
-
-**Filter Bar**
-
-Users can refine the content shown in the feed using several filters.
-
-Filter options include:
-
-- Subject filter
-- Tag filter
-- Search query
-- Content type (Posts or Resources)
-
-### Feed Content Structure
-
-Items in the feed appear in **reverse chronological order** and include both posts and resources.
-
-Each item displays:
-
-- Like count (community feedback)
-- Title
-- Author
-- Subject category
-- Tags
-- Creation date
-
-For posts, additional indicators include:
-
-- Number of comments
-- Number of attached resources
-
-This feed is **paginated** to improve performance and readability when large amounts of content are present.
-
-#### 3. Subject Landing Pagee
-
-`subject_list.html`\
-`subject_detail.html`
-
-Subjects organise learning content into clearly defined topic areas.
-
-### Subject List Page
-
-Displays all available subjects along with:
-
-- Subject name
-- Brief description
-- Number of posts
-- Number of resources
-
-This allows users to explore learning topics and navigate to specific subject areas.
-
-### Subject Detail Page
-
-The subject page displays content related to a specific learning category.
-
-The page includes:
-
-- Subject title and description
-- Tag filters specific to the subject
-- Combined feed of posts and resources related to that subject
-
-Users can further filter the subject feed by:
-
-- tags
-- keyword search
-- content type (posts or resources)
-
-#### 4. Post Page - posts/
-
-`post_detail.html`\
-`create_post.html`\
-`edit_post.html`
-
-Posts represent the **core learning content** on the platform.
-
-Posts are created by users with the **Teacher role** and typically contain structured lesson material or instructional content.
-
-### Post Detail Page
-
-The post page is designed to maximise readability and discussion.
-
-**Post Header**
-
-Displays:
-
-- post title
-- author
-- subject
-- tags
-- minimum skill level required
-
-### Content Section
-
-The main content area displays the full post text using a rich text editor format.
-
-This allows teachers to format lessons clearly with headings, paragraphs, and structured explanations.
-
----
-
-### Resources Section
-
-Users can attach learning resources to posts or comments.
-
-Each resource displays:
-
-- title
-- link to the external material
-- description
-- contributor
-- like count
-- verification badge (if approved by a teacher)
-
-Teachers can mark resources as **verified**, highlighting high-quality or recommended materials.
-
----
-
-### Discussion Section
-
-Below the post content is the discussion area where users can comment.
-
-Features include:
-
-- threaded discussion style comments
-- like functionality for comments
-- ability to attach a learning resource when posting a comment
-
-Comments are ordered by:
-
-1.  like count
-2.  creation date
-
-This helps surface the most helpful responses.
-
-#### 5. User Profile Page
-
-`profile.html`
-
-The profile page displays a user's identity and contributions to the platform.
-
-### User Information Card
-
-Displays:
-
-- username
-- user role (beginner, intermediate, advanced, teacher)
-- biography
-
----
-
-### Contribution Feed
-
-The profile page also shows the user's activity in the platform.
-
-Content displayed includes:
-
-- posts created by the user
-- resources shared by the user
-
-These are displayed in a combined feed similar to the homepage and can be filtered by subject, tags, or search.
-
-#### 6. Registration Page
-
-`register.html`
-
-The registration page allows new users to create an account.
-
-The form collects the following information:
-
-- username
-- email address
-- password
-- skill level (beginner, intermediate, advanced)
-
-This information is used to create a **User account and associated Profile model**, which stores the user's role and optional biography.
-
-After registration, users are automatically logged in and redirected to the homepage.
-
-#### Key Platform Interactions
-
-The platform supports several community-driven interactions:
-
-### Likes
-
-Users can like:
-
-- posts
-- comments
-- resources
-
-This helps highlight helpful contributions and encourages engagement.
-
----
-
-### Resource Sharing
-
-Users can share external learning resources by:
-
-- attaching them to comments
-- submitting standalone resources
-
-Resources may include:
-
-- YouTube tutorials
-- online articles
-- guitar tablature
-- instructional material
-
-Teachers can verify resources to highlight trusted content.
-
----
-
-### Filtering and Discovery
-
-Users can discover content using:
-
-- subject categories
-- tags
-- keyword search
-- content type filters
-
-This allows learners to focus on relevant learning material without being overwhelmed by unrelated content.
-
-## UX
-
-### User Stories
-
-#### User Story 1. Beginner Level User– Discovering beginner content
-
-Acceptance Criteria
-
-- User selects “Beginner” during onboarding or in profile
-- Feed defaults to showing Beginner-level posts
-- User can see level labels on every post
-- User can override filters manually if desired
-
-#### User Story 2. Beginner Level User– Getting help in discussions
-
-Acceptance Criteria
-
-- User can post a reply or question on a learning post
-- Replies display author level badge
-- Teacher replies are visually distinct
-- Replies can be upvoted
-
-#### User Story 3. Beginner – Using recommended resources
-
-Acceptance Criteria
-
-- Learning posts display a “Resources” section
-- Resources include title, type, and description
-- User can upvote resources
-- Resources are sorted by usefulness score by default
-
-#### User Story 4. Intermediate User – Filtering by technique
-
-Acceptance Criteria
-
-- Posts support multiple tags (e.g. speed, rhythm)
-- User can filter by subject and tag
-- Filters update results without page reload (UX)
-- Filter state is clearly visible
-
-#### User Story 5. Intermediate User– Sharing resources
-
-Acceptance Criteria
-
-- User can add a resource via URL
-- User must select resource type
-- User must provide a short justification
-- Resource appears immediately in the post
-
-#### User Story 6. Advanced Users – Weighted advice
-
-Acceptance Criteria
-
-- User level affects vote weight internally
-- UI does NOT expose raw calculations to users
-- Replies are sorted by usefulness score
-- Higher-quality replies naturally surface
-
-#### User Story 7. Advanced Users– Curating content
-
-Acceptance Criteria
-
-- Advanced users can upvote/downvote resources
-- Vote affects resource ranking
-- Resource ranking updates dynamically
-- Low-rated resources are visually deemphasized
-
-#### User Story 8. Teacher/ Moderator User – Verifying guidance
-
-Acceptance Criteria
-
-- Teachers have a “Verify Advice” action
-- Verified replies show a badge
-- Only teachers can verify content
-- Verification is reversible (moderation)
-
-#### User Story 9. Teacher/ Moderator User Level – Identifying unanswered
-
-Acceptance Criteria
-
-- System detects posts with unanswered questions
-- Teachers have a filtered view or indicator
-- Sorting by “Needs help” is available
-- Clicking opens discussion directly
-
-## User Profile
+## Target Audience
 
 The 2 main distinct user profiles/roles for this site is Teacher vs Student, student being split into: Beginner, intermediate and advanced. Which will be part of the users' profile.
 
@@ -377,11 +41,151 @@ The teacher profile would be experienced teachers and/or content creators who wa
 
 The students will be self learning people interested in learning the instrument in a structured and thorough way, traffic mainly coming through the existing teachers existing channels and recommendations.
 
-## User Journey
-
-### Overview
+## Features Overview
 
 The platform is designed as a structured, subject based guitar learning community where different levels of users interact through posts, comments and shared learning resources. The User Journey ensures intuitive navigation, clear content organisation and meaniningful engagement via the contribution system.
+
+- CRUD for posts, comments, resources
+- Authentication & user profiles
+- Likes/voting system
+- Resource verification by teachers
+- Filtering, search, pagination
+- AJAX updates for dynamic UX
+- Responsive design
+
+### CRUD for profile, posts, comments and resources
+
+Posts
+
+- Create: Teachers can create new posts (/create/, create_post view).
+- Read: All users can view posts and their details (/post/<slug>/, post_detail view).
+- Update: Authors can edit their posts (/post/<slug>/edit/, edit_post view).
+- Delete: Authors can delete their posts (/post/<slug>/delete/, delete_post view).
+
+Comments
+
+- Create: Users can add comments to posts (handled in post_detail view).
+- Read: Comments are displayed under posts.
+- Update: Users can edit their own comments (/comment/<id>/edit/, edit_comment view).
+- Delete: Users can delete their own comments (/comment/<id>/delete/, delete_comment view).
+
+Resources
+
+- Create: Users can share resources under posts or comments.
+- Read: Resources are shown with posts/comments and in subject feeds.
+- Update: Contributors can edit their resources (/resource/<id>/edit/, edit_resource view).
+- Delete: Contributors can delete their resources (/resource/<id>/delete/, delete_resource view).
+- Verify: Teachers can mark resources as verified (/verify-resource/<id>/, verify_resource view).
+
+Profiles
+
+- Create: Profile is created at user registration.
+- Read: Profile pages show user info, posts, and resources (/profile/<username>/, profile_view).
+- Update: Users can edit their profile (/profile/edit/, edit_profile view).
+- Delete: Not directly exposed (users can delete their account via Django admin or custom logic).
+
+### Authentication & user profiles
+
+Authentication
+
+- Register: Users can sign up with email, password, and select a skill level/role. Registration creates a user and associated profile. (URL: /register/)
+- Login: Users log in using Django's authentication form. (URL: /login/)
+- Logout: Users can log out, ending their session. (URL: /logout/)
+- Role Assignment: During registration, users select a role (Beginner, Intermediate, Advanced, Teacher). Teacher role is restricted/admin-assigned.
+
+User Profiles
+
+- Profile Creation: Automatically created at registration, stores user info and role.
+- Profile View: Each user has a profile page showing their info, posts, and resources. (URL: /profile/<username>/)
+- Profile Edit: Users can update their profile details (bio, skill level, etc.). (URL: /profile/edit/)
+- Role-based Permissions: Teachers can create posts and verify resources; students can comment, share resources, and vote.
+- Reputation Stats: Profiles track likes/votes given and received, building user reputation.
+- Filtering: Profile pages allow filtering by subject, tags, and search.
+
+### Likes/voting system
+
+- Posts: Users can like or unlike posts. Users cannot like their own posts. Like counts are updated dynamically via AJAX. (URL: /like-post/<id>/)
+- Comments: Users can like or unlike comments. (URL: /like-comment/<id>/)
+- Resources: Users can like or unlike shared resources. (URL: /like-resource/<id>/)
+- Feedback: Like actions provide instant feedback and update the UI without page reloads.
+- Reputation: Likes contribute to user reputation, tracked in their profile.
+- Ranking: Content (posts, comments, resources) is sortable by like count and creation date to highlight the most useful contributions.
+- Permissions: Only authenticated users can vote; users cannot vote on their own content.
+
+### Resource verification by teachers
+
+- Purpose: Allows teachers to mark community-submitted resources as "verified," highlighting high-quality learning materials.
+- Who can verify: Only users with the "teacher" role have permission to verify resources.
+- Verification Action: Teachers access a dedicated URL (/verify-resource/<id>/) to mark a resource as verified.
+- UI Feedback: Verified resources are visually distinguished in the UI (e.g., badge or highlight), signaling trustworthiness to learners.
+
+- Workflow:
+- A student or teacher submits a resource under a post or comment.
+- Teachers review resources and can verify them if they meet quality standards.
+- Once verified, the resource is flagged in the database and shown as verified in feeds and post details.
+- Moderation: Verification acts as a moderation layer, helping surface the best learning materials and maintain content quality.
+
+### Filtering, search, sort & pagination
+
+Filtering
+
+- Users can filter content (posts, resources, comments) by subject, tags, and skill level.
+- Filtering options are available on the homepage, subject feeds, and profile pages.
+- AJAX endpoints dynamically update available tags when a subject is selected, improving UX.
+
+Search
+
+- Users can search for posts, resources, or subjects using keywords.
+- Search results are displayed in feeds and can be combined with filtering for precise navigation.
+- Search supports partial matches and is integrated with filtering and sorting.
+
+Sort
+
+- Content (posts, comments, resources) can be sorted by like count, creation date, or other criteria.
+- Sorting helps users find the most relevant or popular content quickly.
+
+Pagination
+
+- Content feeds (posts, comments, resources) are paginated to improve performance and usability.
+- Users can navigate between pages of results, ensuring manageable content loads.
+- Pagination is applied to main feeds, subject feeds, and profile activity lists.
+
+### AJAX updates for dynamic UX
+
+- Like/Voting: Likes on posts, comments, and resources are processed via AJAX, instantly updating counts and UI without page reloads.
+- Filtering: Tag options update dynamically when a subject is selected, using AJAX endpoints for a seamless filtering experience.
+- Search: Search results and filtering are updated in real-time, allowing users to refine queries and see results instantly.
+- Resource Verification: Verification actions by teachers update the resource status in the UI immediately.
+- Commenting: New comments and resources can be submitted and displayed without reloading the page.
+- Feedback: AJAX is used for error/success messages, providing immediate user feedback.
+- Performance: Reduces full-page reloads, improving speed and responsiveness across the site.
+
+### Responsive design
+
+- Mobile-first layout: The site uses a mobile-first approach, ensuring usability on phones, tablets, and desktops.
+- Flexible grids: Content is organized with CSS flexbox and grid layouts, adapting to different screen sizes.
+- Adaptive navigation: Menus, filters, and forms adjust for touch and small screens, providing easy access and readability.
+- Scalable images: Images and media scale automatically to fit device width, maintaining clarity and performance.
+- Accessible controls: Buttons, links, and interactive elements remain usable and visible across all devices.
+- Consistent experience: All features (filtering, search, voting, commenting) are fully functional on any device.
+
+## UX & Accessibility
+
+UX (User Experience)
+
+- Clear navigation: Subjects, tags, and feeds are organized for intuitive browsing.
+- User journeys: Designed for first-time visitors, students, teachers, and returning users, with tailored flows for each.
+- Quick onboarding: Registration is simple, with clear prompts and feedback.
+- Dynamic feedback: Actions (like, comment, verify) provide instant UI updates and success/error messages.
+- Content ranking: Helpful content is surfaced via likes and teacher verification.
+
+Accessibility
+
+- Keyboard navigation: All interactive elements are accessible via keyboard.
+- Semantic HTML: Uses proper HTML tags for structure and screen reader compatibility.
+- Contrast & font size: Ensures readable text and visible controls for all users.
+- Alt text: Images include descriptive alt attributes for screen readers.
+- Responsive controls: Buttons, links, and forms are large and easy to interact with on any device.
 
 ### First Time Visitor
 
@@ -446,17 +250,11 @@ Value:
 2. Dynamic filtering
 3. Ranked content
 
-## Interaction Design
+## Data Schema & Configuration
 
-## Accessbility & Best Practises
+- Data model diagram
 
-## Visual Design
-
-## Data Model Design
-
-### Data Model Diagram
-
-![Description](static/images/readmeimages/readme-data-relationship-diagram.png)
+![relationship diagram](/static/images/readmeimages/readme-data-relationship-diagram.png)
 
 ### Data Entity Relationship Table
 
@@ -981,8 +779,6 @@ This allows the interface to update filtering options without refreshing the pag
 
 ## URL Structure
 
-# URL Structure
-
 The URL configuration maps incoming requests to the appropriate views.
 
 Routes are grouped by feature area.
@@ -1073,4 +869,139 @@ Routes are grouped by feature area.
 
 ## Technologies Used
 
-## Future Improvements
+Django
+
+- Main web framework for backend, ORM, authentication, and routing.
+
+SQLite
+
+- Default database for development and testing.
+
+HTML/CSS/JavaScript
+
+- Frontend structure, styling, and interactivity.
+
+jQuery
+
+- Simplifies AJAX requests and DOM manipulation.
+
+Summernote
+
+- Rich text editor for post content creation.
+
+Bootstrap (or custom CSS)
+
+- Responsive layout and UI components.
+
+Heroku
+
+- Deployment platform for hosting the app.
+
+Python
+
+- Core programming language for backend logic.
+
+Django Messaging Framework
+
+- Provides user feedback (success/error messages).
+
+Django Forms
+
+- Handles user input and validation.
+
+Django Authentication
+
+- Manages user registration, login, logout, and permissions.
+
+AJAX
+
+- Enables dynamic UI updates (likes, filtering, search, etc.).
+
+Django Admin
+
+- Used for admin-level management and teacher role assignment.
+
+Git
+
+- Version control for codebase management.
+
+Environment Variables
+
+- Securely manage secrets and configuration.
+
+### HTML and CSS
+
+HTML Layouts:
+
+- Your main layout is defined in [base.html], which uses Bootstrap 5 via CDN for responsive design and layout.
+- Content is wrapped in a `.container` with `mt-4` for margin, and blocks are used for Django template inheritance.
+- Other templates (login, register, profile, post, subject, etc.) extend this base and use Bootstrap grid classes like `.row`, `.col-md-6`, `.col-lg-5`, `.justify-content-center`, and `.align-items-center` for layout and alignment.
+- Forms and cards are styled with Bootstrap classes (`.card`, `.shadow-sm`, `.p-4`, `.btn`, `.btn-primary`, `.w-100`).
+
+Bootstrap Usage:
+
+- Bootstrap 5 is included for layout, grid, and component styling.
+- Classes like `.container`, `.row`, `.col-*`, `.btn`, `.card`, `.shadow-sm`, `.mb-4`, `.mt-3`, `.w-100`, `.justify-content-center`, `.align-items-center` are used throughout templates.
+- Bootstrap's JS bundle is loaded for interactive components.
+
+CSS:
+
+- Custom theme styles are in [style.css] and similar files in staticfiles.
+- Global styles set background color, font families (`opensans`, `montserrat`, `varela Round`), and text color.
+- Navbar styles: `.navbar`, `.navbar-brand`, `.nav-link` for color, font-weight, and hover effects.
+- Page headers, subject headers, and cards have custom backgrounds, padding, border-radius, and border.
+- Tag badges: `.tag-badge` for inline display, background, color, border-radius, font-size, and hover transitions.
+- Responsive adjustments for mobile and tablet layouts are handled in admin and custom CSS files.
+- Admin and CKEditor styles are included for dashboard, forms, widgets, and rich text editing.
+
+Other Notable Features:
+
+- jQuery is included for custom scripting.
+- Summernote and CKEditor are used for rich text editing, with their own CSS.
+- Custom classes for submit button alignment, tag containers, and form text.
+
+Summary:
+
+- The project uses Bootstrap for layout and responsiveness, with custom CSS for theme and component styling.
+- HTML templates are structured for modularity and reuse, leveraging Django's template inheritance.
+- Rich text editing and admin interfaces are styled with additional CSS.
+
+## Testing Procedures
+
+- Manual and automated testing steps
+- Bugs found and fixes applied
+- Screenshots or test logs
+
+## Deployment Instructions
+
+- Step-by-step guide for deploying (Heroku or other)
+- Environment variables, .gitignore, secrets management
+- Link to live site (if available)
+
+## Security Features
+
+- Passwords/secrets protected via environment variables
+- DEBUG mode off in production
+- User permissions and authentication
+
+## Development Process
+
+- Git workflow: frequent, descriptive commits
+- Branch strategy (if used)
+- Summary of development stages
+
+## Attribution
+
+- Credit for external code, libraries, tutorials
+
+## Screenshots & Demo
+
+- Screenshots of UI and features
+- Link to demo video (optional)
+
+## Known Issues & Future Improvements
+
+- List any known bugs or limitations
+- Suggestions for enhancements
+
+---

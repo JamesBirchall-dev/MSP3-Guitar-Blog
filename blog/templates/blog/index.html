@@ -9,13 +9,12 @@
     <h1>Guitar Learning Blog</h1>
     <p>Your go-to resource for all things guitar. Explore posts, subjects, and resources to enhance your guitar skills.</p>    
 </div>
-    <div class="page-header">
+<div class="page-header">
     <h2>Explore our learning subjects, posts and resources</h2>
     <p><img src="{% static 'images/guitar-blog-teacherverifiedbadge.png' %}" alt="Teacher Verified Badge"></p>
     <p>Check out our posts from our verified teachers and the additional resources our community posts on them to make sure you never run out of learning content.</p>
     <p>Our teachers check and verify all content to ensure quality and accuracy.</p>
-    Click <a href="{% url 'subject_list' %}">here</a> to browse specific subjects for the learning content.</p>
-    </div>
+    <p>Click <a href="{% url 'subject_list' %}">here</a> to browse specific subjects for the learning content.</p>
 </div>
 
 <!-- Filter bar-->
@@ -106,7 +105,7 @@
         {% include "blog/_feed_items.html" %}
 </div>
 
-    <div class="container mt-4">
+<div class="container mt-4">
         <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-auto">
@@ -137,15 +136,15 @@
                     {% endif %}
                 </ul>
             </nav>
-            </div>
         </div>
+    </div>
 </div>
-
+</div>
   {% if feed|length == 0 %}
     <div class="col-12">
         <p>No posts or resources found. Try adjusting your filters or search terms.</p>
     </div>
+    </div>
 {% endif %}
-</div>
     </main>
 {% endblock %}
