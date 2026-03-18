@@ -93,7 +93,7 @@
                             <div class="like-section mt-1">
                                 <form method="POST" action="{% url 'like_resource' item.id %}" style="display:inline;" class="like-form">
                                     {% csrf_token %}
-                                    <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}">
+                                    <button type="submit" class="like-post-btn" data-resource-id="{{ item.id }}" aria-label="Like resource">
                                         {% if item.user_has_liked %}
                                             <i class="fas fa-heart text-danger"></i>
                                         {% else %}
@@ -101,7 +101,7 @@
                                         {% endif %}
                                     </button>
                                 </form>
-                                <span class="post-like-count" data-resource-id="{{ item.id }}">{{ item.like_count|default:0 }} Likes</span>
+                                <span class="post-like-count" data-resource-id="{{ item.id }}" aria-live="polite">{{ item.like_count|default:0 }} Likes</span>
                             </div>
 
                             {% if user.is_authenticated and user.profile.role == 'teacher' %}

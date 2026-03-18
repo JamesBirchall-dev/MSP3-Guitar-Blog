@@ -931,6 +931,41 @@ Environment Variables
 
 ### HTML and CSS
 
+HTML Layouts:
+
+- Your main layout is defined in [base.html], which uses Bootstrap 5 via CDN for responsive design and layout.
+- Content is wrapped in a `.container` with `mt-4` for margin, and blocks are used for Django template inheritance.
+- Other templates (login, register, profile, post, subject, etc.) extend this base and use Bootstrap grid classes like `.row`, `.col-md-6`, `.col-lg-5`, `.justify-content-center`, and `.align-items-center` for layout and alignment.
+- Forms and cards are styled with Bootstrap classes (`.card`, `.shadow-sm`, `.p-4`, `.btn`, `.btn-primary`, `.w-100`).
+
+Bootstrap Usage:
+
+- Bootstrap 5 is included for layout, grid, and component styling.
+- Classes like `.container`, `.row`, `.col-*`, `.btn`, `.card`, `.shadow-sm`, `.mb-4`, `.mt-3`, `.w-100`, `.justify-content-center`, `.align-items-center` are used throughout templates.
+- Bootstrap's JS bundle is loaded for interactive components.
+
+CSS:
+
+- Custom theme styles are in [style.css] and similar files in staticfiles.
+- Global styles set background color, font families (`opensans`, `montserrat`, `varela Round`), and text color.
+- Navbar styles: `.navbar`, `.navbar-brand`, `.nav-link` for color, font-weight, and hover effects.
+- Page headers, subject headers, and cards have custom backgrounds, padding, border-radius, and border.
+- Tag badges: `.tag-badge` for inline display, background, color, border-radius, font-size, and hover transitions.
+- Responsive adjustments for mobile and tablet layouts are handled in admin and custom CSS files.
+- Admin and CKEditor styles are included for dashboard, forms, widgets, and rich text editing.
+
+Other Notable Features:
+
+- jQuery is included for custom scripting.
+- Summernote and CKEditor are used for rich text editing, with their own CSS.
+- Custom classes for submit button alignment, tag containers, and form text.
+
+Summary:
+
+- The project uses Bootstrap for layout and responsiveness, with custom CSS for theme and component styling.
+- HTML templates are structured for modularity and reuse, leveraging Django's template inheritance.
+- Rich text editing and admin interfaces are styled with additional CSS.
+
 ## Testing Procedures
 
 - Manual and automated testing steps
