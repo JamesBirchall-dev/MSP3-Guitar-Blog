@@ -27,7 +27,7 @@
                 <select name="subject" id="subject" class="form-select">
                     <option value="">All Subjects</option>
                     {% for subject in subjects %}
-                        <option value="{{ subject.slug }}" data-pk="{{ subject.pk }}" {% if subject.slug == active_subject %}selected{% endif %}>
+                        <option value="{{ subject.pk }}" data-slug="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
                             {{ subject.name }}
                         </option>
                     {% endfor %}
