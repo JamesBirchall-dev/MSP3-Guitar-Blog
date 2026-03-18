@@ -57,10 +57,8 @@
                     {{ form.title }}
                 </div>
                 <div class="form-group">
-                    {{ form.content.label_tag }}
-                    {% for widget in form.content.subwidgets %}
-                        {{ widget }}
-                    {% endfor %}
+                        {{ form.content.label_tag }}
+                        {{ form.content }}
                 </div>
                 <div class="form-group">
                     {{ form.min_level.label_tag }}

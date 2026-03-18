@@ -1,5 +1,7 @@
 # MSP3-Guitar-Blog
 
+![Alt Text](/static/images/readmeimages/guitairblog-devices.png)
+
 ## Scope & Content
 
 ### Scope
