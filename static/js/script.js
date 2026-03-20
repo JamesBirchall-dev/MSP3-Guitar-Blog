@@ -107,8 +107,12 @@
                 data: form.serialize(),
                 success: function(data) {
                     const itemId = $btn.data('post-id') || $btn.data('comment-id') || $btn.data('resource-id');
-                    if (itemId) {
-                        $(`.post-like-count[data-post-id="${itemId}"], .post-like-count[data-comment-id="${itemId}"], .post-like-count[data-resource-id="${itemId}"]`).text(data.like_count);
+                    if ($btn.data('post-id')) {
+                        $(`.post-like-count[data-post-id="${itemId}"]`).text(data.like_count + " likes");
+                    } else if ($btn.data('comment-id')) {
+                        $(`.post-like-count[data-comment-id="${itemId}"]`).text(data.like_count + " likes");
+                    } else if ($btn.data('resource-id')) {
+                        $(`.post-like-count[data-resource-id="${itemId}"]`).text(data.like_count + " likes");
                     }
                     if (data.liked) {
                         $btn.find('i').removeClass('far').addClass('fas text-danger');

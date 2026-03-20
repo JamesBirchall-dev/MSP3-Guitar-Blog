@@ -704,9 +704,9 @@ def delete_resource(request, pk):
 @login_required
 def like_post(request, post_id):
 
-    if request.method != "POST":
-        return redirect("home")
     post = get_object_or_404(Post, id=post_id)
+    if request.method != "POST":
+        return redirect("post_detail", slug=post.slug)
     if post.author == request.user:
         return redirect(request.META.get("HTTP_REFERER", "index"))
     like, created = Like.objects.get_or_create(
@@ -726,29 +726,35 @@ def like_post(request, post_id):
 
 @login_required
 def like_comment(request, comment_id):
-    if request.method != "POST":
-        return redirect("home")
     comment = get_object_or_404(Comment, id=comment_id)
+    if request.method != "POST":
+        return redirect("post_detail", slug=comment.post.slug)
     if comment.author == request.user:
         return redirect("post_detail", slug=comment.post.slug)
-    like, created = Like.objects.get_or_create(
-        user=request.user,
-        comment=comment
-    )
-    if not created:
-        like.delete()
-    liked = Like.objects.filter(user=request.user, comment=comment).exists()
-    like_count = comment.likes.count()
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'liked': liked, 'like_count': like_count})
-    return redirect("post_detail", slug=comment.post.slug)
+    try:
+        like, created = Like.objects.get_or_create(
+            user=request.user,
+            comment=comment
+        )
+        if not created:
+            like.delete()
+        liked = Like.objects.filter(
+            user=request.user, comment=comment).exists()
+        like_count = comment.likes.count()
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'liked': liked, 'like_count': like_count})
+        return redirect("post_detail", slug=comment.post.slug)
+    except Exception as e:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        return redirect("post_detail", slug=comment.post.slug)
 
 
 @login_required
 def like_resource(request, resource_id):
-    if request.method != "POST":
-        return redirect("home")
     resource = get_object_or_404(Resource, id=resource_id)
+    if request.method != "POST":
+        return redirect("post_detail", slug=resource.post.slug)
     if resource.added_by == request.user:
         return redirect(request.META.get("HTTP_REFERER", "index"))
     like, created = Like.objects.get_or_create(

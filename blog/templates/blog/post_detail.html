@@ -4,6 +4,7 @@
 <main>
 
 <!-- Heading -->
+<div class = "card mb-4 py-3 px-3">
 <h2>{{ post.title }}</h2>
 <div class="text-muted">
     Subject: <a href="{% url 'subject_detail' post.subject.slug %}" aria-label="View subject: {{ post.subject }}">{{ post.subject }}</a> |
@@ -27,11 +28,11 @@
                         <i class="far fa-heart"></i>
                     {% endif %}
                 </button>
+                <span class="post-like-count ms-1" data-post-id="{{ post.id }}">{{ post.like_count }} likes</span>
             </form>
         {% endif %}
-        <span class="post-like-count" data-post-id="{{ post.id }}">{{ post.like_count }}</span>
     </div>
-
+</div>
 
 <!-- Post Content -->
 
@@ -48,6 +49,67 @@
 
 <hr>
 
+{% if user.is_authenticated %}
+    <!-- Add Comment Button -->
+    <div class="mt-4 mb-2">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCommentModal">
+            Add a Comment
+        </button>
+    </div>
+    <!-- Bootstrap Modal for Add Comment -->
+    <div class="modal fade" id="addCommentModal" tabindex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCommentModalLabel">Add a Comment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% if comment_form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in comment_form.errors.items %}
+                        {% for error in errors %}
+                            <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <form method="POST" class="comment-form">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    {{ comment_form.content.label_tag }}
+                    {{ comment_form.content }}
+                </div>
+                <div class="form-group mb-2">
+                    <strong>Optionally add a resource:</strong>
+                </div>
+                <div class="form-group mb-2">
+                    {{ comment_form.resource_title.label_tag }}
+                    {{ comment_form.resource_title }}
+                </div>
+                <div class="form-group mb-2">
+                    {{ comment_form.resource_url.label_tag }}
+                    {{ comment_form.resource_url }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ comment_form.resource_description.label_tag }}
+                    {{ comment_form.resource_description }}
+                </div>
+                <div class="submit-section">
+                    <button type="submit" name="comment_submit" class="btn btn-primary">Add Comment</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% else %}
+    <span class="mt-4">
+        <a href="{% url 'login' %}" aria-label="Login to add a comment">Login</a> to add a comment.
+    </span>
+{% endif %}
 
 <h4>Comments & Learning Resources</h4>
 
@@ -60,10 +122,10 @@
                 <small class="text-muted ms-2">{{ comment.created_on }}</small>
             </div>
             {% if user.is_authenticated %}
-                <form method="POST" action="{% url 'like_comment' comment.id %}" class="like-form">
+                <form method="POST" action="{% url 'like_comment' comment.id %}" class="like-form" onsubmit="return false;">
                     {% csrf_token %}
                     <span class="post-like-count" data-comment-id="{{ comment.id }}">{{ comment.like_count }}</span> likes
-                    <button type="submit" class="like-post-btn" data-comment-id="{{ comment.id }}" aria-label="Like comment">
+                    <button type="button" class="like-post-btn" data-comment-id="{{ comment.id }}" aria-label="Like comment">
                         {% if comment.user_has_liked %}
                             <i class="fas fa-heart text-danger"></i>
                         {% else %}
@@ -91,10 +153,10 @@
                         <li class="resource-item">
                             <div class="position-relative">
                                 <div class="like-section resource-like">
-                                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;" class="like-form">
+                                    <form method="POST" action="{% url 'like_resource' resource.id %}" style="display:inline;" class="like-form" onsubmit="return false;">
                                         {% csrf_token %}
                                         <span class="post-like-count" data-resource-id="{{ resource.id }}">{{ resource.like_count }}</span> likes
-                                        <button type="submit" class="like-post-btn" data-resource-id="{{ resource.id }}" aria-label="Like resource">
+                                        <button type="button" class="like-post-btn" data-resource-id="{{ resource.id }}" aria-label="Like resource">
                                             {% if resource.user_has_liked %}
                                                 <i class="fas fa-heart text-danger"></i>
                                             {% else %}
@@ -144,62 +206,67 @@
 
 
 {% if user.is_authenticated %}
-    <h3 class="mt-4">Add a Comment</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-lg-6">
-                <div class="card create-post-form mb-4">
-                    <div class="card-body">
-                        {% if comment_form.errors %}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for field, errors in comment_form.errors.items %}
-                                    {% for error in errors %}
-                                        <li><strong>{{ field|title }}:</strong> {{ error }}</li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% endif %}
-                        <form method="POST" class="comment-form">
-                            {% csrf_token %}
-                            <div class="form-group mb-3">
-                                {{ comment_form.content.label_tag }}
-                                {{ comment_form.content }}
-                            </div>
-                            <div class="form-group mb-2">
-                                <strong>Optionally add a resource:</strong>
-                            </div>
-                            <div class="form-group mb-2">
-                                {{ comment_form.resource_title.label_tag }}
-                                {{ comment_form.resource_title }}
-                            </div>
-                            <div class="form-group mb-2">
-                                {{ comment_form.resource_url.label_tag }}
-                                {{ comment_form.resource_url }}
-                            </div>
-                            <div class="form-group mb-3">
-                                {{ comment_form.resource_description.label_tag }}
-                                {{ comment_form.resource_description }}
-                            </div>
-                            <div class="submit-section">
-                                <button type="submit" name="comment_submit" class="btn btn-primary">Add Comment</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <!-- Add Comment Button -->
+    <div class="mt-4 mb-2">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCommentModal">
+            Add a Comment
+        </button>
+    </div>
+    <!-- Bootstrap Modal for Add Comment -->
+    <div class="modal fade" id="addCommentModal" tabindex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCommentModalLabel">Add a Comment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% if comment_form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in comment_form.errors.items %}
+                        {% for error in errors %}
+                            <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
             </div>
+            {% endif %}
+            <form method="POST" class="comment-form">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    {{ comment_form.content.label_tag }}
+                    {{ comment_form.content }}
+                </div>
+                <div class="form-group mb-2">
+                    <strong>Optionally add a resource:</strong>
+                </div>
+                <div class="form-group mb-2">
+                    {{ comment_form.resource_title.label_tag }}
+                    {{ comment_form.resource_title }}
+                </div>
+                <div class="form-group mb-2">
+                    {{ comment_form.resource_url.label_tag }}
+                    {{ comment_form.resource_url }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ comment_form.resource_description.label_tag }}
+                    {{ comment_form.resource_description }}
+                </div>
+                <div class="submit-section">
+                    <button type="submit" name="comment_submit" class="btn btn-primary">Add Comment</button>
+                </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 {% else %}
     <span class="mt-4">
         <a href="{% url 'login' %}" aria-label="Login to add a comment">Login</a> to add a comment.
     </span>
-    
 {% endif %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'summernote/summernote.min.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
+    ...existing code...
 
 {% endblock %}
 </main>
