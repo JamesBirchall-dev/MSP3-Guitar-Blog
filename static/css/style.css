@@ -1,4 +1,3 @@
-
 /* Global Theme Styles */
 a {
     color: #1d5996 !important;
@@ -406,4 +405,25 @@ form.card {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+/* Like section spacing and separation */
+.like-section {
+    margin-top: 1.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e6dccf;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+@media (max-width: 600px) {
+    .like-section {
+        margin-top: 1.2rem;
+        padding-top: 0.5rem;
+        font-size: 1em;
+        gap: 4px;
+    }
 }
