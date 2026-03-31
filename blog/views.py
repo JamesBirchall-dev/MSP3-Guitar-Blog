@@ -520,7 +520,7 @@ def register_view(request):
             login(request, user)
             messages.success(
                 request, "Registration successful! You are now logged in.")
-            return redirect('home')
+            return redirect('index')
         else:
             messages.error(
                 request, "There was an error with your registration.")
