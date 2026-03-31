@@ -156,6 +156,7 @@ def index(request):
 
     # Filter by tags if provided (supports multiple tags)
     tag_slug = request.GET.getlist('tag')
+    print('DEBUG: tag_slug from GET:', tag_slug)
     if tag_slug:
         posts = posts.filter(tags__slug__in=tag_slug)
 

@@ -24,11 +24,11 @@
             <div class="col-md-3">
                 <label class="form-label" for="subject">Filter by Subject:</label>
                 <select name="subject" id="subject" class="form-select">
-                    <option value="">All Subjects</option>
+                      <option value="" data-pk="null">All Subjects</option>
                     {% for subject in subjects %}
-                        <option value="{{ subject.pk }}" data-slug="{{ subject.slug }}" {% if subject.slug == active_subject %}selected{% endif %}>
-                            {{ subject.name }}
-                        </option>
+                    <option value="{{ subject.slug }}" data-pk="{{ subject.pk }}" {% if subject.slug == active_subject %}selected{% endif %}>
+                    {{ subject.name }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>

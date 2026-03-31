@@ -45,7 +45,7 @@
 
         // fetch tags for selected subject and show/hide tag labels
         function filterTagsAjax() {
-            const selectedSubjectId = subjectSelect.val();
+            const selectedSubjectId = subjectSelect.find('option:selected').data('pk');
 
             // If no subject is selected, show all tags
             if (!selectedSubjectId || selectedSubjectId === 'null') { return; }
