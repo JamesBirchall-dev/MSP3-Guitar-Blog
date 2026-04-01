@@ -20,8 +20,10 @@
             {% csrf_token %}
 
             <!--form fields loop through for better control and styling -->
-            {% for field in form %}
-                    {% if field.name == 'bio' %}
+            {% for field in form %} 
+                {% if field.name == 'role' and request.user.profile.role == 'teacher' %}
+                    {# Do not render the role field for teachers #}
+                {% elif field.name == 'bio' %}
                     <div class="mb-3 summernote-field">
                         {{ field.label_tag }}
                         {{ field }}
