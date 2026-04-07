@@ -6,18 +6,119 @@
 
 - Project Rationale & Purpose
 - Target Audience
+- Design & Wireframes
+  - Main Page Wireframes
+    - Navbar
+    - Home Feed Page (index.html)
+    - Profile Page (profile.html)
+    - Subject Page (subject.html)
+    - Subject Detail Page (subject_detail.html)
+    - Post Detail Page (post_detail.html)
 - Features Overview
+  - CRUD for profile, posts, comments and resources
+  - Authentication & user profiles
+  - Likes/voting system
+  - Resource verification by teachers
+  - Filtering, search, sort & pagination
+  - AJAX updates for dynamic UX
+  - Responsive design
 - UX & Accessibility
+  - First Time Visitor
+  - Registered Student (Role: Beginner - Advanced)
+  - Teacher User
+  - Returning User
 - Data Schema & Configuration
+  - Data Entity Relationship Table
+- Relationship Overview
+  - User Relationships
+  - Content Structure
+  - Voting System
+  - Summary
+- Architechture Overview
+  - Application Architecture
+- Models
+  - Tag
+  - Post
+  - Comment
+  - Resource
+  - Like
+- Forms
+  - Register Forms
+  - PostForm
+  - CommentForm
+  - ResourceForm
+  - ProfileForm
+- Views
+  - Feed Views
+    - home
+    - index
+  - Post Views
+    - post_detail
+    - create_post
+    - edit_post
+    - delete_post
+  - Comment Views
+    - edit_comment
+    - delete_comment
+  - Resource Views
+    - edit_resource
+    - delete_resource
+    - verify_resource
+  - Profile Views
+    - profile_view
+    - edit_profile
+  - Authentication Views
+    - register_view
+    - login_view
+    - logout_view
+  - Voting Views
+    - like_post
+    - like_comment
+    - like_resource
+  - Subject Views
+    - subject_list_view
+    - subject_detail_view
+  - Utility Views
+    - get_subject_tags
+- URL Structure
+  - Home
+  - Posts
+  - Comments
+  - Resources
+  - Voting
+  - Profiles
+  - Subjects
+  - Authentication
+  - AJAX
+- Technologies Used
+  - HTML and CSS
 - Testing Procedures
+  - User Story Testing
+    - User Story 1: As a Beginner Level User– Discovering beginner content
+    - User Story 2: As a Beginner Level User– Getting help in discussions
+    - User Story 3. As a Beginner - Advanced User – Using recommended resources
 - Deployment Instructions
 - Security Features
 - Development Process
-- Attribution
-- Screenshots & Demo
-- Known Issues & Future Improvements
-
----
+  - User Story Testing
+    - User Story 1: As a Beginner Level User– Discovering beginner content
+    - User Story 2: As a Beginner Level User– Getting help in discussions
+    - User Story 3. As a Beginner - Advanced User – Using recommended resources
+    - User Story 4. Intermediate - Advanced User – Filtering by technique
+    - User Story 5. Intermediate - Advanced User– Sharing resources
+    - User Story 6. Teacher Users– Curating content
+    - User Story 7. All Users - Visually readable content
+  - Manual testing overview
+  - Lighthouse Testing Reports
+    - Index
+    - Profile
+    - Profile Edit
+    - Subjects
+    - Create Post
+  - HTML, CSS and JS Validation
+  - Bugs & Fixes
+    - Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds
+    - Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.
 
 ## Project Rationale & Purpose
 
@@ -40,6 +141,67 @@ Teacher will only be asigned by admin through application to ensure learning con
 The teacher profile would be experienced teachers and/or content creators who want to provide continued content, this will allow them to cross promote their existing social media channels.
 
 The students will be self learning people interested in learning the instrument in a structured and thorough way, traffic mainly coming through the existing teachers existing channels and recommendations.
+
+## Design & Wireframes
+
+### Design Choices
+
+As this is a blog, best practises dictate to ensure clear readibility as the priority with well structured information. Looking at sites like www.reddit.com, a light, high contrast color approach would fit best for this project. With heavy use of bootstrap for simple device scalability and layout.
+
+#### Font
+
+Montserrat and Varela round chosen as clear and well rounded language. The sans-serif font family is well recommended for people with reading disabilities due to it's clearly spaced lettering. Ideal for a blog.
+
+h1, h2, h3, h4, h5
+font-family: "montserrat", sans-serif;
+font-weight: 600;
+letter-spacing: 0.5px;
+
+.navbar-brand
+font-family: "varela Round", sans-serif;
+font-size: 1.4rem;
+
+#### Color
+
+Primary use of white and black for cards and the following color for main background, as the site is guitar based I chose a color similar to the typical wood that you would get on an acoustic guitar.
+
+background-color: #f5e0c4
+
+### Main Page Wireframes
+
+The following are basic layout wireframes for the main navigatable pages on the site. The edit and create functions will use a summernote widget with basic window functionality for simplicity.
+
+#### Navbar
+
+A simple bootstrap navbar with logo on left and links to the profile, create post (teacher role only function), home feed and login/out.
+
+![navbar wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-navbar.png)
+
+#### Home Feed Page (index.html)
+
+The landing page for the site, will provide a basic overview of the site via the header cards and subject information and links, with a quick access to the home feed below which will show the latest posts and resources with filter functionality.
+![index wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-index.png)
+
+#### Profile Page (profile.html)
+
+A users' personal profile page including the heading of their name a long with a short, optional bio field that the user can edit for themselves, some stats also showing their upvoting stats. Below this, a personal feed showing the user's contribution (filtered by user).
+![profile wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-profile.png)
+
+#### Subject Page (subject.html)
+
+The main navigation by subject page, a short heading and description. This will be automatically pulled from the django DB and editable in the admin panel.
+The subjects will display via card format with a short description, with CTA buttons to direct the user to the subject detail page for more specific reading.
+![subject wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-subject.png)
+
+#### Subject Detail Page (subject_detail.html)
+
+The subject details purpose is to display the content of the subject via long description and provide underneat, a subject specific feed that allows the user to see related resources and posts which have been categorised under this specific subject.
+![subject detail](/static/images/readmeimages/readme-guitairblog-wireframe-subject-detail.png)
+
+#### Post Detail Page (post_detail.html)
+
+A page create by teacher or above permission roles to allow users to comment with optional shared resource.
+This feed is the only one which shows comments and comments with nested resource.
 
 ## Features Overview
 
@@ -193,11 +355,13 @@ Journey
 
 1. Lands on the homepage.
 2. Browses subjects from the subject list.
+   ![first time 1 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-1.png)
+
 3. Selects a subject.
-4. Views posts by subject.
-5. Opens a post.
-6. Reads comments and shared resources.
-7. Registers to participate in community.
+
+![first time 2 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-2.png) 4. Views posts by subject. 5. Opens a post.
+![first time 3 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-3.png) 6. Reads comments and shared resources. 7. Registers to participate in community.
+![first time 4 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-4.png)
 
 Value:
 
@@ -211,10 +375,25 @@ Journey:
 
 1. Logs into account
 2. Reads recent posts via homefeed
+
+![revisit 1 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-1.png)
+
 3. Navigates or filters to subject for posts and resources.
+
+![revisit 2 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-2.png)
+
 4. leaves comment and optionally shares resources for posts.
+
+![revisit 3 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-3.png)
+![revisit 4 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-4.png)
+
 5. votes on helpful resources.
+
+![revisit 5 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-5.png)
+
 6. See's own profile for their contribution.
+
+![revisit 6 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-6.png)
 
 Value:
 
@@ -230,8 +409,13 @@ Value:
 2. Create a new post
 3. Assign a subject to post with any relevant tags
 4. Publish post
+
+![teacher 1 detail](/static/images/readmeimages/readme-guitairblog-ux-teacher-1.png)
+
 5. Engages with students comments and resources.
 6. Moderates and monitors resources shared under their posts.
+
+![teacher 2 detail](/static/images/readmeimages/readme-guitairblog-ux-teacher-2.png)
 
 ### Returning User
 
@@ -968,40 +1152,463 @@ Summary:
 
 ## Testing Procedures
 
-- Manual and automated testing steps
-- Bugs found and fixes applied
-- Screenshots or test logs
+### User Story Testing
+
+#### User Story 1: As a Beginner Level User– Discovering beginner content
+
+Acceptance Criteria
+
+1. User selects “Beginner” during onboarding or in profile
+   Passed - See image
+   ![user story 1a](/static/images/readmeimages/readme-guitairblog-userstories-1-a.png)
+
+2. User can see level labels on every post
+   Passed - See image
+   ![user story 1b](/static/images/readmeimages/readme-guitairblog-userstories-1-b.png)
+
+3. User can override filters manually if desired
+   Passed - See image
+   ![user story 1c](/static/images/readmeimages/readme-guitairblog-userstories-1-c.png)
+
+#### User Story 2: As a Beginner Level User– Getting help in discussions
+
+Acceptance Criteria
+
+1. User can post a reply or question on a learning post
+   Passed - See image
+   ![user story 2a](/static/images/readmeimages/readme-guitairblog-userstories-2-a.png)
+
+2. Replies display author
+   Passed - See image
+   ![user story 2b](/static/images/readmeimages/readme-guitairblog-userstories-2-b.png)
+
+3. Teacher approvals are visually distinct
+   Passed - See image
+   ![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-c.png)
+
+4. Replies can be upvoted
+   Passed - See image
+   ![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-d.png)
+
+#### User Story 3. As a Beginner - Advanced User – Using recommended resources
+
+Acceptance Criteria
+
+1. Learning posts display a “Resources” section
+2. Resources include title, type, and description
+3. User can upvote resources
+
+Passed - See image
+![user story 3a](/static/images/readmeimages/readme-guitairblog-userstories-3-a.png)
+
+#### User Story 4. Intermediate - Advanced User – Filtering by technique
+
+Acceptance Criteria
+
+1. Posts support multiple tags (e.g. speed, rhythm)
+2. User can filter by subject and tag
+   Passed - See image
+   ![user story 4a](/static/images/readmeimages/readme-guitairblog-userstories-4-a.png)
+
+#### User Story 5. Intermediate - Advanced User– Sharing resources
+
+Acceptance Criteria
+
+1. User can add a resource via URL
+2. User must select resource type
+3. User must provide a short justification
+
+Passed - See image
+![user story 5a](/static/images/readmeimages/readme-guitairblog-userstories-5-a.png)
+
+#### User Story 6. Teacher Users– Curating content
+
+Acceptance Criteria
+
+1. Teachers have a “Verify Advice” action
+2. Verified replies show a badge
+3. Only teachers can verify content
+4. Verification is reversible (moderation)
+
+Passed - See image
+![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-c.png)
+
+#### User Story 7. All Users - Visually readable content
+
+1. High accessibility
+   Passed - Using lighthouse testing to ensure score over 80 for accessibility.
+
+2. High contrast between background and font
+   Passed - Use of white/light tan background with black/brown font.
+
+3. Digestable layouts with intuitive design
+   Passed - Use of cards and simple format to ensure.
+
+4. Device Accessible
+   Passed - Use of bootstrap for content stacking, lighthouse testing on both desktop and mobile to ensure.
+
+### Manual testing overview
+
+Primarily done via Google Chrome.
+
+I tested the python queries as I implemented them through production with periodic testing on the deployed site to ensure no major bugs.
+Once this was satisfactory, I tested all actions and navigation by at least 1 account in every role. Below is the table I used to guide this process and record any issues to be fixed.
+
+![user testing](/static/images/readmeimages/readme-guitairblog-manual-test-sheet.png)
+
+### Lighthouse Testing Reports
+
+I used the lighthouse extension to test overall performance, accessibility, best practises and SEO scoring on each html template. My goal was to acheive over 80 in all where posssible, here are the page's peeformance reports:
+
+#### Index
+
+![lighthouse index desktop](/static/images/readmeimages/readme-guitairblog-index-lighthouse-desktop.png)
+![lighthouse index mobile](/static/images/readmeimages/readme-guitairblog-index-lighthouse-mobile.png)
+
+#### Profile
+
+![lighthouse profile desktop](/static/images/readmeimages/readme-guitairblog-profile-lighthouse-desktop.png)
+![lighthouse profile mobile](/static/images/readmeimages/readme-guitairblog-profile-lighthouse-mobile.png)
+
+#### Profile Edit
+
+![lighthouse profile edit desktop](/static/images/readmeimages/readme-guitairblog-profile-edit-lighthouse-desktop.png)
+![lighthouse profile edit mobile](/static/images/readmeimages/readme-guitairblog-profile-edit-lighthouse-mobile.png)
+
+#### Subjects
+
+![lighthouse subjects desktop](/static/images/readmeimages/readme-guitairblog-subjects-lighthouse-desktop.png)
+![lighthouse subjects mobile](/static/images/readmeimages/readme-guitairblog-subjects-lighthouse-mobile.png)
+
+#### Create Post
+
+![lighthouse create desktop](/static/images/readmeimages/readme-guitairblog-createpost-lighthouse-desktop.png)
+![lighthouse create mobile](/static/images/readmeimages/readme-guitairblog-createpost-lighthouse-mobile.png)
+
+### HTML, CSS and JS Validation
+
+#### HTML Validation
+
+All pages passed html validation with the exception of the following errors which appear on all text edit pages and are due to the 'Summernote' widget.
+The widget is required for free rich text capability on this website. As the errors pertain to this and appearing within the script, and also summernote has little to no documentation. This is an unavoidable error due to requiring the widget to scale correctly for the device via forcing dimensions, so I have passed this for deployment/ live. The following are the errors which appear.
+
+Error: Bad value true for attribute hidden on element textarea.
+
+From line 193, column 21; to line 193, column 95
+
+textarea name"content" cols"40" rows"10" id"id_content" hidden"true">↩</tex
+
+Error: Element style not allowed as child of element div in this context. (Suppressing further errors from this subtree.)
+
+From line 197, column 1; to line 197, column 7
+
+</script>↩<style>↩ifram
+
+Contexts in which element style may be used:
+Where metadata content is expected.
+In a noscript element that is a child of a head element.
+Content model for element div:
+If the element is a child of a dl element: One or more dt elements followed by one or more dd elements, optionally intermixed with script-supporting elements.
+Otherwise, if the element is a descendant of an option element: Zero or more option element inner content elements.
+Otherwise, if the element is a descendant of an optgroup element: Zero or more optgroup element inner content elements.
+Otherwise, if the element is a descendant of a select element: Zero or more select element inner content elements.
+Otherwise: flow content.
+Error: Attribute cols not allowed on element div at this point.
+
+From line 207, column 1; to line 207, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute rows not allowed on element div at this point.
+
+From line 207, column 1; to line 207, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute width not allowed on element div at this point.
+
+From line 207, column 1; to line 207, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute height not allowed on element div at this point.
+
+From line 207, column 1; to line 207, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Bad value 100% for attribute width on element iframe: Expected a digit but saw % instead.
+
+From line 208, column 3; to line 208, column 112
+
+#ERROR!
+
+Warning: The frameborder attribute on the iframe element is obsolete. Use CSS instead.
+
+From line 208, column 3; to line 208, column 112
+
+#ERROR!
+
+Error: Bad value true for attribute hidden on element textarea.
+
+From line 225, column 21; to line 225, column 121
+
+textarea name"resource_description" cols"40" rows"10" id"id_resource_description" hidden"true">↩</tex
+
+Error: Element style not allowed as child of element div in this context. (Suppressing further errors from this subtree.)
+
+From line 229, column 1; to line 229, column 7
+
+/script>↩<style>↩ifram
+
+Contexts in which element style may be used:
+Where metadata content is expected.
+In a noscript element that is a child of a head element.
+Content model for element div:
+If the element is a child of a dl element: One or more dt elements followed by one or more dd elements, optionally intermixed with script-supporting elements.
+Otherwise, if the element is a descendant of an option element: Zero or more option element inner content elements.
+Otherwise, if the element is a descendant of an optgroup element: Zero or more optgroup element inner content elements.
+Otherwise, if the element is a descendant of a select element: Zero or more select element inner content elements.
+Otherwise: flow content.
+Error: Attribute cols not allowed on element div at this point.
+
+From line 239, column 1; to line 239, column 75
+
+/style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute rows not allowed on element div at this point.
+
+From line 239, column 1; to line 239, column 75
+
+/style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute width not allowed on element div at this point.
+
+From line 239, column 1; to line 239, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Attribute height not allowed on element div at this point.
+
+From line 239, column 1; to line 239, column 75
+
+↩</style>↩<div class"summernote-div" cols"40" rows"10" width"100%" height"300">↩ <if
+
+Attributes for element div:
+Global attributes
+Error: Bad value 100% for attribute width on element iframe: Expected a digit but saw % instead.
+
+From line 240, column 3; to line 240, column 138
+
+#ERROR!
+
+Warning: The frameborder attribute on the iframe element is obsolete. Use CSS instead.
+
+From line 240, column 3; to line 240, column 138
+
+"300">↩ <iframe id"id_resource_description_iframe" src"/summernote/editor/id_resource_description/" frameborder"0" width"100%" height"300"></ifra
+
+#### CSS Validation (style.css W3)
+
+![css validation](/static/images/readmeimages/readme-guitairblog-css-validation.png)
+
+#### Javascript (script.js JSHINT)
+
+![jshint validation](/static/images/readmeimages/readme-guitarblog-jshint-validation.png)
+
+### Bugs & Fixes
+
+The following are the main bugs and fixes applied during the testing phase of my project:
+
+#### Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds
+
+Expected result: When selecting a subject via filter drop down, the tags assigned to the subject should appear and be clickable.
+
+Troubleshooting:
+
+Step 1: As I had recently mass-deleted posts via admin panel, my first step was to clean the database for orphan tags in case this was causing any issues with the database. I used the commands and removed 90 orphaned tags:
+
+![issue 1](/static/images/readmeimages/readme-guitairblog-issues-1.png)
+
+Step 1 Outcome: Fail
+
+Fail: However did succeed in cleaning data base as screenshot shows 'Tag Orphans' did require purging following some deletions of content via Django Admin
+
+Step 2
+I had discovered through further investigation that the url for subject filter was not returning the slug but the pk value.
+Solution Steps
+
+1. Dropdown Value and Data Attribute
+   Changed the subject dropdown <option> value to use the subject’s slug (for filtering in the view).
+   Added/ensured a data-pk attribute on each <option> (for AJAX/tag filtering).
+   Set the "All Subjects" option to:
+2. JavaScript Update
+   Updated the tag filtering AJAX to use the subject’s primary key from data-pk:
+   Ensured the AJAX does not run if "All Subjects" is selected:
+3. Template Consistency
+   Applied these changes to both profile.html and index.html to ensure consistent behavior across your site.
+4. No Model or Migration Changes Needed
+5. Result
+   Subject filtering now works using slugs (clean URLs).
+   Tag filtering by subject works via AJAX, using the subject’s primary key.
+
+Result: No more broken dropdowns or missing tags.
+
+Commit Message: "user test: feed filter tags not returning correct content"
+
+#### Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.
+
+Expected result: Only applicable levels to show.
+
+Fix:
+
+Removed the dropdown field entirely for teacher role, as the teacher is moderator and highest level role beneath admin, there is no need for this user to downgrade to student and/or is already engaged with the site admin.
+
+in edit_profile.html
+![issue 2](/static/images/readmeimages/readme-guitairblog-issues-2.png)
 
 ## Deployment Instructions
 
-- Step-by-step guide for deploying (Heroku or other)
-- Environment variables, .gitignore, secrets management
-- Link to live site (if available)
+### Local Development
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone <your-repo-url>
+   cd MSP3-Guitar-Blog
+   ```
+
+2. **Create and activate a virtual environment:**
+
+   ```sh
+   python -m venv .venv
+   # On Windows:
+   .venv\Scripts\activate
+   # On macOS/Linux:
+   source .venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+4. **Apply migrations:**
+
+   ```sh
+   python manage.py migrate
+   ```
+
+5. **Create a superuser (optional, for admin access):**
+
+   ```sh
+   python manage.py createsuperuser
+   ```
+
+6. **Run the development server:**
+
+   ```sh
+   python manage.py runserver
+   ```
+
+7. **Access the app:**
+   Open your browser at [http://localhost:8000](http://localhost:8000)
+
+---
+
+### Deploying to Heroku
+
+1. **Install the Heroku CLI** (if not already installed):  
+   [Heroku CLI Download](https://devcenter.heroku.com/articles/heroku-cli)
+
+2. **Login to Heroku:**
+
+   ```sh
+   heroku login
+   ```
+
+3. **Create a new Heroku app:**
+
+   ```sh
+   heroku create your-app-name
+   ```
+
+4. **Set up environment variables:**  
+   Set `SECRET_KEY`, `DEBUG=False`, and any other required variables:
+
+   ```sh
+   heroku config:set SECRET_KEY=your_secret_key
+   heroku config:set DEBUG=False
+   ```
+
+5. **Add Heroku Postgres (if using a database):**
+
+   ```sh
+   heroku addons:create heroku-postgresql:hobby-dev
+   ```
+
+6. **Push code to Heroku:**
+
+   ```sh
+   git push heroku main
+   # or, if using master branch:
+   git push heroku master
+   ```
+
+7. **Run migrations on Heroku:**
+
+   ```sh
+   heroku run python manage.py migrate
+   ```
+
+8. **Create a superuser on Heroku (optional):**
+
+   ```sh
+   heroku run python manage.py createsuperuser
+   ```
+
+9. **Open your app:**
+   ```sh
+   heroku open
+   ```
+
+---
+
+**Notes:**
+
+- Ensure your `requirements.txt`, `Procfile`, and `runtime.txt` are up to date.
+- Collect static files if needed:
+  ```sh
+  python manage.py collectstatic
+  ```
+- Use environment variables for all secrets and sensitive settings. Never commit secrets to version control.
+- Add `*.pyc`, `.env`, `.venv/`, `db.sqlite3`, and other sensitive files to `.gitignore`.
 
 ## Security Features
 
-- Passwords/secrets protected via environment variables
-- DEBUG mode off in production
-- User permissions and authentication
+This project follows Django security best practices. All sensitive information, such as secret keys and database credentials, is managed using environment variables and never committed to version control. The application enforces `DEBUG = False` in production to prevent exposure of sensitive error details. User authentication and permissions are handled through Django’s built-in system, ensuring that only authorized users can access or modify protected resources. Additional security measures include password hashing, CSRF protection, and regular updates to dependencies.
 
 ## Development Process
 
-- Git workflow: frequent, descriptive commits
-- Branch strategy (if used)
-- Summary of development stages
+All development for this project was performed on the main branch using Git for version control. Changes were committed frequently with descriptive messages to document progress and key decisions. The workflow was linear, with each new feature or bugfix added directly to the main branch. The project progressed through several stages: initial planning and requirements gathering, database and model design, implementation of core features, user interface development, thorough manual testing, and deployment. This approach ensured a clear and traceable development history suitable for a solo developer.
 
 ## Attribution
 
 - Credit for external code, libraries, tutorials
-
-## Screenshots & Demo
-
-- Screenshots of UI and features
-- Link to demo video (optional)
-
-## Known Issues & Future Improvements
-
-- List any known bugs or limitations
-- Suggestions for enhancements
 
 ---
