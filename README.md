@@ -1,146 +1,141 @@
 # Guitar-Learning-Blog
 
 ![device view](/static/images/readmeimages/guitairblog-devices.png)
+Deployed site: https://msp3-guitar-blog-heroku-c8e0734e4d0d.herokuapp.com
 
 ## Table of Contents
 
-- Project Rationale & Purpose
-- Target Audience
-- Design & Wireframes
-  - Main Page Wireframes
-    - Navbar
-    - Home Feed Page (index.html)
-    - Profile Page (profile.html)
-    - Subject Page (subject.html)
-    - Subject Detail Page (subject_detail.html)
-    - Post Detail Page (post_detail.html)
-- Features Overview
-  - CRUD for profile, posts, comments and resources
-  - Authentication & user profiles
-  - Likes/voting system
-  - Resource verification by teachers
-  - Filtering, search, sort & pagination
-  - AJAX updates for dynamic UX
-  - Responsive design
-- UX & Accessibility
-  - First Time Visitor
-  - Registered Student (Role: Beginner - Advanced)
-  - Teacher User
-  - Returning User
-- Data Schema & Configuration
-  - Data Entity Relationship Table
-- Relationship Overview
-  - User Relationships
-  - Content Structure
-  - Voting System
-  - Summary
-- Architechture Overview
-  - Application Architecture
-- Models
-  - Tag
-  - Post
-  - Comment
-  - Resource
-  - Like
-- Forms
-  - Register Forms
-  - PostForm
-  - CommentForm
-  - ResourceForm
-  - ProfileForm
-- Views
-  - Feed Views
-    - home
-    - index
-  - Post Views
-    - post_detail
-    - create_post
-    - edit_post
-    - delete_post
-  - Comment Views
-    - edit_comment
-    - delete_comment
-  - Resource Views
-    - edit_resource
-    - delete_resource
-    - verify_resource
-  - Profile Views
-    - profile_view
-    - edit_profile
-  - Authentication Views
-    - register_view
-    - login_view
-    - logout_view
-  - Voting Views
-    - like_post
-    - like_comment
-    - like_resource
-  - Subject Views
-    - subject_list_view
-    - subject_detail_view
-  - Utility Views
-    - get_subject_tags
-- URL Structure
-  - Home
-  - Posts
-  - Comments
-  - Resources
-  - Voting
-  - Profiles
-  - Subjects
-  - Authentication
-  - AJAX
-- Technologies Used
-  - HTML and CSS
-- Testing Procedures
-  - User Story Testing
-    - User Story 1: As a Beginner Level User– Discovering beginner content
-    - User Story 2: As a Beginner Level User– Getting help in discussions
-    - User Story 3. As a Beginner - Advanced User – Using recommended resources
-- Deployment Instructions
-- Security Features
-- Development Process
-  - User Story Testing
-    - User Story 1: As a Beginner Level User– Discovering beginner content
-    - User Story 2: As a Beginner Level User– Getting help in discussions
-    - User Story 3. As a Beginner - Advanced User – Using recommended resources
-    - User Story 4. Intermediate - Advanced User – Filtering by technique
-    - User Story 5. Intermediate - Advanced User– Sharing resources
-    - User Story 6. Teacher Users– Curating content
-    - User Story 7. All Users - Visually readable content
-  - Manual testing overview
-  - Lighthouse Testing Reports
-    - Index
-    - Profile
-    - Profile Edit
-    - Subjects
-    - Create Post
-  - HTML, CSS and JS Validation
-  - Bugs & Fixes
-    - Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds
-    - Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.
-
-## Project Rationale & Purpose
-
-As someone who has both taught guitar and learned independently, I have found that platforms such as YouTube provide an enormous amount of valuable content but can also be overwhelming for beginners and intermediate learners. With many different teachers, teaching philosophies, and lesson structures available, learners can often end up "going down rabbit holes" of content without developing a balanced or structured learning progression. This can lead to knowledge gaps in key areas such as technique, theory, or practice structure.
-
-The goal of this project is to develop a community-driven guitar learning platform where teachers can publish structured learning posts in clearly defined subjects. Other users can participate by discussing the posts and sharing additional learning resources such as videos, articles, or tablature.
-
-The site combines elements of a blog, forum, and collaborative resource hub, allowing learners to discover structured lessons while benefiting from community recommendations and discussion.
-
-Content is organised into subjects and tags, and users can filter the feed to discover relevant content. A teacher-level role acts as a moderator layer, with the ability to verify community-submitted resources, helping highlight high-quality learning materials.
-
-Users can also like posts, comments, and resources, allowing the most helpful contributions to surface within the community.
-
-## Target Audience
-
-The 2 main distinct user profiles/roles for this site is Teacher vs Student, student being split into: Beginner, intermediate and advanced. Which will be part of the users' profile.
-
-Teacher will only be asigned by admin through application to ensure learning content is moderated and to protect brand integrity.
-
-The teacher profile would be experienced teachers and/or content creators who want to provide continued content, this will allow them to cross promote their existing social media channels.
-
-The students will be self learning people interested in learning the instrument in a structured and thorough way, traffic mainly coming through the existing teachers existing channels and recommendations.
+- [Project Rationale & Purpose](#project-rationale--purpose)
+- [Target Audience](#target-audience)
+- [Design & Wireframes](#design--wireframes)
+  - [Main Page Wireframes](#main-page-wireframes)
+    - [Navbar](#navbar-wireframe)
+    - [Home Feed Page (index.html)](#home-feed-page-indexhtml)
+    - [Profile Page (profilehtml)](#profile-page-profilehtml)
+    - [Subject Page (subjecthtml)](#subject-page-subjecthtml)
+    - [Subject Detail Page (subject_detailhtml)](#subject-detail-page-subject_detailhtml)
+    - [Post Detail Page (post_detail.html)](#post-detail-page-post_detailhtml)
+- [Features Overview](#features-overview)
+  - [CRUD for profile, posts, comments and resources](#crud-for-profile-posts-comments-and-resources)
+  - [Authentication & user profiles](#authentication--user-profiles)
+  - [Likes/voting system](#likesvoting-system)
+  - [Resource verification by teachers](#resource-verification-by-teachers)
+  - [Filtering, search, sort & pagination](#filtering-search-sort--pagination)
+  - [AJAX updates for dynamic UX](#ajax-updates-for-dynamic-ux)
+  - [Responsive design](#responsive-design)
+- [UX & Accessibility](#ux--accessibility)
+  - [First Time Visitor](#first-time-visitor)
+  - [Registered Student (Role: Beginner - Advanced)](#registered-student-role-beginner---advanced)
+  - [Teacher User](#teacher-user)
+  - [Returning User](#returning-user)
+- [Data Schema & Configuration](#data-schema--configuration)
+  - [Data Entity Relationship Table](#data-entity-relationship-table)
+- [Relationship Overview](#relationship-overview)
+  - [User Relationships](#user-relationships)
+  - [Content Structure](#content-structure)
+  - [Voting System](#voting-system)
+  - [Summary](#summary)
+- [Architechture Overview](#architechture-overview)
+  - [Application Architecture](#application-architecture)
+- [Models](#models)
+  - [Tag](#tag)
+  - [Post](#post)
+  - [Comment](#comment)
+  - [Resource](#resource)
+  - [Like](#like)
+- [Forms](#forms)
+  - [Register Forms](#register-forms)
+  - [PostForm](#postform)
+  - [CommentForm](#commentform)
+  - [ResourceForm](#resourceform)
+  - [ProfileForm](#profileform)
+- [Views](#views)
+  - [Feed Views](#feed-views)
+    - [home](#home)
+    - [index](#index)
+  - [Post Views](#post-views)
+    - [post_detail](#post_detail)
+    - [create_post](#create_post)
+    - [edit_post](#edit_post)
+    - [delete_post](#delete_post)
+  - [Comment Views](#comment-views)
+    - [edit_comment](#edit_comment)
+    - [delete_comment](#delete_comment)
+  - [Resource Views](#resource-views)
+    - [edit_resource](#edit_resource)
+    - [delete_resource](#delete_resource)
+    - [verify_resource](#verify_resource)
+  - [Profile Views](#profile-views)
+    - [profile_view](#profile_view)
+    - [edit_profile](#edit_profile)
+  - [Authentication Views](#authentication-views)
+    - [register_view](#register_view)
+    - [login_view](#login_view)
+    - [logout_view](#logout_view)
+  - [Voting Views](#voting-views)
+    - [like_post](#like_post)
+    - [like_comment](#like_comment)
+    - [like_resource](#like_resource)
+  - [Subject Views](#subject-views)
+    - [subject_list_view](#subject_list_view)
+    - [subject_detail_view](#subject_detail_view)
+  - [Utility Views](#utility-views)
+    - [get_subject_tags](#get_subject_tags)
+- [URL Structure](#url-structure)
+  - [Home](#home-1)
+  - [Posts](#posts)
+  - [Comments](#comments)
+  - [Resources](#resources)
+  - [Voting](#voting)
+  - [Profiles](#profiles)
+  - [Subjects](#subjects)
+  - [Authentication](#authentication)
+  - [AJAX](#ajax)
+- [Technologies Used](#technologies-used)
+  - [HTML and CSS](#html-and-css)
+- [Testing Procedures](#testing-procedures)
+  - [User Story Testing](#user-story-testing)
+    - [User Story 1: As a Beginner Level User– Discovering beginner content](#user-story-1-as-a-beginner-level-user-discovering-beginner-content)
+    - [User Story 2: As a Beginner Level User– Getting help in discussions](#user-story-2-as-a-beginner-level-user-getting-help-in-discussions)
+    - [User Story 3. As a Beginner - Advanced User – Using recommended resources](#user-story-3-as-a-beginner---advanced-user--using-recommended-resources)
+    - [User Story 4. Intermediate - Advanced User – Filtering by technique](#user-story-4-intermediate---advanced-user--filtering-by-technique)
+    - [User Story 5. Intermediate - Advanced User– Sharing resources](#user-story-5-intermediate---advanced-user-sharing-resources)
+    - [User Story 6. Teacher Users– Curating content](#user-story-6-teacher-users-curating-content)
+    - [User Story 7. All Users - Visually readable content](#user-story-7-all-users---visually-readable-content)
+  - [Manual testing overview](#manual-testing-overview)
+  - [Lighthouse Testing Reports](#lighthouse-testing-reports)
+    - [Index](#index-1)
+    - [Profile](#profile)
+    - [Profile Edit](#profile-edit)
+    - [Subjects](#subjects-1)
+    - [Create Post](#create-post)
+  - [HTML, CSS and JS Validation](#html-css-and-js-validation)
+  - [Bugs & Fixes](#bugs--fixes)
+    - [Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds](#issue-1-subject-and-tag-filters-not-filtering-breaking-filtering-on-profile-and-index-feeds)
+    - [Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.](#issue-2-edit-profile-as-teacher-roles-available-to-change-but-teacher-role-not-available)
+- [Deployment Instructions](#deployment-instructions)
+- [Security Features](#security-features)
+- [Development Process](#development-process)
+  - [User Story Testing](#user-story-testing)
+    - [User Story 1: As a Beginner Level User– Discovering beginner content](#user-story-1-as-a-beginner-level-user-discovering-beginner-content)
+    - [User Story 2: As a Beginner Level User– Getting help in discussions](#user-story-2-as-a-beginner-level-user-getting-help-in-discussions)
+    - [User Story 3. As a Beginner - Advanced User – Using recommended resources](#user-story-3-as-a-beginner---advanced-user--using-recommended-resources)
+    - [User Story 4. Intermediate - Advanced User – Filtering by technique](#user-story-4-intermediate---advanced-user--filtering-by-technique)
+    - [User Story 5. Intermediate - Advanced User– Sharing resources](#user-story-5-intermediate---advanced-user-sharing-resources)
+    - [User Story 6. Teacher Users– Curating content](#user-story-6-teacher-users-curating-content)
+    - [User Story 7. All Users - Visually readable content](#user-story-7-all-users---visually-readable-content)
+  - [Manual testing overview](#manual-testing-overview)
+  - [Lighthouse Testing Reports](#lighthouse-testing-reports)
+    - [Index](#index-1)
+    - [Profile](#profile)
+    - [Profile Edit](#profile-edit)
+    - [Subjects](#subjects-1)
+    - [Subject Detail](#subject-detail)
+    - [Create Post](#create-post)
+  - [HTML, CSS and JS Validation](#html-css-and-js-validation)
+  - [Bugs & Fixes](#bugs--fixes)
+    - [Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds](#issue-1-subject-and-tag-filters-not-filtering-breaking-filtering-on-profile-and-index-feeds)
+    - [Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.](#issue-2-edit-profile-as-teacher-roles-available-to-change-but-teacher-role-not-available)
 
 ## Design & Wireframes
 
@@ -171,32 +166,45 @@ background-color: #f5e0c4
 
 The following are basic layout wireframes for the main navigatable pages on the site. The edit and create functions will use a summernote widget with basic window functionality for simplicity.
 
-#### Navbar
-
-A simple bootstrap navbar with logo on left and links to the profile, create post (teacher role only function), home feed and login/out.
+<details>
+   <summary><strong>Navbar Wireframe</strong></summary>
 
 ![navbar wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-navbar.png)
 
-#### Home Feed Page (index.html)
+   <p>A simple bootstrap navbar with logo on left and links to the profile, create post (teacher role only function), home feed and login/out.</p>
+</details>
 
-The landing page for the site, will provide a basic overview of the site via the header cards and subject information and links, with a quick access to the home feed below which will show the latest posts and resources with filter functionality.
+<details>
+   <summary><strong>Home Feed Page (index.html)</strong></summary>
+
 ![index wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-index.png)
 
-#### Profile Page (profile.html)
+   <p>The landing page for the site, will provide a basic overview of the site via the header cards and subject information and links, with a quick access to the home feed below which will show the latest posts and resources with filter functionality.</p>
+</details>
 
-A users' personal profile page including the heading of their name a long with a short, optional bio field that the user can edit for themselves, some stats also showing their upvoting stats. Below this, a personal feed showing the user's contribution (filtered by user).
+<details>
+   <summary><strong>Profile Page (profile.html)</strong></summary>
+
 ![profile wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-profile.png)
 
-#### Subject Page (subject.html)
+   <p>A users' personal profile page including the heading of their name a long with a short, optional bio field that the user can edit for themselves, some stats also showing their upvoting stats. Below this, a personal feed showing the user's contribution (filtered by user).</p>
+</details>
 
-The main navigation by subject page, a short heading and description. This will be automatically pulled from the django DB and editable in the admin panel.
-The subjects will display via card format with a short description, with CTA buttons to direct the user to the subject detail page for more specific reading.
+<details>
+   <summary><strong>Subject Page (subject.html)</strong></summary>
+
 ![subject wireframe](/static/images/readmeimages/readme-guitairblog-wireframe-subject.png)
 
-#### Subject Detail Page (subject_detail.html)
+   <p>The main navigation by subject page, a short heading and description. This will be automatically pulled from the django DB and editable in the admin panel. The subjects will display via card format with a short description, with CTA buttons to direct the user to the subject detail page for more specific reading.</p>
+</details>
 
-The subject details purpose is to display the content of the subject via long description and provide underneat, a subject specific feed that allows the user to see related resources and posts which have been categorised under this specific subject.
+<details>
+   <summary><strong>Subject Detail Page (subject_detail.html)</strong></summary>
+
 ![subject detail](/static/images/readmeimages/readme-guitairblog-wireframe-subject-detail.png)
+
+   <p>The subject details purpose is to display the content of the subject via long description and provide underneat, a subject specific feed that allows the user to see related resources and posts which have been categorised under this specific subject.</p>
+</details>
 
 #### Post Detail Page (post_detail.html)
 
@@ -353,15 +361,37 @@ Accessibility
 
 Journey
 
-1. Lands on the homepage.
-2. Browses subjects from the subject list.
-   ![first time 1 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-1.png)
+<details>
+   <summary><strong>Journey Step 1–2: Homepage & Browse Subjects</strong></summary>
 
-3. Selects a subject.
+![first time 1 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-1.png)
 
-![first time 2 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-2.png) 4. Views posts by subject. 5. Opens a post.
-![first time 3 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-3.png) 6. Reads comments and shared resources. 7. Registers to participate in community.
+   <p>User lands on the homepage and browses subjects from the subject list.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 3: Select Subject</strong></summary>
+
+![first time 2 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-2.png)
+
+   <p>User selects a subject of interest.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 4–5: View Posts & Open Post</strong></summary>
+
+![first time 3 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-3.png)
+
+   <p>User views posts filtered by subject and opens a post to read more.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 6–7: Engage & Register</strong></summary>
+
 ![first time 4 detail](/static/images/readmeimages/readme-guitairblog-ux-firsttimevisitor-4.png)
+
+   <p>User reads comments and shared resources, then registers to participate in the community.</p>
+</details>
 
 Value:
 
@@ -373,27 +403,46 @@ Value:
 
 Journey:
 
-1. Logs into account
-2. Reads recent posts via homefeed
+<details>
+   <summary><strong>Journey Step 1–2: Login & Homefeed</strong></summary>
 
 ![revisit 1 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-1.png)
 
-3. Navigates or filters to subject for posts and resources.
+   <p>User logs into their account and reads recent posts via the home feed.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 3: Navigate or Filter by Subject</strong></summary>
 
 ![revisit 2 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-2.png)
 
-4. leaves comment and optionally shares resources for posts.
+   <p>User navigates or filters content by subject to find relevant posts and resources.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 4: Comment & Share Resources</strong></summary>
 
 ![revisit 3 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-3.png)
 ![revisit 4 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-4.png)
 
-5. votes on helpful resources.
+   <p>User leaves comments and optionally shares resources on posts.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 5: Vote on Resources</strong></summary>
 
 ![revisit 5 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-5.png)
 
-6. See's own profile for their contribution.
+   <p>User votes on helpful resources shared by others.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 6: View Profile</strong></summary>
 
 ![revisit 6 detail](/static/images/readmeimages/readme-guitairblog-ux-revisitvisitor-6.png)
+
+   <p>User views their own profile to see their contributions.</p>
+</details>
 
 Value:
 
@@ -405,17 +454,21 @@ Value:
 
 (Can publish learning posts)
 
-1. log into account
-2. Create a new post
-3. Assign a subject to post with any relevant tags
-4. Publish post
+<details>
+   <summary><strong>Journey Step 1–4: Login & Create Post</strong></summary>
 
 ![teacher 1 detail](/static/images/readmeimages/readme-guitairblog-ux-teacher-1.png)
 
-5. Engages with students comments and resources.
-6. Moderates and monitors resources shared under their posts.
+   <p>User logs into their account, creates a new post, assigns a subject with relevant tags, and publishes the post.</p>
+</details>
+
+<details>
+   <summary><strong>Journey Step 5–6: Engage & Moderate</strong></summary>
 
 ![teacher 2 detail](/static/images/readmeimages/readme-guitairblog-ux-teacher-2.png)
+
+   <p>User engages with student comments and shared resources, while also moderating and monitoring content under their posts.</p>
+</details>
 
 ### Returning User
 
@@ -436,9 +489,13 @@ Value:
 
 ## Data Schema & Configuration
 
-- Data model diagram
+<details>
+   <summary><strong>Data Model Diagram</strong></summary>
 
 ![relationship diagram](/static/images/readmeimages/readme-data-relationship-diagram.png)
+
+   <p>Visual representation of the data model, showing relationships between entities in the system.</p>
+</details>
 
 ### Data Entity Relationship Table
 
@@ -1156,82 +1213,131 @@ Summary:
 
 #### User Story 1: As a Beginner Level User– Discovering beginner content
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story 1: Beginner User – Discovering Beginner Content</strong></summary>
 
-1. User selects “Beginner” during onboarding or in profile
-   Passed - See image
-   ![user story 1a](/static/images/readmeimages/readme-guitairblog-userstories-1-a.png)
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>User selects “Beginner” during onboarding or in profile<br>Passed - See image</li>
+   </ul>
 
-2. User can see level labels on every post
-   Passed - See image
-   ![user story 1b](/static/images/readmeimages/readme-guitairblog-userstories-1-b.png)
+![user story 1a](/static/images/readmeimages/readme-guitairblog-userstories-1-a.png)
 
-3. User can override filters manually if desired
-   Passed - See image
-   ![user story 1c](/static/images/readmeimages/readme-guitairblog-userstories-1-c.png)
+   <ul>
+      <li>User can see level labels on every post<br>Passed - See image</li>
+   </ul>
+
+![user story 1b](/static/images/readmeimages/readme-guitairblog-userstories-1-b.png)
+
+   <ul>
+      <li>User can override filters manually if desired<br>Passed - See image</li>
+   </ul>
+
+![user story 1c](/static/images/readmeimages/readme-guitairblog-userstories-1-c.png)
+
+</details>
 
 #### User Story 2: As a Beginner Level User– Getting help in discussions
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story 2: Beginner User – Getting Help in Discussions</strong></summary>
 
-1. User can post a reply or question on a learning post
-   Passed - See image
-   ![user story 2a](/static/images/readmeimages/readme-guitairblog-userstories-2-a.png)
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>User can post a reply or question on a learning post<br>Passed - See image</li>
+   </ul>
 
-2. Replies display author
-   Passed - See image
-   ![user story 2b](/static/images/readmeimages/readme-guitairblog-userstories-2-b.png)
+![user story 2a](/static/images/readmeimages/readme-guitairblog-userstories-2-a.png)
 
-3. Teacher approvals are visually distinct
-   Passed - See image
-   ![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-c.png)
+   <ul>
+      <li>Replies display author<br>Passed - See image</li>
+   </ul>
 
-4. Replies can be upvoted
-   Passed - See image
-   ![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-d.png)
+![user story 2b](/static/images/readmeimages/readme-guitairblog-userstories-2-b.png)
+
+   <ul>
+      <li>Teacher approvals are visually distinct<br>Passed - See image</li>
+   </ul>
+
+![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-c.png)
+
+   <ul>
+      <li>Replies can be upvoted<br>Passed - See image</li>
+   </ul>
+
+![user story 2d](/static/images/readmeimages/readme-guitairblog-userstories-2-d.png)
+
+</details>
 
 #### User Story 3. As a Beginner - Advanced User – Using recommended resources
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story: Using Recommended Resources</strong></summary>
 
-1. Learning posts display a “Resources” section
-2. Resources include title, type, and description
-3. User can upvote resources
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>Learning posts display a “Resources” section</li>
+      <li>Resources include title, type, and description</li>
+      <li>User can upvote resources</li>
+   </ul>
 
-Passed - See image
+   <p>Passed - See image</p>
+
 ![user story 3a](/static/images/readmeimages/readme-guitairblog-userstories-3-a.png)
+
+</details>
 
 #### User Story 4. Intermediate - Advanced User – Filtering by technique
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story 4: Intermediate–Advanced User – Filtering by Technique</strong></summary>
 
-1. Posts support multiple tags (e.g. speed, rhythm)
-2. User can filter by subject and tag
-   Passed - See image
-   ![user story 4a](/static/images/readmeimages/readme-guitairblog-userstories-4-a.png)
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>Posts support multiple tags (e.g. speed, rhythm)</li>
+      <li>User can filter by subject and tag<br>Passed - See image</li>
+   </ul>
+
+![user story 4a](/static/images/readmeimages/readme-guitairblog-userstories-4-a.png)
+
+</details>
 
 #### User Story 5. Intermediate - Advanced User– Sharing resources
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story 5: Intermediate–Advanced User – Sharing Resources</strong></summary>
 
-1. User can add a resource via URL
-2. User must select resource type
-3. User must provide a short justification
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>User can add a resource via URL</li>
+      <li>User must select resource type</li>
+      <li>User must provide a short justification</li>
+   </ul>
 
-Passed - See image
+   <p>Passed - See image</p>
+
 ![user story 5a](/static/images/readmeimages/readme-guitairblog-userstories-5-a.png)
+
+</details>
 
 #### User Story 6. Teacher Users– Curating content
 
-Acceptance Criteria
+<details>
+   <summary><strong>User Story 6: Teacher Users – Curating Content</strong></summary>
 
-1. Teachers have a “Verify Advice” action
-2. Verified replies show a badge
-3. Only teachers can verify content
-4. Verification is reversible (moderation)
+   <p><strong>Acceptance Criteria</strong></p>
+   <ul>
+      <li>Teachers have a “Verify Advice” action</li>
+      <li>Verified replies show a badge</li>
+      <li>Only teachers can verify content</li>
+      <li>Verification is reversible (moderation)</li>
+   </ul>
 
-Passed - See image
+   <p>Passed - See image</p>
+
 ![user story 2c](/static/images/readmeimages/readme-guitairblog-userstories-2-c.png)
+
+</details>
 
 #### User Story 7. All Users - Visually readable content
 
@@ -1247,43 +1353,59 @@ Passed - See image
 4. Device Accessible
    Passed - Use of bootstrap for content stacking, lighthouse testing on both desktop and mobile to ensure.
 
-### Manual testing overview
+the detail tag after that?
 
-Primarily done via Google Chrome.
+### Manual Testing Overview
 
-I tested the python queries as I implemented them through production with periodic testing on the deployed site to ensure no major bugs.
-Once this was satisfactory, I tested all actions and navigation by at least 1 account in every role. Below is the table I used to guide this process and record any issues to be fixed.
+<details>
+   <summary><strong>View Details</strong></summary>
+
+   <p>Primarily conducted using Google Chrome.</p>
+
+   <p>Python queries were tested during development, alongside periodic testing on the deployed site to ensure no major bugs. Once stable, all actions and navigation were tested using at least one account per user role. The table below was used to guide testing and track issues.</p>
 
 ![user testing](/static/images/readmeimages/readme-guitairblog-manual-test-sheet.png)
 
+</details>
+
 ### Lighthouse Testing Reports
 
-I used the lighthouse extension to test overall performance, accessibility, best practises and SEO scoring on each html template. My goal was to acheive over 80 in all where posssible, here are the page's peeformance reports:
+<details>
+   <summary><strong>View Reports</strong></summary>
 
-#### Index
+   <p>Lighthouse was used to evaluate performance, accessibility, best practices, and SEO across all templates. The target was a score of 80+ where possible. Results are shown below.</p>
+
+   <p><strong>Index</strong></p>
 
 ![lighthouse index desktop](/static/images/readmeimages/readme-guitairblog-index-lighthouse-desktop.png)
 ![lighthouse index mobile](/static/images/readmeimages/readme-guitairblog-index-lighthouse-mobile.png)
 
-#### Profile
+   <p><strong>Profile</strong></p>
 
 ![lighthouse profile desktop](/static/images/readmeimages/readme-guitairblog-profile-lighthouse-desktop.png)
 ![lighthouse profile mobile](/static/images/readmeimages/readme-guitairblog-profile-lighthouse-mobile.png)
 
-#### Profile Edit
+   <p><strong>Profile Edit</strong></p>
 
 ![lighthouse profile edit desktop](/static/images/readmeimages/readme-guitairblog-profile-edit-lighthouse-desktop.png)
 ![lighthouse profile edit mobile](/static/images/readmeimages/readme-guitairblog-profile-edit-lighthouse-mobile.png)
 
-#### Subjects
+   <p><strong>Subjects</strong></p>
 
 ![lighthouse subjects desktop](/static/images/readmeimages/readme-guitairblog-subjects-lighthouse-desktop.png)
 ![lighthouse subjects mobile](/static/images/readmeimages/readme-guitairblog-subjects-lighthouse-mobile.png)
 
-#### Create Post
+   <p><strong>Subject Detail</strong></p>
+
+![lighthouse subject detail desktop](/static/images/readmeimages/readme-guitairblog-subject-detail-lighthouse-desktop.png)
+![lighthouse subject detail mobile](/static/images/readmeimages/readme-guitairblog-subject-detail-lighthouse-mobile.png)
+
+   <p><strong>Create Post</strong></p>
 
 ![lighthouse create desktop](/static/images/readmeimages/readme-guitairblog-createpost-lighthouse-desktop.png)
 ![lighthouse create mobile](/static/images/readmeimages/readme-guitairblog-createpost-lighthouse-mobile.png)
+
+</details>
 
 ### HTML, CSS and JS Validation
 
@@ -1422,64 +1544,74 @@ From line 240, column 3; to line 240, column 138
 
 "300">↩ <iframe id"id_resource_description_iframe" src"/summernote/editor/id_resource_description/" frameborder"0" width"100%" height"300"></ifra
 
+![issue 2](/static/images/readmeimages/readme-guitairblog-issues-2.png)
+
 #### CSS Validation (style.css W3)
+
+<details>
+   <summary><strong>View Validation</strong></summary>
 
 ![css validation](/static/images/readmeimages/readme-guitairblog-css-validation.png)
 
+</details>
+
 #### Javascript (script.js JSHINT)
+
+<details>
+   <summary><strong>View Validation</strong></summary>
 
 ![jshint validation](/static/images/readmeimages/readme-guitarblog-jshint-validation.png)
 
+</details>
+
 ### Bugs & Fixes
 
-The following are the main bugs and fixes applied during the testing phase of my project:
+<details>
+   <summary><strong>View Issues & Resolutions</strong></summary>
 
-#### Issue 1: Subject and Tag filters not filtering/ breaking filtering. on Profile and Index Feeds
+   <p>The following are the main bugs and fixes applied during the testing phase of the project:</p>
 
-Expected result: When selecting a subject via filter drop down, the tags assigned to the subject should appear and be clickable.
+   <p><strong>Issue 1: Subject and Tag filters not filtering / breaking on Profile and Index Feeds</strong></p>
 
-Troubleshooting:
+   <p><strong>Expected result:</strong> When selecting a subject via filter dropdown, the tags assigned to the subject should appear and be clickable.</p>
 
-Step 1: As I had recently mass-deleted posts via admin panel, my first step was to clean the database for orphan tags in case this was causing any issues with the database. I used the commands and removed 90 orphaned tags:
+   <p><strong>Troubleshooting:</strong></p>
+   <ul>
+      <li><strong>Step 1:</strong> Cleaned database for orphan tags after mass deletion via admin panel.</li>
+   </ul>
 
 ![issue 1](/static/images/readmeimages/readme-guitairblog-issues-1.png)
 
-Step 1 Outcome: Fail
+   <p><strong>Outcome:</strong> Failed to fix filtering, but successfully removed ~90 orphaned tags.</p>
 
-Fail: However did succeed in cleaning data base as screenshot shows 'Tag Orphans' did require purging following some deletions of content via Django Admin
+   <ul>
+      <li><strong>Step 2:</strong> Identified issue with URL returning PK instead of slug.</li>
+   </ul>
 
-Step 2
-I had discovered through further investigation that the url for subject filter was not returning the slug but the pk value.
-Solution Steps
+   <p><strong>Solution Steps:</strong></p>
+   <ul>
+      <li>Updated dropdown to use subject slug as value</li>
+      <li>Added <code>data-pk</code> attribute for AJAX filtering</li>
+      <li>Ensured "All Subjects" prevents AJAX execution</li>
+      <li>Applied fixes to both <code>profile.html</code> and <code>index.html</code></li>
+      <li>No model or migration changes required</li>
+   </ul>
 
-1. Dropdown Value and Data Attribute
-   Changed the subject dropdown <option> value to use the subject’s slug (for filtering in the view).
-   Added/ensured a data-pk attribute on each <option> (for AJAX/tag filtering).
-   Set the "All Subjects" option to:
-2. JavaScript Update
-   Updated the tag filtering AJAX to use the subject’s primary key from data-pk:
-   Ensured the AJAX does not run if "All Subjects" is selected:
-3. Template Consistency
-   Applied these changes to both profile.html and index.html to ensure consistent behavior across your site.
-4. No Model or Migration Changes Needed
-5. Result
-   Subject filtering now works using slugs (clean URLs).
-   Tag filtering by subject works via AJAX, using the subject’s primary key.
+   <p><strong>Result:</strong> Filtering works correctly with clean URLs and functional tag filtering.</p>
 
-Result: No more broken dropdowns or missing tags.
+   <p><strong>Commit Message:</strong> "user test: feed filter tags not returning correct content"</p>
 
-Commit Message: "user test: feed filter tags not returning correct content"
+   <hr>
 
-#### Issue 2: Edit Profile as 'teacher' roles available to change but teacher role not available.
+   <p><strong>Issue 2: Teacher role editable but not selectable</strong></p>
 
-Expected result: Only applicable levels to show.
+   <p><strong>Expected result:</strong> Only applicable role options should be shown.</p>
 
-Fix:
+   <p><strong>Fix:</strong> Removed dropdown for teacher role, as it represents a moderator-level account and should not be downgraded.</p>
 
-Removed the dropdown field entirely for teacher role, as the teacher is moderator and highest level role beneath admin, there is no need for this user to downgrade to student and/or is already engaged with the site admin.
-
-in edit_profile.html
 ![issue 2](/static/images/readmeimages/readme-guitairblog-issues-2.png)
+
+</details>
 
 ## Deployment Instructions
 
@@ -1609,6 +1741,10 @@ All development for this project was performed on the main branch using Git for 
 
 ## Attribution
 
-- Credit for external code, libraries, tutorials
+Credit for external code, libraries, tutorials
+
+- The Code Institute: Python code, general process and procedure for build.
+- Stack Overflow, Google: Troubleshooting
+- ChatGPT: user content (posts, replies users for import), Site logo
 
 ---
