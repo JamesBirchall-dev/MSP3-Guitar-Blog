@@ -652,6 +652,7 @@ def edit_comment(request, pk):
 
 @login_required
 def delete_comment(request, pk):
+    from django.contrib import messages as django_messages
     comment = get_object_or_404(Comment, pk=pk)
     if comment.author != request.user:
         return redirect('post_detail', slug=comment.post.slug)
@@ -659,6 +660,8 @@ def delete_comment(request, pk):
         comment.delete()
         messages.success(request, "Comment deleted.")
         return redirect('post_detail', slug=comment.post.slug)
+    # Clear all messages on GET to avoid showing old errors
+    list(django_messages.get_messages(request))
     return render(request, 'blog/delete_comment.html', {'comment': comment})
 
 
